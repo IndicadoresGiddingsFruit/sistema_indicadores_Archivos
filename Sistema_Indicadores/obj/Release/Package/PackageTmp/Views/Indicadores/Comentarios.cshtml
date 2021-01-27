@@ -1,0 +1,49 @@
+﻿@model Sistema_Indicadores.Models.SIPGComentarios
+
+@{
+    ViewBag.Title = "Comentarios";
+}
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Enviar comentarios</h5>
+        </div>
+        <form action="~/Indicadores/Comentarios" method="post">
+            @using (Html.BeginForm())
+            {
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Codigo:</div>
+                    <input type="text" class="form-control form-control-sm" id="Cod_Prod" name="Cod_Prod" maxlength="5" minlength="5" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Cod_prod, "", new { @class = "text-danger" })
+
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Productor:</div>
+                    <input type="text" class="form-control form-control-sm" id="nombreProductor" name="nombreProductor" placeholder="Nombre del productor" readonly="" required="">
+
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Comentario:</div>
+                    <textarea rows="6" cols="50" class="form-control form-control-sm" name="Comentario" autocomplete="off"></textarea>
+                    @Html.ValidationMessageFor(model => model.Comentario, "", new { @class = "text-danger" })
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="ENVIAR" class="btn btn-primary mb-2" style="font-weight:bold" />
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    $("#Cod_Prod").change(function () {
+        nombre_productor();
+    });
+
+    function nombre_productor() {
+        $.getJSON(siteURL +"Indicadores/GetProductor?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#nombreProductor");
+            select.val(result.Nombre);
+        });
+    }
+</script>

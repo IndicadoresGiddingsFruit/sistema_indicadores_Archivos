@@ -1,0 +1,489 @@
+﻿@model Sistema_Indicadores.Models.SIPGProyeccion
+
+@if (ViewBag.sms != null)
+{
+    <div>
+        <div class="alert alert-primary alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-check-circle"></i> @ViewBag.sms</h4>
+        </div>
+    </div>
+}
+
+@if (ViewBag.error != null)
+{
+    <div>
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-check-circle"></i> @ViewBag.error</h4>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div id="nombreProductor"></div>
+                    <a href="@Url.Action("Semanas", "Indicadores")" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-arrow-circle-left"></i> Regresar</a>
+                </div>
+                <form action="~/Indicadores/Semanas" method="post">
+                    @using (Html.BeginForm())
+                    {
+                        <div class="modal-body">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="row" style="margin:0 0 10px 0; padding:5px; border:1px solid #CFCACA; width:50%; color:black">
+                                Cajas entregadas: <div style="margin-left:10px" id="cjs"></div>
+                            </div>
+
+                            <div class="row">
+                                @Html.TextBoxFor(model => model.Cod_Prod, new { @id = "Cod_Prod", @Style = "display:none" })
+                                @Html.TextBoxFor(model => model.Cod_Campo, new { @id = "Cod_Campo", @Style = "display:none" })
+                                @Html.TextBoxFor(model => model.Sector, new { @id = "Sector", @Style = "display:none" })
+                                @Html.TextBoxFor(model => model.Id, new { @id = "Id_Proyeccion", @Style = "display:none" })
+
+                                <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                                    Campo
+                                    <input type="text" class="form-control form-control-sm" id="DescCampo" name="DescCampo" readonly="" />
+                                </div>
+
+                                <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                                    Sector
+                                    <input type="text" class="form-control form-control-sm" id="inputSector" name="inputSector" readonly="" />
+                                    @*@Html.DropDownListFor(model => model.Sector, new SelectList(" "), "--Seleccione un sector--", new { @id = "Sector", @class = "form-control form-control-sm" })*@
+                                </div>
+
+                                <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                                    Tipo
+                                    <input type="text" class="form-control form-control-sm" id="Tipo" name="Tipo" readonly="" />
+                                </div>
+
+                                <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                                    Producto
+                                    <input type="text" class="form-control form-control-sm" id="Producto" name="Producto" readonly="" />
+                                </div>
+
+                                <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                                    Aumentar cajas <i class="fas fa-plus"></i>
+                                    <div class="input-group" style="position: relative;">
+                                        <input type="text" style="width:100%" class="form-control form-control-sm" id="mascjs" name="mascjs" autocomplete="off">
+                                        <div class="input-group-addon" style="position: absolute; margin-left: 85%; padding: 3%; pointer-events: none;">
+                                            <i class="fab fa-raspberry-pi"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                                    Disminuir cajas <i class="fas fa-minus"></i>
+                                    <div class="input-group" style="position: relative;">
+                                        <input type="text" style="width:100%" class="form-control form-control-sm" id="minuscjs" name="minuscjs" autocomplete="off">
+                                        <div class="input-group-addon" style="position: absolute; margin-left: 85%; padding: 3%; pointer-events: none;">
+                                            <i class="fab fa-raspberry-pi"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-md-12 mb-12 col-sm-12" style="margin:10px 0 10px 0; ">
+                                    <div style="float:left">Agregar semana </div>
+                                    <input type="number" minlength="2" maxlength="2" class="form-control form-control-sm" id="Semana" name="Semana" style="margin:0 5px 0 5px; width:80px; text-transform: uppercase;float:left" autocomplete="off" />
+                                    <div style="float:left">Cantidad </div>
+                                    <input type="number" class="form-control form-control-sm" id="Cantidad" name="Cantidad" style="margin:0 5px 0 5px; width:80px; text-transform: uppercase;float:left" autocomplete="off" />
+                                    <button id="btnAgregar" type="submit" class="btn btn-info btn-sm active" style="float:left"><i class="fas fa-plus"></i></button>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6 mb-3 col-sm-6" id="div_corte1">
+                                    <div id="divFecha_defoliacion">
+                                        Defoliacion
+                                        @*@Html.EditorFor(x => x.Fecha_defoliacion, new { @class = "form-control  form-control-sm", @type = "date", @id = "Fecha_defoliacion", @required = "", @autocomplete = "off" })*@
+                                        <input type="text" class="form-control form-control-sm" id="Fecha_defoliacion" name="Fecha_defoliacion" autocomplete="off" />
+                                    </div>
+
+                                    <div id="divFecha_corte1">
+                                        Inicio cosecha
+                                        @* @Html.EditorFor(x => x.Fecha_corte1, new { @class = "form-control  form-control-sm", @type = "date", @id = "Fecha_corte1", @required = "", @autocomplete = "off" })*@
+                                        <input type="text" class="form-control form-control-sm" id="Fecha_corte1" name="Fecha_corte1" autocomplete="off" />
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6 mb-3 col-sm-6" id="div_dataTableCorte1">
+                                    <div class="table-responsive table-condensed table-sm table-bordered tabla" style="margin:15px">
+                                        <table class="table table-hover" id="dataTableCorte1">
+                                            <thead class="thead-dark" style="font-size:small; text-align:center">
+                                                <tr class="info">
+                                                    <th> Semana </th>
+                                                    <th> Cantidad </th>
+                                                    <th> Borrar </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                            <tfoot class="thead-light" style="font-size:small; text-align:center">
+                                                <tr class="info">
+                                                    <th>  </th>
+                                                    <th> <span id="foot1"></span> </th>
+                                                    <th>  </th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-md-6 mb-3 col-sm-6" runat="server" id="div_corte2">
+                                    <div id="divFecha_redefoliacion">
+                                        Re/Defoliacion
+                                        @*@Html.EditorFor(x => x.Fecha_redefoliacion, new { @class = "form-control  form-control-sm", @type = "date", @id = "Fecha_redefoliacion", @required = "", @autocomplete = "off" })*@
+                                        <input type="text" class="form-control form-control-sm" id="Fecha_redefoliacion" name="Fecha_redefoliacion" autocomplete="off" />
+                                    </div>
+                                    <div id="divFecha_corte2">
+                                        Inicio cosecha
+                                        @*@Html.EditorFor(x => x.Fecha_corte2, new { @class = "form-control  form-control-sm", @type = "date", @id = "Fecha_corte2", @required = "", @autocomplete = "off" })*@
+                                        <input type="text" class="form-control form-control-sm" id="Fecha_corte2" name="Fecha_corte2" autocomplete="off" />
+                                    </div>
+                                    @*<input type="date" class="form-control form-control-sm" id="Fecha_corte2" name="Fecha_corte2" required="" autocomplete="off" />*@
+                                </div>
+
+                                <div class="col-xl-3 col-md-6 mb-3 col-sm-6" id="div_dataTableCorte2">
+                                    <div class="table-responsive table-condensed table-sm table-bordered tabla" style="margin:15px">
+                                        <table class="table table-hover" id="dataTableCorte2">
+                                            <thead class="thead-dark" style="font-size:small; text-align:center">
+                                                <tr class="info">
+                                                    <th> Semana </th>
+                                                    <th> Cantidad </th>
+                                                    <th> Borrar </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                            <tfoot class="thead-light" style="font-size:small; text-align:center">
+                                                <tr class="info">
+                                                    <th>  </th>
+                                                    <th> <span id="foot2"></span> </th>
+                                                    <th>  </th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input id="btnGuardar" type="submit" value="GUARDAR CAMBIOS" class="btn btn-primary btn-sm active" style="font-weight:bold" />
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var id_semana, txt = "", cantidad, op = "";
+
+    $(document).ready(function () {
+        $('#div_dataTableCorte1').css('display', 'none');
+        $('#div_dataTableCorte2').css('display', 'none');
+        nombre_productor();
+        cjs_entregadas();
+        nom_campo();
+        $("#inputSector").val($("#Sector").val());
+        tipo_p();        
+        fechas();
+        //ListSectores();
+        corte1();
+        corte2();
+    });
+
+    $('#btnGuardar').click(function () {
+        if ($("#mascjs").val() != '') {
+            cantidad = $("#mascjs").val();
+            op = "aumentar";
+        }
+        else if ($("#minuscjs").val() != '') {
+            cantidad = $("#minuscjs").val();
+            op = "disminuir";
+        }
+
+        $.ajax({
+            url: siteURL + "Indicadores/Semanas?Id_Proyeccion=" + $("#Id_Proyeccion").val() + "&Cantidad=" + cantidad + "&op=" + op + "&Fecha_corte1=" + $("#Fecha_corte1").val() + "&Fecha_corte2=" + $("#Fecha_corte2").val(),
+            type: "POST",
+        });
+        add_visita();
+    });
+
+    $('#btnAgregar').click(function () {
+        var data = {
+            //Cod_Prod: $("#Cod_Prod").val(),
+            //Cod_Campo: $("#Cod_Campo").val(),
+            //Sector: $("#Sector").val(),
+            Id_Proyeccion: $("#Id_Proyeccion").val(),
+            Semana: $("#Semana").val(),
+            Cantidad: $("#Cantidad").val()
+        };
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Indicadores/Update_Semanas",
+            success: function (data) {
+                window.location.reload();
+                add_visita();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+       
+    });
+
+    //$("#Fecha_corte1").change(function () {
+    //    Fecha_corte1 = $("#Fecha_corte1").val();
+    //    console.log(Fecha_corte1);
+    //});
+
+    //$("#Fecha_corte2").change(function () {
+    //    Fecha_corte2 = $("#Fecha_corte2").val();
+    //    console.log(Fecha_corte2);
+    //});
+
+    $('#Sector').change(function () {
+        vaciar();
+        corte1();
+        corte2();
+        fechas();
+    });
+
+    function vaciar() {
+        $('#dataTableCorte1 tr:not(:first-child)').remove();
+        $('#dataTableCorte2 tr:not(:first-child)').remove();
+    }
+
+    function nombre_productor() {
+        $.getJSON(siteURL + "Json/GetProductor?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = result.Nombre;
+            $("#nombreProductor").text($("#Cod_Prod").val() + " - " + select);
+        });
+    }
+
+    function nom_campo() {
+        $.getJSON(siteURL + "Json/DescCampo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + $("#Cod_Campo").val(), function (result) {
+            var select = $("#DescCampo");
+            select.val($("#Cod_Campo").val() + " - " + result.Descripcion);
+        });
+    }
+
+    function ListSectores() {
+        $.getJSON(siteURL + "Json/GetDataProyeccionList?Id_Proyeccion=" + $("#Id_Proyeccion").val(), function (data) {
+            var select = $("#Sector");
+            select.val(result.Sector);
+        });
+        //    $.each(data, function (idx, opt) {
+        //        $("#Sector").text(opt.Sector);
+        //    });
+        //}, 'json');
+
+         
+            //var select = $("#Sector");
+            //select.empty();
+            //$.each(result, function (index, itemData) {
+            //    select.append($('<option/>', {
+            //        value: itemData.Sector,
+            //        text: itemData.Sector
+            //    }));
+            //});
+        
+    }
+
+    function fechas() {
+        $.getJSON(siteURL + "Json/GetDataSectorFechas?Id_Proyeccion=" + $("#Id_Proyeccion").val(), function (result) {
+            var options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+            var Fecha_defoliacion = new Date(parseInt(result.Fecha_defoliacion.slice(6, -2)));
+            var Fecha_corte1 = new Date(parseInt(result.Fecha_corte1.slice(6, -2)));
+            var Fecha_redefoliacion = new Date(parseInt(result.Fecha_redefoliacion.slice(6, -2)));
+            var Fecha_corte2 = new Date(parseInt(result.Fecha_corte2.slice(6, -2)));
+
+            var date_Fecha_defoliacion = new Date(Fecha_defoliacion);
+            var year_Fecha_defoliacion = date_Fecha_defoliacion.getFullYear();
+            var month_Fecha_defoliacion = date_Fecha_defoliacion.getMonth() + 1
+            var day_Fecha_defoliacion = date_Fecha_defoliacion.getDate();
+
+            var date_Fecha_corte1 = new Date(Fecha_corte1);
+            var year_Fecha_corte1 = date_Fecha_corte1.getFullYear();
+            var month_Fecha_corte1 = date_Fecha_corte1.getMonth() + 1
+            var day_Fecha_corte1 = date_Fecha_corte1.getDate();
+
+            var date_Fecha_redefoliacion = new Date(Fecha_redefoliacion);
+            var year_Fecha_redefoliacion = date_Fecha_redefoliacion.getFullYear();
+            var month_Fecha_redefoliacion = date_Fecha_redefoliacion.getMonth() + 1
+            var day_Fecha_redefoliacion = date_Fecha_redefoliacion.getDate();
+
+            var date_Fecha_corte2 = new Date(Fecha_corte2);
+            var year_Fecha_corte2 = date_Fecha_corte2.getFullYear();
+            var month_Fecha_corte2 = date_Fecha_corte2.getMonth() + 1
+            var day_Fecha_corte2 = date_Fecha_corte2.getDate();
+
+            var Fecha_defoliacion_formatted = year_Fecha_defoliacion + "-" + month_Fecha_defoliacion + "-" + day_Fecha_defoliacion;
+            var Fecha_corte1_formatted = year_Fecha_corte1 + "-" + month_Fecha_corte1 + "-" + day_Fecha_corte1;
+            var Fecha_redefoliacion_formatted = year_Fecha_redefoliacion + "-" + month_Fecha_redefoliacion + "-" + day_Fecha_redefoliacion;
+            var Fecha_corte2_formatted = year_Fecha_corte2 + "-" + month_Fecha_corte2 + "-" + day_Fecha_corte2;
+
+            var select_Fecha_defoliacion = $("#Fecha_defoliacion");
+            if (Fecha_defoliacion_formatted == '1899-12-31') {
+                $('#divFecha_defoliacion').hide();
+            }
+            else {
+                select_Fecha_defoliacion.val(Fecha_defoliacion_formatted);
+                $('#divFecha_defoliacion').show();
+            }
+            var select_Fecha_corte1 = $("#Fecha_corte1");
+            if (Fecha_corte1_formatted == '1899-12-31') {
+                $('#divFecha_corte1').hide();
+            }
+            else {
+                select_Fecha_corte1.val(Fecha_corte1_formatted);
+                $('#divFecha_corte1').show();
+            }
+            var select_Fecha_redefoliacion = $("#Fecha_redefoliacion");
+            if (Fecha_redefoliacion_formatted == '1899-12-31') {
+                $('#divFecha_redefoliacion').hide();
+            }
+            else {
+                select_Fecha_redefoliacion.val(Fecha_redefoliacion_formatted);
+                $('#divFecha_redefoliacion').show();
+            }
+            var select_Fecha_corte2 = $("#Fecha_corte2");
+            if (Fecha_corte2_formatted == '1899-12-31') {
+                $('#divFecha_corte2').hide();
+            }
+            else {
+                select_Fecha_corte2.val(Fecha_corte2_formatted);
+                $('#divFecha_corte2').show();
+            }
+        });
+    }
+
+    function tipo_p() {
+        $.getJSON(siteURL + "Json/GetTipoProducto?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + $("#Cod_Campo").val(), function (result) {
+            var select = $("#Tipo");
+            select.val(result.Tipo);
+            var select = $("#Producto");
+            select.val(result.Producto);
+        });
+    }
+
+    function corte1() {
+        $.getJSON(siteURL + "Indicadores/Corte1List?Id_Proyeccion=" + $("#Id_Proyeccion").val(), function (data_corte1) {
+            if (data_corte1.length == 0) {
+                $('#div_dataTableCorte1').css('display', 'none');
+            }
+            else {                   
+                    $.each(data_corte1, function (idx, opt) {
+                        id_semana = opt.Id_Semana
+                        $('#dataTableCorte1').append('<tr><td id="Sem1">' + opt.Semana + '</td><td>' + opt.Cantidad +
+                            '</td><td><a href="#" onclick="delRow(this)"><i class="fas fa-trash-alt"></i></a></td></tr>');
+                    });
+                    var result = data_corte1.reduce(function (_this, val) {
+                        return _this + val.Cantidad
+                    }, 0);
+                $("#foot1").text(result);
+                $('#div_dataTableCorte1').css('display', 'table');     
+            }
+        }, 'json');
+    }
+
+    function corte2() {
+        $.getJSON(siteURL + "Indicadores/Corte2List?Id_Proyeccion=" + $("#Id_Proyeccion").val(), function (data_corte2) {
+            if (data_corte2.length == 0) {
+                $('#div_dataTableCorte2').css('display', 'none');
+            }
+            else {
+                $.each(data_corte2, function (idx, opt) {
+                    id_semana = opt.Id_Semana
+                    $('#dataTableCorte2').append('<tr><td id="Sem2">' + opt.Semana + '</td><td>' + opt.Cantidad +
+                        '</td><td><a href="#" onclick="delRow(this)"><i class="fas fa-trash-alt"></i></a></td></tr>');
+                });
+                var result = data_corte2.reduce(function (_this, val) {
+                    return _this + val.Cantidad
+                }, 0);
+                $("#foot2").text(result);
+                $('#div_dataTableCorte2').css('display', 'table');
+            }
+        }, 'json');
+    }
+
+    function cjs_entregadas() {
+        $.getJSON(siteURL + "Json/GetCajasEntregadas?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + $("#Cod_Campo").val(), function (data) {           
+            if (data.length==0) {
+                $("#cjs").text("0");
+            }
+            else {
+                $.each(data, function (idx, opt) {
+                    console.log(opt.EntregadoT);
+                    $("#cjs").text(opt.EntregadoT + " - empezó a entregar desde la semana " + opt.Semana);
+                });
+            }
+        }, 'json');
+    }
+
+    function delRow(currElement) {
+        $("#dataTableCorte1 tr").click(function () {
+            $(this).find("#Sem1").each(function () {
+                delete_semana($(this).html(), 1);
+            });
+        });
+
+        $("#dataTableCorte2 tr").click(function () {
+            $(this).find("#Sem2").each(function () {
+                delete_semana($(this).html(), 2);
+            });
+        });
+    }
+
+    function delete_semana(Semana, Sem) {
+        var data = {
+            //Cod_Prod: $("#Cod_Prod").val(),
+            //Cod_Campo: $("#Cod_Campo").val(),
+            //Sector: $("#Sector").val(),
+            Id_Proyeccion: $("#Id_Proyeccion").val(),
+            Semana: Semana,
+            Sem: Sem
+        };
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Indicadores/Update_Semanas",
+            success: function (data) {
+                //var res = $.parseJSON(data);
+                //console.log(res);
+                window.location.reload();  
+                add_visita();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+        
+    }
+
+    function add_visita() { 
+        $.ajax({
+            url: siteURL + "Indicadores/AddVisita?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + $("#Cod_Campo").val() + "&Sector=" + $("#Sector").val(),
+            type: "POST",
+        });
+    }
+
+</script>
+
+

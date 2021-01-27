@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SeasonSun1213Model2.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CatSemanas">
+    <Key>
+      <PropertyRef Name="Temporada" />
+      <PropertyRef Name="Semana" />
+    </Key>
+    <Property Name="Temporada" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="Semana" Type="tinyint" Nullable="false" />
+    <Property Name="Inicio" Type="datetime" Nullable="false" />
+    <Property Name="Fin" Type="datetime" Nullable="false" />
+    <Property Name="Yearr" Type="char" MaxLength="2" Nullable="false" />
+    <Property Name="Mes" Type="char" MaxLength="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProdAgenteCat">
+    <Key>
+      <PropertyRef Name="IdAgen" />
+    </Key>
+    <Property Name="IdAgen" Type="smallint" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Depto" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="Abrev" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="Activo" Type="bit" />
+    <Property Name="IdRegion" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProdCamposCat">
+    <Key>
+      <PropertyRef Name="Cod_Empresa" />
+      <PropertyRef Name="Cod_Prod" />
+      <PropertyRef Name="Cod_Campo" />
+    </Key>
+    <Property Name="Cod_Empresa" Type="smallint" Nullable="false" />
+    <Property Name="Cod_Prod" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="Cod_Campo" Type="smallint" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Tipo" Type="smallint" Nullable="false" />
+    <Property Name="Producto" Type="smallint" Nullable="false" />
+    <Property Name="Ubicacion" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="GPS1" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="GPS2" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Hectareas" Type="money" Nullable="false" />
+    <Property Name="codigo" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="Colindancia1" Type="varchar" MaxLength="500" />
+    <Property Name="Colindancia2" Type="varchar" MaxLength="500" />
+    <Property Name="Colindancia3" Type="varchar" MaxLength="500" />
+    <Property Name="Colindancia4" Type="varchar" MaxLength="500" />
+    <Property Name="CodZona" Type="smallint" Nullable="false" />
+    <Property Name="IdArea" Type="smallint" />
+    <Property Name="CajasEstimadas" Type="money" />
+    <Property Name="PeriodoInicial" Type="varchar" MaxLength="20" />
+    <Property Name="PeriodoFinal" Type="varchar" MaxLength="20" />
+    <Property Name="Activo" Type="char" MaxLength="1" />
+    <Property Name="IdZona" Type="smallint" Nullable="false" />
+    <Property Name="Gps_Latitude" Type="float" />
+    <Property Name="Gps_Longitude" Type="float" />
+    <Property Name="Gps_Altitude" Type="float" />
+    <Property Name="rowguid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="IdAgen" Type="smallint" Nullable="false" />
+    <Property Name="IdAgenC" Type="int" />
+  </EntityType>
+  <EntityType Name="ProdVisitasCab">
+    <Key>
+      <PropertyRef Name="IdVisita" />
+    </Key>
+    <Property Name="IdVisita" Type="int" Nullable="false" />
+    <Property Name="IdAgen" Type="smallint" Nullable="false" />
+    <Property Name="Cod_prod" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="Cod_Campo" Type="smallint" Nullable="false" />
+    <Property Name="IdSector" Type="smallint" />
+    <Property Name="Fecha" Type="datetime" Nullable="false" />
+    <Property Name="Estatus" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="Comentarios" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Atendio" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="UidApp" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="rowguid" Type="uniqueidentifier" />
+  </EntityType>
+  <EntityContainer Name="SeasonSun1213Model2StoreContainer">
+    <EntitySet Name="CatSemanas" EntityType="Self.CatSemanas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProdAgenteCat" EntityType="Self.ProdAgenteCat" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProdCamposCat" EntityType="Self.ProdCamposCat" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProdVisitasCab" EntityType="Self.ProdVisitasCab" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

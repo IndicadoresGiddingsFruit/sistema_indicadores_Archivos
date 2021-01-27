@@ -1,0 +1,260 @@
+﻿@{
+    ViewBag.Title = "Produccion";
+}
+
+<h5 class="font-weight-bold text-secondary">REPORTE DE PRODUCCION TEMPORADA 2021</h5>
+
+<div class="card shadow mb-5" style="height: 300px; width:350px; float:left;">
+    <div class="card-header py-3" style="padding: 0.75rem 1.25rem;">
+        <h6 class="m-0 font-weight-bold text-primary">Total Temporada</h6>
+    </div>
+    <div id="ChartTotal" class="card-body" style="padding: 0;"></div>
+    <div id="Diferencia" class="difs"></div>
+</div>
+
+@*<div class="card shadow mb-5" style="height: 300px; width:350px;float:left; margin-left:20px">
+    <div class="card-header py-3" style="padding: 0.75rem 1.25rem;">
+        <h6 class="m-0 font-weight-bold text-primary">Avance Actual</h6>
+    </div>
+    <div id="ChartAcum" class="card-body" style="padding:0"></div>
+    <div id="DiferenciaAA" class="difs"></div>
+</div>*@
+
+<div class="card shadow mb-5" style="height: 300px; width:350px;float:left; margin-left:20px">
+    <div class="card-header py-3" style="padding: 0.75rem 1.25rem;">
+        <h6 class="m-0 font-weight-bold text-primary">Avance Semanal</h6>
+    </div>
+    <div id="Sem" style="padding:0 0 0 20px"></div>
+    <div id="ChartSem" class="card-body" style="padding:0"></div>
+    <div id="DiferenciaSA" class="difs"></div>
+</div>
+
+<div class="table-responsive table-condensed table-sm tabla">
+    <table class="table table-hover content-tabla" id="dataTableProduccion">
+        <thead>
+            <tr>
+                <td style="background-color:lightgray">Código</td>
+                <td style="background-color:lightgray">Productor</td>
+                <td style="background-color:lightgray">Deuda</td>
+                @*<td style="background-color:lightgreen">Pronostico Total</td>*@
+                <td style="background-color:lightgreen">Entregado</td>
+                @*<td style="background-color:lightgreen">Diferencia</td>
+                <td style="background-color:orange">Pronostico Acumulado</td>
+                <td style="background-color:orange">Diferencia Acumulada</td>
+                <td style="background-color:lightpink">Pronostico Semanal</td>*@
+                <td style="background-color:lightpink">Entregado Semanal</td>
+                @*<td style="background-color:lightpink">Diferencia Semanal</td>*@
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        graficaTotal();
+        //graficaAA();
+        graficaSA();
+        tabla();
+    });
+
+    function tabla() {
+        $.getJSON(siteURL+"Indicadores/ProduccionList", function (data) {
+            $.each(data, function (idx, opt) {
+                //var estilo1 = '', estilo2 = '', estilo = '';
+
+                ////Diferencias AA
+                //if (opt.Diferencia >= 0 && opt.Diferencia <= 5 || opt.Diferencia <= 0 && opt.Diferencia >= -5) {
+                //    estilo = 'background-color:LightGreen';
+                //}
+                //else if (opt.Diferencia > 5 && opt.Diferencia <= 25 || opt.Diferencia < -5 && opt.Diferencia >= -25) {
+                //    estilo = 'background-color:Yellow';
+                //}
+                //else if (opt.Diferencia > 25 && opt.Diferencia <= 50 || opt.Diferencia < -25 && opt.Diferencia >= -50) {
+                //    estilo = 'background-color:Tomato';
+                //}
+                //else if (opt.Diferencia > 50 && opt.Diferencia <= 100 || opt.Diferencia < -50 && opt.Diferencia >= -100 || opt.Diferencia > 100) {
+                //    estilo = 'background-color:black; color:red';
+                //}
+
+                ////Diferencias AA
+                //if (opt.DiferenciaAA >= 0 && opt.DiferenciaAA <= 5 || opt.DiferenciaAA <= 0 && opt.DiferenciaAA >= -5) {
+                //    estilo1 = 'background-color:LightGreen';
+                //}
+                //else if (opt.DiferenciaAA > 5 && opt.DiferenciaAA <= 25 || opt.DiferenciaAA < -5 && opt.DiferenciaAA >= -25) {
+                //    estilo1 = 'background-color:Yellow';
+                //}
+                //else if (opt.DiferenciaAA > 25 && opt.DiferenciaAA <= 50 || opt.DiferenciaAA < -25 && opt.DiferenciaAA >= -50) {
+                //    estilo1 = 'background-color:Tomato';
+                //}
+                //else if (opt.DiferenciaAA > 50 && opt.DiferenciaAA <= 100 || opt.DiferenciaAA < -50 && opt.DiferenciaAA >= -100 || opt.DiferenciaAA > 100) {
+                //    estilo1 = 'background-color:black; color:red';
+                //}
+
+                ////Diferencias SA
+                //if (opt.DiferenciaSA >= 0 && opt.DiferenciaSA <= 5 || opt.DiferenciaSA <= 0 && opt.DiferenciaSA >= -5) {
+                //    estilo2 = 'background-color:LightGreen';
+                //}
+                //else if (opt.DiferenciaSA > 5 && opt.DiferenciaSA <= 25 || opt.DiferenciaSA < -5 && opt.DiferenciaSA >= -25) {
+                //    estilo2 = 'background-color:Yellow';
+                //}
+                //else if (opt.DiferenciaSA > 25 && opt.DiferenciaSA <= 50 || opt.DiferenciaSA < -25 && opt.DiferenciaSA >= -50) {
+                //    estilo2 = 'background-color:Tomato';
+                //}
+                //else if (opt.DiferenciaSA > 50 && opt.DiferenciaSA <= 100 || opt.DiferenciaSA < -50 && opt.DiferenciaSA >= -100 || opt.DiferenciaSA > 100) {
+                //    estilo2 = 'background-color:black; color:red';
+                //}
+
+                //$('#dataTableProduccion').append('<tr><td>' + opt.Cod_Prod + '</td><td>' + opt.Nombre + '</td><td>' + '$'+opt.SaldoFinal + '</td><td>' + opt.Pronostico + '</td><td>' + opt.Entregado + '</td><td style="' + estilo + '">' + opt.Diferencia+'%' + '</td><td>' + opt.PronosticoAA + '</td><td style="' + estilo1 + '">' + opt.DiferenciaAA+'%' + '</td><td>' + opt.PronosticoSA + '</td><td>' + opt.EntregadoSA + '</td><td style="' + estilo2 + '">' + opt.DiferenciaSA+'%' + '</td></tr>');
+                $('#dataTableProduccion').append(
+                    '<tr><td>' + opt.Cod_Prod +
+                    '</td><td>' + opt.Productor +
+                    '</td><td>' + '$' + opt.SaldoFinal +
+                    '</td><td>' + opt.EntregadoT +
+                    '</td><td>' + opt.EntregadoSA + '</td></tr>');
+            });
+        }, 'json');
+    }
+
+    function graficaTotal() {
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.ajax({
+                url: siteURL+"Indicadores/GraficaProduccion",
+                type: "GET",
+                ContentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var array = [['-','Entregado']];                   
+                    var dif = [['']];
+
+                    $.each(data, function (index, value) {
+                        array.push(['',value.EntregadoT]);
+                    });
+
+                    //$.each(data, function (index, value) {
+                    //    //dif.push([value.DiferenciaT]);
+                    //});
+                    //$('#Diferencia').html('<strong>Avance Total ' + dif + '% </strong>');
+
+                    var options = {
+                        curveType: 'function',
+                        legend: { position: 'bottom', textStyle: { color: '#000000', fontSize: 10 } },
+                        colors: ['lightgreen','#ADFF2F'],
+                        vAxis: {
+                            gridlines: { color: 'transparent' },
+                            //textStyle: { color: '#FFFFFF' }
+                        }
+                    };
+
+                    var figures = google.visualization.arrayToDataTable(array)
+                    var chart = new google.visualization.ColumnChart(document.getElementById('ChartTotal'));
+
+                    chart.draw(figures, options);
+                },
+                error: function (jqxhr, status, exception) {
+                    console.log(jqxhr.responseText);
+                }
+            });
+        }
+    }
+
+    function graficaAA() {
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.ajax({
+                url: siteURL+"Indicadores/GraficaProduccion",
+                type: "GET",
+                ContentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var array = [['-', 'Entregado']];
+                    var dif = [['']];
+
+                    $.each(data, function (index, value) {
+                        array.push(['', value.PronosticoAA, value.Entregado]);
+                    });
+
+                    $.each(data, function (index, value) {
+                        dif.push([value.DiferenciaAA]);
+                    });
+
+                    //$('#DiferenciaAA').html('<strong>Avance Actual ' + dif + '% </strong>');
+
+                    var options = {
+                        curveType: 'function',
+                        legend: { position: 'bottom', textStyle: { color: '#000000', fontSize: 10 } },
+                        colors: ['orange','#D2691E'],
+                        vAxis: {
+                            gridlines: { color: 'transparent' },
+                            //textStyle: { color: '#FFFFFF' }
+                        }
+                    };
+                    var figures = google.visualization.arrayToDataTable(array)
+                    var chart = new google.visualization.ColumnChart(document.getElementById('ChartAcum'));
+                    chart.draw(figures, options);
+                },
+                error: function (jqxhr, status, exception) {
+                    console.log(jqxhr.responseText);
+                }
+            });
+        }
+    }
+
+    function graficaSA() {
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.ajax({
+                url: siteURL+"Indicadores/GraficaProduccion",
+                type: "GET",
+                ContentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    var array = [['-', 'Entregado']];
+                    var array1 = [[':']];
+                    var dif = [['']];
+
+                    $.each(data, function (index, value) {
+                        array.push(['', value.EntregadoSA]);
+                    });
+
+                    $.each(data, function (index, value) {
+                        array1.push([value.Semana]);
+                    });
+
+                    $.each(data, function (index, value) {
+                        //dif.push([value.DiferenciaSA]);
+                    });
+
+                    //$('#DiferenciaSA').html('<strong>Avance Semanal ' + dif + '% </strong>');
+                    $('#Sem').html('<strong>Semana actual: ' + array1[1] + '</strong>');
+                   
+                    var options = {
+                        curveType: 'function',
+                        legend: { position: 'bottom', textStyle: { color: '#000000', fontSize: 10 } },
+                        colors: ['lightpink', '#DEB887'],
+                        vAxis: {
+                            gridlines: { color: 'transparent' },
+                            //textStyle: { color: '#FFFFFF' }
+                        }
+                    };
+
+                    var figures = google.visualization.arrayToDataTable(array)
+                    var chart = new google.visualization.ColumnChart(document.getElementById('ChartSem'));
+                    chart.draw(figures, options);
+                },
+                error: function (jqxhr, status, exception) {
+                    console.log(jqxhr.responseText);
+                }
+            });
+        }
+    }
+</script>

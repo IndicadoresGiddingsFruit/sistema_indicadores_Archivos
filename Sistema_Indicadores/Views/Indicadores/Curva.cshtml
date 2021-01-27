@@ -1,0 +1,543 @@
+﻿@{
+    ViewBag.Title = "Curva";
+}
+
+@if (Session["IdAgen"].ToString() == "1" || Session["IdAgen"].ToString() == "5")
+{
+    <a href="@Url.Action("VARIACION_ESTIMACION_BERRIES1920","Indicadores")" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:right;margin:10px"><i class="fas fa-file-excel"></i> Descargar</a>
+
+    <div class="table-responsive table-condensed table-sm tabla" style="background-color:white">
+        <table class="table table-hover content-tabla" id="dataTableCurvaxZona" cellpadding="0" cellspacing="0">
+            <thead style="background-color:aliceblue">
+                <tr class="table-success">
+                    <th></th>
+                    <th>Zona</th>
+                    <th>Pronostico Total</th>
+                    <th></th>
+                    <th>Pronostico Acumulado</th>
+                    <th>Entregado</th>
+                    <th>Diferencia</th>
+                    <th></th>
+                    <th>Pronostico Semana Actual</th>
+                    <th>Entregado</th>
+                    <th>Diferencia</th>
+                </tr>
+            </thead>
+            <tbody style="background-color:white;font-weight:bold">
+                <tr>
+                    @*<td>
+                            <img alt="" style="cursor: pointer;" src="~/Image/icon_plus.png" />
+                            <div style="display:none">
+                                <table cellpadding="0" cellspacing="0" class="dataTableCurvaxIng">
+                                    <thead style="background-color:aliceblue;font-weight:bold">
+                                        <tr class="table-danger">
+                                            <th>Ingeniero</th>
+                                            <th>Pronostico Total</th>
+                                            <th></th>
+                                            <th>Pronostico Acumulado</th>
+                                            <th>Entregado</th>
+                                            <th>Diferencia</th>
+                                            <th></th>
+                                            <th>Pronostico Semana Actual</th>
+                                            <th>Entregado</th>
+                                            <th>Diferencia</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>*@
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript">
+        var idregion;
+
+        $(document).ready(function () {
+            curvaZona();
+        });
+
+        //Assign Click event to Plus Image.
+        $("body").on("click", "img[src*='icon_plus.png']", function () {
+            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            $(this).attr("src", siteURL + "Image/icon_minus.png");
+        });
+
+        //Assign Click event to Minus Image.
+        $("body").on("click", "img[src*='icon_minus.png']", function () {
+            $(this).attr("src", siteURL + "Image/icon_plus.png");
+            $(this).closest("tr").next().remove();
+        });
+
+        function curvaZona() {
+            $.getJSON(siteURL + "Indicadores/CurvaListZ", function (data) {
+                $.each(data, function (idx, opt) {
+                    console.log(data);
+                    var estilo1 = '', estilo2 = '';
+
+                    //Diferencias AA
+                    if (opt.DiferenciaAA >= 0 && opt.DiferenciaAA <= 5 || opt.DiferenciaAA <= 0 && opt.DiferenciaAA >= -5) {
+                        estilo1 = 'background-color:LightGreen';
+                    }
+                    else if (opt.DiferenciaAA > 5 && opt.DiferenciaAA <= 25 || opt.DiferenciaAA < -5 && opt.DiferenciaAA >= -25) {
+                        estilo1 = 'background-color:Yellow';
+                    }
+                    else if (opt.DiferenciaAA > 25 && opt.DiferenciaAA <= 50 || opt.DiferenciaAA < -25 && opt.DiferenciaAA >= -50) {
+                        estilo1 = 'background-color:Tomato';
+                    }
+                    else if (opt.DiferenciaAA > 50 && opt.DiferenciaAA <= 100 || opt.DiferenciaAA < -50 && opt.DiferenciaAA >= -100 || opt.DiferenciaAA > 100) {
+                        estilo1 = 'background-color:black; color:red';
+                    }
+
+                    //Diferencias SA
+                    if (opt.DiferenciaSA >= 0 && opt.DiferenciaSA <= 5 || opt.DiferenciaSA <= 0 && opt.DiferenciaSA >= -5) {
+                        estilo2 = 'background-color:LightGreen';
+                    }
+                    else if (opt.DiferenciaSA > 5 && opt.DiferenciaSA <= 25 || opt.DiferenciaSA < -5 && opt.DiferenciaSA >= -25) {
+                        estilo2 = 'background-color:Yellow';
+                    }
+                    else if (opt.DiferenciaSA > 25 && opt.DiferenciaSA <= 50 || opt.DiferenciaSA < -25 && opt.DiferenciaSA >= -50) {
+                        estilo2 = 'background-color:Tomato';
+                    }
+                    else if (opt.DiferenciaSA > 50 && opt.DiferenciaSA <= 100 || opt.DiferenciaSA < -50 && opt.DiferenciaSA >= -100 || opt.DiferenciaSA > 100) {
+                        estilo2 = 'background-color:black; color:red';
+                    }
+
+                    $('#dataTableCurvaxZona').append('<tr>' +
+                        '<td>' +
+                        '<img alt = "" style = "cursor: pointer;" src = "' + siteURL + 'Image/icon_plus.png" />' +
+                        '<div style="display:none">' +
+                        '<table cellpadding="0" cellspacing="0" id="dataTableCurvaxIng-' + opt.IdRegion + '">' +
+                        '<thead style="background-color:aliceblue;font-weight:bold">' +
+                        '<tr class="table-danger">' +
+                        '<th>Ingeniero</th>' +
+                        '<th>Pronostico Total</th>' +
+                        '<th></th><th>Pronostico Acumulado</th>' +
+                        '<th>Entregado</th>' +
+                        '<th>Diferencia</th>' +
+                        '<th></th>' +
+                        '<th>Pronostico Semana Actual</th>' +
+                        '<th>Entregado</th>' +
+                        '<th>Diferencia</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>' +
+
+                        '</tbody>' +
+                        '</table>' +
+                        '</div>' +
+                        '</td>' +
+                        '<td>' + opt.Zona + '</td>' +
+                        '<td>' + opt.Pronostico + '</td>' +
+                        '<td>' + '' + '</td>' +
+                        '<td>' + opt.PronosticoAA + '</td>' +
+                        '<td>' + opt.Entregado + '</td>' +
+                        '<td style="' + estilo1 + '">' + opt.DiferenciaAA + '%' + '</td>' +
+                        '<td>' + '' + '</td>' +
+                        '<td>' + opt.PronosticoSA + '</td>' +
+                        '<td>' + opt.EntregadoSA + '</td>' +
+                        '<td style="' + estilo2 + '">' + opt.DiferenciaSA + '%' + '</td>' +
+                        '</tr>');
+                    curvaIng(opt.IdRegion);
+                });
+            }, 'json');
+        }
+
+        function curvaIng(idregion) {
+            $.getJSON(siteURL + "Indicadores/CurvaListIng?idregion=" + idregion, function (data) {
+                $.each(data, function (idx, opt) {
+                    console.log(opt)
+                    var estilo1 = '', estilo2 = '';
+                    //DiferenciasAA
+                    if (opt.DiferenciaAA >= 0 && opt.DiferenciaAA <= 5 || opt.DiferenciaAA <= 0 && opt.DiferenciaAA >= -5) {
+                        estilo1 = 'background-color:LightGreen';
+                    }
+                    else if (opt.DiferenciaAA > 5 && opt.DiferenciaAA <= 25 || opt.DiferenciaAA < -5 && opt.DiferenciaAA >= -25) {
+                        estilo1 = 'background-color:Yellow';
+                    }
+                    else if (opt.DiferenciaAA > 25 && opt.DiferenciaAA <= 50 || opt.DiferenciaAA < -25 && opt.DiferenciaAA >= -50) {
+                        estilo1 = 'background-color:Tomato';
+                    }
+                    else if (opt.DiferenciaAA > 50 && opt.DiferenciaAA <= 100 || opt.DiferenciaAA < -50 && opt.DiferenciaAA >= -100 || opt.DiferenciaAA > 100) {
+                        estilo1 = 'background-color:black; color:red';
+                    }
+
+                    //DiferenciasSA
+                    if (opt.DiferenciaSA >= 0 && opt.DiferenciaSA <= 5 || opt.DiferenciaSA <= 0 && opt.DiferenciaSA >= -5) {
+                        estilo2 = 'background-color:LightGreen';
+                    }
+                    else if (opt.DiferenciaSA > 5 && opt.DiferenciaSA <= 25 || opt.DiferenciaSA < -5 && opt.DiferenciaSA >= -25) {
+                        estilo2 = 'background-color:Yellow';
+                    }
+                    else if (opt.DiferenciaSA > 25 && opt.DiferenciaSA <= 50 || opt.DiferenciaSA < -25 && opt.DiferenciaSA >= -50) {
+                        estilo2 = 'background-color:Tomato';
+                    }
+                    else if (opt.DiferenciaSA > 50 && opt.DiferenciaSA <= 100 || opt.DiferenciaSA < -50 && opt.DiferenciaSA >= -100 || opt.DiferenciaSA > 100) {
+                        estilo2 = 'background-color:black; color:red';
+                    }
+
+                    $('#dataTableCurvaxIng-' + opt.IdRegion).append('<tr>' +
+                        '<td>' + opt.Ingeniero + '</td>' +
+                        '<td>' + opt.Pronostico + '</td>' +
+                        '<td>' + '' + '</td>' +
+                        '<td>' + opt.PronosticoAA + '</td>' +
+                        '<td>' + opt.Entregado + '</td>' +
+                        '<td style="' + estilo1 + '">' + opt.DiferenciaAA + '%' + '</td>' +
+                        '<td>' + '' + '</td>' +
+                        '<td>' + opt.PronosticoSA + '</td>' +
+                        '<td>' + opt.EntregadoSA + '</td>' +
+                        '<td style="' + estilo2 + '">' + opt.DiferenciaSA + '%' + '</td>' +
+                        '</tr>');
+                });
+            }, 'json');
+        }
+    </script>
+}
+else
+{
+    <a href="@Url.Action("VARIACION_ESTIMACION_BERRIES","Indicadores")" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm" style="float:left;margin:10px"><i class="fas fa-download"></i>Descargar</a>
+    @*<a href="@Url.Action("CurvaNueva","Indicadores")" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="float:left;margin:10px">Agregar productor<i class="fas fa-user-plus"></i></a>*@
+    <button type="button" id="btn5" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:left;margin:10px">5<i class="fas fa-percent"></i></button>
+    <button type="button" id="btn25" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="float:left;margin:10px">25<i class="fas fa-percent"></i></button>
+    <button type="button" id="btn50" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" style="float:left;margin:10px">50<i class="fas fa-percent"></i></button>
+    <button type="button" id="btnTodo" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" style="float:left;margin:10px">Todo<i class="fas fa-users"></i></button>
+    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" style="float:left;margin:10px;border-radius: 40%;">Urgentes<i class="fas fa-exclamation"></i></button>
+    @*<button type="button" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm" style="float:left;margin:10px">Ocultar<i class="fas fa-eye"></i></button>*@
+
+    <div class="table-responsive table-condensed table-sm tabla">
+        <table class="table table-hover content-tabla" id="dataTableCurva" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr class="table-success">
+                    <td></td>
+                    <td>Código</td>
+                    <td>Productor</td>
+                    <td>Pronosticado</td>
+                    <td></td>
+                    <td>Pronosticado Acumulado</td>
+                    <td>Entregado</td>
+                    <td>Diferencia</td>
+                    <td></td>
+                    <td>Pronosticado Actual</td>
+                    <td>Entregado</td>
+                    <td>Diferencia</td>
+                    @*<td>Ocultar</td>*@
+                </tr>
+            </thead>
+            <tbody style="background-color:white;font-weight:bold">
+                <tr></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="ModalSemanas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div style="float: right; margin:5px 0 5px 5px;">
+                        @*<a href="@Url.Action("Curva", "Indicadores")" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm"><i class="fas fa-arrow-circle-left"></i> Regresar</a>*@
+                    </div>
+                    <div id="nombreProductor"></div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        @*@Html.TextBoxFor(model => model.Cod_Prod, new { @id = "Cod_Prod", @Style = "display:none" })*@
+                        <div class="col-xl-4 col-md-8 mb-4 col-sm-8">
+                            <h6>Elegir campo</h6>
+                            @*@Html.DropDownListFor(model => model.Cod_Campo, new SelectList(" "), "--Seleccione un campo--", new { @id = "IdCodCampo", @class = "form-control form-control-sm" })*@
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                            <h6 style="margin: 5% 0 0 0">Sector</h6>
+                            @*@Html.DropDownListFor(model => model.Sector, new SelectList(" "), "--Seleccione un sector--", new { @id = "Sector", @class = "form-control form-control-sm" })*@
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                            <h6 style="margin: 5% 0 0 0">Aumentar cajas <i class="fas fa-plus"></i></h6>
+                            <div class="input-group" style="position: relative;">
+                                <input type="text" style="width:100%" class="form-control form-control-sm" id="mascjs" name="mascjs">
+                                <div class="input-group-addon" style="position: absolute; margin-left: 85%; padding: 3%; pointer-events: none;">
+                                    <i class="fab fa-raspberry-pi"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                            <h6 style="margin: 5% 0 0 0">Disminuir cajas <i class="fas fa-minus"></i></h6>
+                            <div class="input-group" style="position: relative;">
+                                <input type="text" style="width:100%" class="form-control form-control-sm" id="minuscjs" name="minuscjs">
+                                <div class="input-group-addon" style="position: absolute; margin-left: 85%; padding: 3%; pointer-events: none;">
+                                    <i class="fab fa-raspberry-pi"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 mb-2 col-sm-4">
+                            <input type="submit" value="Aplicar" id="btnAdd" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" style="font-weight:bold" />
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-3 col-sm-6" runat="server" id="div_corte1">
+                            <h6 style="margin: 5% 0 0 0">Defoliacion</h6>
+                            @*@Html.TextBoxFor(model => model.Fecha_defoliacion, new { @class = "form-control", @type = "date" })
+                                <span class="validity"></span>
+                                @Html.ValidationMessageFor(model => model.Fecha_defoliacion, "", new { @class = "text-danger" })*@
+
+                            <h6 style="margin: 5% 0 0 0">Inicio cosecha</h6>
+                            @*@Html.TextBoxFor(model => model.Fecha_corte1, new { @class = "form-control", @type = "date" })
+                                <span class="validity"></span>
+                                @Html.ValidationMessageFor(model => model.Fecha_corte1, "", new { @class = "text-danger" })*@
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-3 col-sm-6">
+                            <div class="table-responsive table-condensed table-sm table-bordered tabla" style="margin:15px">
+                                <table class="table table-hover" id="dataTableIncidenciasCalidad">
+                                    <thead class="thead-dark" style="font-size:small; text-align:center">
+                                        <tr class="info">
+                                            <th> Semana </th>
+                                            <th> Cantidad </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-3 col-sm-6" runat="server" id="div_corte2">
+                            <h6 style="margin: 5% 0 0 0">Re/Defoliacion</h6>
+                            @*@Html.TextBoxFor(model => model.Fecha_redefoliacion, new { @class = "form-control", @type = "date" })
+                                <span class="validity"></span>
+                                @Html.ValidationMessageFor(model => model.Fecha_redefoliacion, "", new { @class = "text-danger" })*@
+
+                            <h6 style="margin: 5% 0 0 0">Inicio cosecha</h6>
+                            @*@Html.TextBoxFor(model => model.Fecha_corte2, new { @class = "form-control", @type = "date" })
+                                <span class="validity"></span>
+                                @Html.ValidationMessageFor(model => model.Fecha_corte2, "", new { @class = "text-danger" })*@
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-3 col-sm-6">
+                            <div class="table-responsive table-condensed table-sm table-bordered tabla" style="margin:15px">
+                                <table class="table table-hover" id="dataTableIncidenciasCalidad">
+                                    <thead class="thead-dark" style="font-size:small; text-align:center">
+                                        <tr class="info">
+                                            <th> Semana </th>
+                                            <th> Cantidad </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="GUARDAR FECHAS" class="btn btn-primary btn-sm active" style="font-weight:bold" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript">
+            var Cod_Prod, Cod_Campo, Id_Proyeccion, filtro="urgentes";
+
+            $(document).ready(function () {
+                curva(filtro);
+            });
+
+            $('#btn5').click(function () {
+                vaciar();
+                filtro = "cinco";
+                curva(filtro);
+            });
+
+            $('#btn25').click(function () {
+                vaciar();
+                filtro = "vcinco";
+                curva(filtro);
+            });
+
+            $('#btn50').click(function () {
+                vaciar();
+                filtro = "cincuenta";
+                curva(filtro);
+            });
+
+            $('#btnTodo').click(function () {
+                vaciar();
+                filtro = "todo";
+                curva(filtro);
+            });
+
+            function vaciar() {
+                $('#dataTableCurva tr:not(:first-child)').remove();
+                $('#dataTableCurvaxCampos tr:not(:first-child)').remove();
+            }
+
+            //Assign Click event to Plus Image.
+            $("body").on("click", "img[src*='icon_plus.png']", function () {
+                $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+                $(this).attr("src", siteURL + "Image/icon_minus.png");
+            });
+
+            //Assign Click event to Minus Image.
+            $("body").on("click", "img[src*='icon_minus.png']", function () {
+                $(this).attr("src", siteURL + "Image/icon_plus.png");
+                $(this).closest("tr").next().remove();
+            });
+
+            function curva(filtro) {
+                $.getJSON(siteURL + "Indicadores/CurvaList?filtro=" + filtro, function (data) {
+                    $.each(data, function (idx, opt) {
+                        var estilo1 = '', estilo2 = '';
+
+                        //Diferencias AA
+                        if (opt.DiferenciaAA >= 0 && opt.DiferenciaAA <= 5 || opt.DiferenciaAA <= 0 && opt.DiferenciaAA >= -5) {
+                            estilo1 = 'background-color:LightGreen';
+                        }
+                        else if (opt.DiferenciaAA > 5 && opt.DiferenciaAA <= 25 || opt.DiferenciaAA < -5 && opt.DiferenciaAA >= -25) {
+                            estilo1 = 'background-color:Yellow';
+                        }
+                        else if (opt.DiferenciaAA > 25 && opt.DiferenciaAA <= 50 || opt.DiferenciaAA < -25 && opt.DiferenciaAA >= -50) {
+                            estilo1 = 'background-color:Tomato';
+                        }
+                        else if (opt.DiferenciaAA > 50 && opt.DiferenciaAA <= 100 || opt.DiferenciaAA < -50 && opt.DiferenciaAA >= -100 || opt.DiferenciaAA > 100) {
+                            estilo1 = 'background-color:black; color:red';
+                        }
+
+                        //Diferencias SA
+                        if (opt.DiferenciaSA >= 0 && opt.DiferenciaSA <= 5 || opt.DiferenciaSA <= 0 && opt.DiferenciaSA >= -5) {
+                            estilo2 = 'background-color:LightGreen';
+                        }
+                        else if (opt.DiferenciaSA > 5 && opt.DiferenciaSA <= 25 || opt.DiferenciaSA < -5 && opt.DiferenciaSA >= -25) {
+                            estilo2 = 'background-color:Yellow';
+                        }
+                        else if (opt.DiferenciaSA > 25 && opt.DiferenciaSA <= 50 || opt.DiferenciaSA < -25 && opt.DiferenciaSA >= -50) {
+                            estilo2 = 'background-color:Tomato';
+                        }
+                        else if (opt.DiferenciaSA > 50 && opt.DiferenciaSA <= 100 || opt.DiferenciaSA < -50 && opt.DiferenciaSA >= -100 || opt.DiferenciaSA > 100) {
+                            estilo2 = 'background-color:black; color:red';
+                        }
+
+                        $('#dataTableCurva').append('<tr>' +
+                            '<td>' +
+                            '<img alt = "" style = "cursor: pointer;" src = "' + siteURL + 'Image/icon_plus.png" />' +
+                            '<div style="display:none">' +
+                            '<table cellpadding="0" cellspacing="0" id="dataTableCurvaxCampos-' + opt.Cod_Prod + '">' +
+                            '<thead style="background-color:aliceblue;font-weight:bold">' +
+                            '<tr class="table-danger">' +
+                            '<th>Cod_Campo</th>' +
+                            '<th>Campo</th>' +
+                            '<th>Sector</th>' +
+                            '<th>Ha</th>' +
+                            '<th>Cultivo</th>' +
+                            '<th>Variedad</th>' +
+                            '<th>Pronostico</th>' +
+                            '<th>Pronostico Acumulado</th>' +
+                            '<th>Entregado</th>' +
+                            '<th>Pronostico semana actual</th>' +
+                            '<th>Entregado semana actual</th>' +
+                            '<th>Semanas</th>' +
+                            '<th></th>' +
+                            '</tr>' +
+                            '</thead>' +
+                            '<tbody>' +
+
+                            '</tbody>' +
+                            '</table>' +
+                            '</div>' +
+                            '</td>' +
+                            '<td>' + opt.Cod_Prod + '</td>' +
+                            '<td>' + opt.Productor + '</td>' +
+                            '<td>' + opt.PronosticoT + '</td>' +
+                            '<td>' + '' + '</td>' +
+                            '<td>' + opt.PronosticoA + '</td>' +
+                            '<td>' + opt.EntregadoT + '</td>' +
+                            '<td style="' + estilo1 + '">' + opt.DiferenciaA + '%' + '</td>' +
+                            '<td>' + '' + '</td>' +
+                            '<td>' + opt.PronosticoSA + '</td>' +
+                            '<td>' + opt.EntregadoSA + '</td>' +
+                            '<td style="' + estilo2 + '">' + opt.DiferenciaSA + '%' + '</td>' +
+                            //'<td><a href="#" onclick="hideRow(this)"><i class="fas fa-times"></i></a></td>' +
+                            '</tr>');
+
+                        curvaCampo(opt.Cod_Prod);
+                    });
+                }, 'json');
+        }
+
+            function curvaCampo(Cod_Prod) {
+                $.getJSON(siteURL + "Indicadores/CurvaListCampos?Cod_Prod=" + Cod_Prod, function (data) {
+                    $.each(data, function (idx, opt) {
+                        var estilo1 = '';
+                        Id_Proyeccion = opt.Id_Proyeccion;
+                        Cod_Prod = opt.Cod_Prod;
+                        Cod_Campo = opt.Cod_Campo;
+
+                        //console.log(Id_Proyeccion);
+
+                        var myUrl = '@Url.Action("Semanas", "Indicadores")?Id_Proyeccion=' + Id_Proyeccion;
+
+                        if (opt.Diferencia >= 0 && opt.Diferencia <= 5 || opt.Diferencia <= 0 && opt.Diferencia >= -5) {
+                            estilo1 = 'background-color:LightGreen';
+                        }
+                        else if (opt.Diferencia > 5 && opt.Diferencia <= 25 || opt.Diferencia < -5 && opt.Diferencia >= -25) {
+                            estilo1 = 'background-color:Yellow';
+                        }
+                        else if (opt.Diferencia > 25 && opt.Diferencia <= 50 || opt.Diferencia < -25 && opt.Diferencia >= -50) {
+                            estilo1 = 'background-color:Tomato';
+                        }
+                        else if (opt.Diferencia > 50 && opt.Diferencia <= 100 || opt.Diferencia < -50 && opt.Diferencia >= -100 || opt.Diferencia > 100) {
+                            estilo1 = 'background-color:black; color:red';
+                        }
+
+                        $(document).find('#dataTableCurvaxCampos-' + opt.Cod_Prod).append('<tr>' +
+                            '<td>' + opt.Cod_Campo + '</td>' +
+                            '<td>' + opt.Campo + '</td>' +
+                            '<td>' + opt.Sector + '</td>' +
+                            '<td>' + opt.Ha + '</td>' +
+                            '<td>' + opt.Tipo + '</td>' +
+                            '<td>' + opt.Producto + '</td>' +
+                            '<td>' + opt.PronosticoT + '</td>' +
+                            '<td>' + opt.PronosticoA + '</td>' +
+                            '<td>' + opt.EntregadoT + '</td>' +
+                            '<td>' + opt.PronosticoSA + '</td>' +
+                            '<td>' + opt.EntregadoSA + '</td>' +
+                            '<td><a href="' + myUrl + '"><span>ver</span></a></td>'+
+                            '</tr>');
+                    });
+                }, 'json');
+            }
+    </script>
+}
+

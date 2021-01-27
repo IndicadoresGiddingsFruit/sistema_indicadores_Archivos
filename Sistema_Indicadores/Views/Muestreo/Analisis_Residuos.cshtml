@@ -1,0 +1,294 @@
+﻿@model Sistema_Indicadores.Models.ProdAnalisis_Residuo
+
+@{
+    ViewBag.Title = "Analisis_Residuos";
+    //List<SelectListItem> zonas = (List<SelectListItem>)ViewBag.zonas;
+}
+
+@if (@ViewBag.sms != null)
+{
+    <div>
+        <div class="alert alert-primary alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-check-circle"></i> @ViewBag.sms</h4>
+        </div>
+    </div>
+}
+
+@if (@ViewBag.error != null)
+{
+    <div>
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-times-circle"></i> Error</h4>
+            @ViewBag.error
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-sm-12 table-responsive" style="margin-top:-4%">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4><i class="fas fa-spa"></i> Análisis de Residuos de Plaguicidas</h4>
+                    <div>
+                        <i class="fas fa-arrow-circle-left"></i>
+                        @Html.ActionLink("REGRESAR", "SetSolicitud", new { @class = "d-none d-sm-inline-block btn btn-sm btn-secondary shadow-lg", @style = "font-weight:bold" })
+                    </div>
+                    @*<form action="~/Muestreo/Analisis_Residuos" method="post">*@
+                    @*@using (Html.BeginForm())        {*@
+                </div>
+                    <div class="modal-body">
+                        @Html.AntiForgeryToken()
+                        <div style="width:50%;  float:left">
+                            <div class="form-group" style="display:none">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Id:</div>
+                                @*@Html.EditorFor(model => model.Id_Muestreo, new { htmlAttributes = new { @id = "IdMuestreo", @class = "form-control form-control-sm", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Id_Muestreo, "", new { @class = "text-danger" })
+
+                                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @id = "IdAnalisis_Residuo", @class = "form-control form-control-sm", @readonly = "readonly" } })
+                                @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })*@
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Codigo:</div>
+                                @*<input type="text" style="width:100%" class="form-control form-control-sm" id="Cod_Prod" name="Cod_Prod" readonly="">*@
+                                @Html.EditorFor(model => model.Cod_Prod, new { htmlAttributes = new { @id = "Cod_Prod", @name = "Cod_Prod", @class = "form-control form-control-sm", @readonly = "readonly" } })
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Productor:</div>
+                                <input type="text" style="width:100%" class="form-control form-control-sm" id="nombreProductor" name="nombreProductor" readonly="">
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Campo:</div>
+                                @Html.EditorFor(model => model.Cod_Campo, new { htmlAttributes = new { @id = "Cod_Campo", @name = "Cod_Campo", @class = "form-control form-control-sm", @readonly = "readonly" } })
+                               @* <input type="text" style="width:100%" class="form-control form-control-sm" id="Cod_Campo" name="Cod_Campo" readonly="">*@
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Sector(es):</div>
+                                <input type="text" class="form-control form-control-sm" id="Sectores" name="Sectores" readonly="" Style="text-transform: uppercase;" autocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Cultivo:</div>
+                                <input type="text" class="form-control form-control-sm" id="Tipo" name="Tipo" readonly="" Style="text-transform: uppercase;" autocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Variedad:</div>
+                                <input type="text" class="form-control form-control-sm" id="Producto" name="Producto" readonly="" Style="text-transform: uppercase;" autocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Folio análisis:</div>
+                                <input type="text" class="form-control form-control-sm" id="Folio" name="Folio" Style="text-transform: uppercase;" autocomplete="off" />
+                                @*@Html.EditorFor(model => model.Folio, new { htmlAttributes = new { @id = "Folio", @class = "form-control form-control-sm", @readonly = "readonly" } })*@
+                            </div>
+
+                        </div>
+                        <div style="width:50%; float:left">
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Zona:</div>
+                                @Html.DropDownListFor(model => model.CodZona, (IEnumerable<SelectListItem>)ViewBag.zonas, "--Seleccione la zona--", new { @id = "CodZona", @class = "form-control form-control-sm" })
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Fecha de envio:</div>
+                                <input type="date" class="form-control form-control-sm" id="Fecha_envio" name="Fecha_envio" required="" autocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Fecha de entrega:</div>
+                                <input type="date" class="form-control form-control-sm" id="Fecha_entrega" name="Fecha_entrega" required="" autocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Status:</div>
+                                @Html.DropDownListFor(model => model.Estatus, new SelectListItem[]{
+                                       new SelectListItem() {Text = "--Seleccione un Status--", Value=null},
+                                       new SelectListItem() {Text = "CON RESIDUOS", Value="R"},
+                                       new SelectListItem() {Text = "EN PROCESO", Value="P"},
+                                       new SelectListItem() {Text = "FUERA DEL LIMITE", Value="F"},
+                                       new SelectListItem() {Text = "LIBERADO", Value="L"}}, new { @id = "Estatus", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.Estatus, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div id="fechasL" style="display:none">
+                                <div class="form-group" id="div_fecha_liberacion">
+                                    <div class="m-0 font-weight-bold text-primary subtitulo">Liberación USA (dias):</div>
+                                    <input type="number" class="form-control form-control-sm" id="LiberacionUSA" name="LiberacionUSA" required="" autocomplete="off" />
+                                </div>
+
+                                <div class="form-group" id="div_fecha_liberacion">
+                                    <div class="m-0 font-weight-bold text-primary subtitulo">Liberación EU (dias):</div>
+                                    <input type="number" class="form-control form-control-sm" id="LiberacionEU" name="LiberacionEU" required="" autocomplete="off" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo"> Número de análisis:</div>
+                                <input type="number" class="form-control form-control-sm" id="Num_analisis" name="Num_analisis" required="" sautocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Laboratorio:</div>
+                                @Html.DropDownListFor(model => model.Laboratorio, new SelectListItem[]{
+                                       new SelectListItem() {Text = "--Seleccione un Laboratorio--", Value=null},
+                                       new SelectListItem() {Text = "AGQ", Value="AGQ"},
+                                       new SelectListItem() {Text = "AGROLAB", Value="AGROLAB"}}, new { @id = "Laboratorio", @class = "form-control form-control-sm" })
+                                @Html.ValidationMessageFor(model => model.Laboratorio, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                <div class="m-0 font-weight-bold text-primary subtitulo">Comentarios:</div>
+                                <textarea class="form-control" rows="4" id="Comentarios" name="Comentarios" Style="text-transform: uppercase;" autocomplete="off"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" value="GUARDAR" id="btnAdd" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-lg" style="font-weight:bold" />
+                    </div>
+                    @*}*@
+                    @*</form>*@
+                </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">    
+    $(document).ready(function () {
+        //nombre_productor();
+        //tipo_p();
+        //sectores();        
+        data();
+
+        $("#Estatus").click(function () {
+            select = $("#Estatus option:selected").text();
+            var valor = $("#Estatus").val();
+            if (valor == "F") {               
+                $('#fechasL').show(); 
+            }
+            else {
+                $('#fechasL').hide();
+            }
+        });
+
+        $("#btnAdd").click(function () {
+            add_analisis();
+        });
+    });
+
+    function add_analisis() {
+        var data = {
+            IdMuestreo: $("#IdMuestreo").val(),  
+            IdAnalisis: $("#IdAnalisis_Residuo").val(),  
+            Cod_Prod: $("#Cod_Prod").val(),
+            Cod_Campo: $("#Cod_Campo").val(),
+            CodZona : $("#CodZona").val(),
+            Fecha_envio : $("#Fecha_envio").val(),
+            Fecha_entrega : $("#Fecha_entrega").val(),
+            Estatus : $("#Estatus").val(),
+            Num_analisis : $("#Num_analisis").val(),
+            Laboratorio : $("#Laboratorio").val(),
+            Comentarios : $("#Comentarios").val(),
+            LiberacionUSA : $("#LiberacionUSA").val(),
+            LiberacionEU: $("#LiberacionEU").val(),   
+            Folio: $("#Folio").val(),   
+        };
+        console.log(data);
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Muestreo/Analisis_ResiduosData",
+            success: function (data) {
+                //var res = $.parseJSON(data);
+                //console.log(res);                
+                alert('Datos guardados correctamente!');
+                window.location.reload();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+    }
+
+    function nombre_productor() {
+        $.getJSON(siteURL + "Json/GetProductor?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#nombreProductor");
+            select.val(result.Nombre);
+        });
+    }
+
+    function tipo_p() {
+        codigo_C = $('#IdCodCampo').val();
+        if (codigo_C.length == 0) {
+            codigo_C = 1;
+        }
+        
+        $.getJSON(siteURL + "Json/GetTipoProducto?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+            var select = $("#Tipo");
+            select.val(result.Tipo);
+            var select = $("#Producto");
+            select.val(result.Producto);
+        });
+    }
+
+    function localidad() {
+        codigo_C = $('#IdCodCampo').val();
+        if (codigo_C.length == 0) {
+            codigo_C = 1;
+        }
+        $.getJSON(siteURL + "Json/GetLocalidad_campo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+            var select = $("#Localidad");
+            select.val(result.Descripcion);
+        });
+    }
+
+    function descripcion_variedad() {
+        $.getJSON(siteURL + "Json/GetVariedadesList" , function (result) {
+            var select = $("#Variedad");
+            select.empty();
+            $.each(result, function (index, itemData) {
+                select.append($('<option/>', {
+                    value: itemData.Tipo,
+                    text: itemData.Descripcion
+                }));
+            });
+        });
+    }
+
+    function sectores() {
+        $.getJSON(siteURL + "Muestreo/SectoresList?IdMuestreo=" + $("#IdMuestreo").val(), function (result) {
+            var select = $("#Sectores");
+            select.val(result.SectorList); 
+        });
+    }
+
+    function data() {     
+        $.getJSON(siteURL + "Muestreo/Analisis_ResiduosData?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + $("#Cod_Campo").val(), function (result) {
+            $("#Cod_Prod").val(result.Cod_Prod);
+            $("#nombreProductor").val(result.Productor);
+            $("#Cod_Campo").val(result.Cod_Campo);
+            $("#Sectores").val(result.SectorList);
+            $("#Tipo").val(result.Tipo);
+            $("#Producto").val(result.Producto);
+            $("#Folio").val(result.Folio);
+            $("#CodZona").val(result.CodZona);
+            $("#Num_analisis").val(result.Num_analisis);
+        });
+    }
+      
+</script>

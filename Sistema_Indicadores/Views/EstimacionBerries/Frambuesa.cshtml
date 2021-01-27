@@ -1,0 +1,311 @@
+﻿@model Sistema_Indicadores.Models.Estimacion_Berries
+
+<div>
+    <h6 class="font-weight-bold" style="color:deeppink;float:left">VARIACIÓN SEMANAL DE LA ESTIMACIÓN DE FRAMBUESA</h6>
+    @if (Session["Id"].ToString() == "117")
+    {
+        <input style="float:right" id="Save" type="button" value="Guardar cambios" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" />
+    }
+</div>
+
+<br />
+<br />
+
+<div class="table-responsive table-condensed table-sm table-bordered tabla">
+    <table class="table table-hover content-tabla" id="dataTableRFrambuesa">
+        <thead class="thead-dark">
+            <tr>
+                <th>Semana</th>
+                <th>37</th>
+                <th>38</th>
+                <th>39</th>
+                <th>40</th>
+                <th>41</th>
+                <th>42</th>
+                <th>43</th>
+                <th>44</th>
+                <th>45</th>
+                <th>46</th>
+                <th>47</th>
+                <th>48</th>
+                <th>49</th>
+                <th>50</th>
+                <th>51</th>
+                <th>52</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16</th>
+                <th>17</th>
+                <th>18</th>
+                <th>19</th>
+                <th>20</th>
+                <th>21</th>
+                <th>22</th>
+                <th>23</th>
+                <th>24</th>
+                <th>25</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>
+
+@*RECEPCION EUROPA*@
+<br />
+<h6 style="color:rebeccapurple">ESTIMACIÓN SEMANAL</h6>
+<div class="table-responsive table-condensed table-sm table-bordered tabla">
+    <table class="table table-hover content-tabla" id="dataTableEFrambuesa">
+        <thead style="background-color:gold">
+            <tr>
+                <th>Semana</th>
+                <th>37</th>
+                <th>38</th>
+                <th>39</th>
+                <th>40</th>
+                <th>41</th>
+                <th>42</th>
+                <th>43</th>
+                <th>44</th>
+                <th>45</th>
+                <th>46</th>
+                <th>47</th>
+                <th>48</th>
+                <th>49</th>
+                <th>50</th>
+                <th>51</th>
+                <th>52</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16</th>
+                <th>17</th>
+                <th>18</th>
+                <th>19</th>
+                <th>20</th>
+                <th>21</th>
+                <th>22</th>
+                <th>23</th>
+                <th>24</th>
+                <th>25</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>
+
+@*porcentajes*@
+<div class="table-responsive table-condensed table-sm table-bordered tabla">
+    <table class="table table-hover content-tabla" id="dataTableEFrambuesaP">
+        <thead style="background-color:#FF785B">
+            <tr>
+                <th>Semana</th>
+                <th>37</th>
+                <th>38</th>
+                <th>39</th>
+                <th>40</th>
+                <th>41</th>
+                <th>42</th>
+                <th>43</th>
+                <th>44</th>
+                <th>45</th>
+                <th>46</th>
+                <th>47</th>
+                <th>48</th>
+                <th>49</th>
+                <th>50</th>
+                <th>51</th>
+                <th>52</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+                <th>13</th>
+                <th>14</th>
+                <th>15</th>
+                <th>16</th>
+                <th>17</th>
+                <th>18</th>
+                <th>19</th>
+                <th>20</th>
+                <th>21</th>
+                <th>22</th>
+                <th>23</th>
+                <th>24</th>
+                <th>25</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>
+
+@*loading*@
+<div class="modal fade" id="Alerts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background-color:transparent; border:none">
+            <div class="modal-body">
+                <img src="~/Image/Loading.gif" style="width:30%;height:30%;margin:40%" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Cajas_reales();
+        Estimacion_semanal();
+        Estimacion_semanalP();
+    });
+
+    function Cajas_reales() {
+        $.getJSON(siteURL+"EstimacionBerries/RecepcionFrambuesa", function (data) {
+            $.each(data, function (idx, opt) {
+                $('#dataTableRFrambuesa').append('<tr><td>' + opt.SEMANA + '</td><td>' + opt._37 + '</td><td>' + opt._38 + '</td><td>' + opt._39 + '</td><td>' + opt._40 + '</td><td>' + opt._41 + '</td><td>' + opt._42 + '</td><td>' + opt._43 + '</td><td>' + opt._44 + '</td><td>' + opt._45 + '</td><td>' + opt._46 + '</td><td>' + opt._47 + '</td><td>' + opt._48 + '</td><td>' + opt._49 + '</td><td>' + opt._50 + '</td><td>' + opt._51 + '</td><td>' + opt._52 + '</td><td>' + opt._1 + '</td><td>' + opt._2 + '</td><td>' + opt._3 + '</td><td>' + opt._4 + '</td><td>' + opt._5 + '</td><td>' + opt._6 + '</td><td>' + opt._7 + '</td><td>' + opt._8 + '</td><td>' + opt._9 + '</td><td>' + opt._10 + '</td><td>' + opt._11 + '</td><td>' + opt._12 + '</td><td>' + opt._13 + '</td><td>' + opt._14 + '</td><td>' + opt._15 + '</td><td>' + opt._16 + '</td><td>' + opt._17 + '</td><td>' + opt._18 + '</td><td>' + opt._19 + '</td><td>' + opt._20 + '</td><td>' + opt._21 + '</td><td>' + opt._22 + '</td><td>' + opt._23 + '</td><td>' + opt._24 + '</td><td>' + opt._25 + '</td></tr>');
+            });
+        }, 'json');
+    }
+
+    function Estimacion_semanal() {
+        $.getJSON(siteURL+"EstimacionBerries/EstimacionSFrambuesa", function (data) {
+            $.each(data, function (idx, opt) {
+                $('#dataTableEFrambuesa').append('<tr><td style="background-color:gold">' + opt.SEMANA + '</td><td contentEditable="true">' + opt._37 + '</td><td contentEditable="true">' + opt._38 + '</td><td contentEditable="true">' + opt._39 + '</td><td contentEditable="true">' + opt._40 + '</td><td contentEditable="true">' + opt._41 + '</td><td contentEditable="true">' + opt._42 + '</td><td contentEditable="true">' + opt._43 + '</td><td contentEditable="true">' + opt._44 + '</td><td contentEditable="true">' + opt._45 + '</td><td contentEditable="true">' + opt._46 + '</td><td contentEditable="true">' + opt._47 + '</td><td contentEditable="true">' + opt._48 + '</td><td contentEditable="true">' + opt._49 + '</td><td contentEditable="true">' + opt._50 + '</td><td contentEditable="true">' + opt._51 + '</td><td contentEditable="true">' + opt._52 + '</td><td contentEditable="true">' + opt._1 + '</td><td contentEditable="true">' + opt._2 + '</td><td contentEditable="true">' + opt._3 + '</td><td contentEditable="true">' + opt._4 + '</td><td contentEditable="true">' + opt._5 + '</td><td contentEditable="true">' + opt._6 + '</td><td contentEditable="true">' + opt._7 + '</td><td contentEditable="true">' + opt._8 + '</td><td contentEditable="true">' + opt._9 + '</td><td contentEditable="true">' + opt._10 + '</td><td contentEditable="true">' + opt._11 + '</td><td contentEditable="true">' + opt._12 + '</td><td contentEditable="true">' + opt._13 + '</td><td contentEditable="true">' + opt._14 + '</td><td contentEditable="true">' + opt._15 + '</td><td contentEditable="true">' + opt._16 + '</td><td contentEditable="true">' + opt._17 + '</td><td contentEditable="true">' + opt._18 + '</td><td contentEditable="true">' + opt._19 + '</td><td contentEditable="true">' + opt._20 + '</td><td contentEditable="true">' + opt._21 + '</td><td contentEditable="true">' + opt._22 + '</td><td contentEditable="true">' + opt._23 + '</td><td contentEditable="true">' + opt._24 + '</td><td contentEditable="true">' + opt._25 + '</td></tr>');
+            });
+        }, 'json');
+    }
+
+    function Estimacion_semanalP() {
+        $.getJSON(siteURL+"EstimacionBerries/EstimacionSFrambuesaP", function (data) {
+            $.each(data, function (idx, opt) {
+                $('#dataTableEFrambuesaP').append('<tr><td style="background-color:#FF785B">' + opt.SEMANA + '</td><td>' + opt._37 + '</td><td>' + opt._38 + '</td><td>' + opt._39 + '</td><td>' + opt._40 + '</td><td>' + opt._41 + '</td><td>' + opt._42 + '</td><td>' + opt._43 + '</td><td>' + opt._44 + '</td><td>' + opt._45 + '</td><td>' + opt._46 + '</td><td>' + opt._47 + '</td><td>' + opt._48 + '</td><td>' + opt._49 + '</td><td>' + opt._50 + '</td><td>' + opt._51 + '</td><td>' + opt._52 + '</td><td>' + opt._1 + '</td><td>' + opt._2 + '</td><td>' + opt._3 + '</td><td>' + opt._4 + '</td><td>' + opt._5 + '</td><td>' + opt._6 + '</td><td>' + opt._7 + '</td><td>' + opt._8 + '</td><td>' + opt._9 + '</td><td>' + opt._10 + '</td><td>' + opt._11 + '</td><td>' + opt._12 + '</td><td>' + opt._13 + '</td><td>' + opt._14 + '</td><td>' + opt._15 + '</td><td>' + opt._16 + '</td><td>' + opt._17 + '</td><td>' + opt._18 + '</td><td>' + opt._19 + '</td><td>' + opt._20 + '</td><td>' + opt._21 + '</td><td>' + opt._22 + '</td><td>' + opt._23 + '</td><td>' + opt._24 + '</td><td>' + opt._25 + '</td></tr>');
+            });
+        }, 'json');
+    }
+</script>
+
+<script type="text/javascript">
+    var array = [];
+    var index2;
+    $(document).on('click', '#Save', function (event) {
+    //PROYECCION SEMANAL
+        $("#dataTableEFrambuesa tbody tr").each(function (index) {
+            var semana, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25;
+            $(this).children("td").each(function (index2) {
+                switch (index2) {
+                    case 0: semana = $(this).text(); break;
+                    case 1: _37 = $(this).text(); break;
+                    case 2: _38 = $(this).text(); break;
+                    case 3: _39 = $(this).text(); break;
+                    case 4: _40 = $(this).text(); break;
+                    case 5: _41 = $(this).text(); break;
+                    case 6: _42 = $(this).text(); break;
+                    case 7: _43 = $(this).text(); break;
+                    case 8: _44 = $(this).text(); break;
+                    case 9: _45 = $(this).text(); break;
+                    case 10: _46 = $(this).text(); break;
+                    case 11: _47 = $(this).text(); break;
+                    case 12: _48 = $(this).text(); break;
+                    case 13: _49 = $(this).text(); break;
+                    case 14: _50 = $(this).text(); break;
+                    case 15: _51 = $(this).text(); break;
+                    case 16: _52 = $(this).text(); break;
+                    case 17: _1 = $(this).text(); break;
+                    case 18: _2 = $(this).text(); break;
+                    case 19: _3 = $(this).text(); break;
+                    case 20: _4 = $(this).text(); break;
+                    case 21: _5 = $(this).text(); break;
+                    case 22: _6 = $(this).text(); break;
+                    case 23: _7 = $(this).text(); break;
+                    case 24: _8 = $(this).text(); break;
+                    case 25: _9 = $(this).text(); break;
+                    case 26: _10 = $(this).text(); break;
+                    case 27: _11 = $(this).text(); break;
+                    case 28: _12 = $(this).text(); break;
+                    case 29: _13 = $(this).text(); break;
+                    case 30: _14 = $(this).text(); break;
+                    case 31: _15 = $(this).text(); break;
+                    case 32: _16 = $(this).text(); break;
+                    case 33: _17 = $(this).text(); break;
+                    case 34: _18 = $(this).text(); break;
+                    case 35: _19 = $(this).text(); break;
+                    case 36: _20 = $(this).text(); break;
+                    case 37: _21 = $(this).text(); break;
+                    case 38: _22 = $(this).text(); break;
+                    case 39: _23 = $(this).text(); break;
+                    case 40: _24 = $(this).text(); break;
+                    case 41: _25 = $(this).text(); break;
+                    default: console.log('Final');
+                }
+            })
+            array = [semana, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25];
+
+            if (array[0] != undefined) {
+                Guardar();
+            }
+        })
+
+        function Guardar() {
+            $.ajax({
+                type: 'POST',
+                dataType: "json",
+                url: siteURL+'EstimacionBerries/Frambuesa',
+                traditional: true,
+                data: {
+                    array: array
+                },
+                success: function (data) {
+                    if (data.rstProceso === "true") {
+                        console.log('Exito: ' + data.rstMensaje);
+                        $('#Alerts').modal('show');
+                        location.reload();
+                    }
+                    else if (data.rstProceso === "false") {
+                        console.log('Algo salió mal ' + data.rstMensaje);
+                    }
+                },
+                error: function (jqxhr, status, exception) {
+                    console.log(jqxhr.responseText);
+                    //location.reload();
+                }
+            });
+        }
+    });
+</script>

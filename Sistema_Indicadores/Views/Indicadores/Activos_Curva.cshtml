@@ -1,0 +1,230 @@
+﻿@{
+    ViewBag.Title = "Activos_Curva";
+}
+
+<style>
+    .dif1 {
+        background-color: red;
+    }
+</style>
+
+<div style="float: left; margin:5px 0 5px 0;">
+    <div style="float: left;margin:0 0 0 10px;">
+        @Html.DropDownList("agente", new SelectList(ViewBag.List_Agente, "IdAgen", "Nombre"), new { @class = "form-control form-control-sm" })
+    </div>
+    <div style="float: right;">
+        <input type="button" value="Buscar" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-lg" name="searchIng" id="searchIng" />
+    </div>
+</div>
+
+<div style="float: right; margin:5px 0 5px 5px;">
+    <input type="button" value="Guardar cambios" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-lg" name="save" id="save" />
+</div>
+
+@*<div style="float: right; margin:5px 0 5px 0;">
+        <input type="button" value="Buscar" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-lg" name="searchCod" id="searchCod" />
+    </div>
+
+    <div style="float: right;  margin:5px 0 5px 0">
+        @Html.TextBox("codigo", "", new { @class = "form-control form-control-sm", @autocomplete = "off", @placeholder = "Buscar código" })
+    </div>*@
+
+<div class="table-responsive table-condensed table-sm tabla">
+    <table class="table table-hover content-tabla" id="dataTableCurva" cellpadding="0" cellspacing="0">
+        <thead>
+            <tr class="table-success">
+                <td>Código</td>
+                <td>Productor</td>
+                <td>Pronosticado</td>
+                <td></td>
+                <td>Pronosticado Acumulado</td>
+                <td>Entregado</td>
+                <td>Diferencia</td>
+                <td></td>
+                <td>Pronosticado Semanal</td>
+                <td>Entregado</td>
+                <td>Diferencia</td>
+                <td></td>
+                <td>Estatus</td>
+                <td>Fecha</td>
+                <td>Activar</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>
+
+@*loading*@
+<div class="modal fade" id="Alerts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background-color:transparent; border:none">
+            <div class="modal-body">
+                <img src="~/Image/Loading.gif" style="width:30%;height:30%;margin:40%" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var agente;
+    var array = [];
+
+    $(document).ready(function () {
+        datos();
+    });
+
+    $('#agente').change(function () {
+        agente = $(this).find('option:selected').val();
+        //console.log(agente);
+    });
+
+    $(document).on('click', '#searchIng', function (event) {
+        datos();
+    });
+
+    $(document).on('click', '#searchCod', function (event) {
+        datos();
+    });
+
+    $(document).on('click', '#save', function (event) {
+        $("input[type=checkbox]:checked").each(function () {
+            var result = [];
+            var i = 0;
+            $(this).closest('td').siblings().each(function () {
+                result[i] = $(this).text();
+                ++i;
+            });
+            array = [agente, result[0]];
+
+            if (array[0] != undefined && array[1] != undefined) {
+                console.log(array);
+                Guardar(array);
+            }
+        });
+    });
+
+    function datos() {
+        //$('#codigo').val()
+        if (agente != undefined) {
+            @*$.getJSON("/Indicadores/CurvaList?agente=" + agente, function (data) {
+                $.each(data, function (idx, opt) {
+                    $('#dataTableCurva').append('<tr><td>' + opt.Cod_Prod + '</td><td>' + opt.Nombre + '</td><td>' + opt.Pronostico + '</td><td>' + '' + '</td><td>' + opt.PronosticoAA + '</td><td>' + opt.Entregado + '</td><td id="difA" class="diferencias">' + opt.DiferenciaAA + '</td><td>' + '' + '</td><td>' + opt.PronosticoSA + '</td><td>' + opt.EntregadoSA + '</td><td id="difSA" class="diferencias">' + opt.DiferenciaSA + '</td><td><input type="checkbox" name="cod_A" id="cod_A" value="A" /></td></tr>');
+                });
+            }, 'json');*@
+
+            $.ajax({
+                type: "POST",
+                url: siteURL + "Indicadores/CurvaList?agente=" + agente,
+                dataType: 'json',
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (data) {
+                    $.each(data, function (idx, opt) {
+
+                        var estilo1 = '', estilo2 = '', status = '';
+
+                        //Diferencias AA
+                        if (opt.DiferenciaAA >= 0 && opt.DiferenciaAA <= 5 || opt.DiferenciaAA <= 0 && opt.DiferenciaAA >= -5)
+                        {
+                            estilo1 = 'background-color:LightGreen';
+                        }
+                        else if (opt.DiferenciaAA > 5 && opt.DiferenciaAA <= 25 || opt.DiferenciaAA < -5 && opt.DiferenciaAA >= -25)
+                        {
+                            estilo1 = 'background-color:Yellow';
+                        }
+                        else if (opt.DiferenciaAA > 25 && opt.DiferenciaAA <= 50 || opt.DiferenciaAA < -25 && opt.DiferenciaAA >= -50)
+                        {
+                            estilo1 = 'background-color:Tomato';
+                        }
+                        else if (opt.DiferenciaAA > 50 && opt.DiferenciaAA <= 100 || opt.DiferenciaAA < -50 && opt.DiferenciaAA >= -100 || opt.DiferenciaAA > 100)
+                        {
+                            estilo1 = 'background-color:black; color:red';
+                        }
+
+                        //Diferencias SA
+                        if (opt.DiferenciaSA >= 0 && opt.DiferenciaSA <= 5 || opt.DiferenciaSA <= 0 && opt.DiferenciaSA >= -5)
+                        {
+                            estilo2 = 'background-color:LightGreen';
+                        }
+                        else if (opt.DiferenciaSA > 5 && opt.DiferenciaSA <= 25 || opt.DiferenciaSA < -5 && opt.DiferenciaSA >= -25)
+                        {
+                            estilo2 = 'background-color:Yellow';
+                        }
+                        else if (opt.DiferenciaSA > 25 && opt.DiferenciaSA <= 50 || opt.DiferenciaSA < -25 && opt.DiferenciaSA >= -50)
+                        {
+                            estilo2 = 'background-color:Tomato';
+                        }
+                        else if (opt.DiferenciaSA > 50 && opt.DiferenciaSA <= 100 || opt.DiferenciaSA < -50 && opt.DiferenciaSA >= -100 || opt.DiferenciaSA > 100)
+                        {
+                            estilo2 = 'background-color:black; color:red';
+                        }
+
+                        //status
+                        if (opt.Estado_M == 'A') {
+                            status = 'background-color:#5BFFA1;'
+                        }
+                        if (opt.Estado_M == 'M') {
+                            status = 'background-color:#FCF871;'
+                        }
+                        if (opt.Estado_M == 'O') {
+                            status = 'background-color:#FC7171;'
+                        }
+
+                        $('#dataTableCurva').append('<tr>' +
+                            '<td>' + opt.Cod_Prod + '</td>' +
+                            '<td>' + opt.Nombre + '</td>' +
+                            '<td>' + opt.Pronostico + '</td>' +
+                            '<td>' + '' + '</td>' +
+                            '<td>' + opt.PronosticoAA + '</td>' +
+                            '<td>' + opt.Entregado + '</td>' +
+                            '<td style="' + estilo1 + '">' + opt.DiferenciaAA + '%' + '</td>' +
+                            '<td>' + '' + '</td>' +
+                            '<td>' + opt.PronosticoSA + '</td>' +
+                            '<td>' + opt.EntregadoSA + '</td>' +
+                            '<td style="' + estilo2 + '">' + opt.DiferenciaSA + '%' + '</td>' +
+                            '<td>' + '' + '</td>' +
+                            '<td style="' + status + '">' + opt.Estado_M + '</td>' +
+                            '<td>' + opt.Fecha + '</td>' +
+                            '<td><input type="checkbox" name="cod_A" id="cod_A" value="A" /></td>' +
+                            '</tr>');
+                    });
+                    console.log(agente);
+                },
+                error: function (data, status, jqXHR) {
+                    console.log('Error');
+                }
+            });
+        }
+    }
+
+    function Guardar(array) {
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: siteURL+ 'Indicadores/Activos_Curva',
+            traditional: true,
+            data: {
+                agente: agente,
+                codigo: array[1],
+                check: 'A'
+            },
+            success: function (data) {
+                if (data.rstProceso === "true") {
+                    console.log('Exito: ' + data.rstMensaje);
+                    $('#Alerts').modal('show');
+                    location.reload();
+                }
+                else if (data.rstProceso === "false") {
+                    console.log('Algo salió mal ' + data.rstMensaje);
+                }
+            },
+            error: function (jqxhr, status, exception) {
+                console.log(jqxhr.responseText, status, exception);
+                //location.reload();
+            }
+        });
+    }
+</script>

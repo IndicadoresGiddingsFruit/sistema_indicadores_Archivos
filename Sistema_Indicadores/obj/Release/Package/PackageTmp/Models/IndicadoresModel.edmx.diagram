@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7cf31df545a14bec9e23e5ef9d7fde71" Name="Diagram1" ZoomLevel="58">
+        <EntityTypeShape EntityType="SeasonSun1213Model2.CatAcopios" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.CatProductos" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.CatSemanas" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.CatTiposProd" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.ProdAgenteCat" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.ProdCamposCat" Width="1.5" PointX="7.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.ProdProductoresCat" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.SIPGVisitas" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="SeasonSun1213Model2.FK_ProdProductoresCat_ProdAgenteCat" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.SIPGComentarios" Width="1.5" PointX="12.375" PointY="3.75" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.ProdVisitasCab" Width="1.5" PointX="12.375" PointY="6.75" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.SIPGProyeccion" Width="1.5" PointX="10.375" PointY="11.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,292 @@
+﻿@model Sistema_Indicadores.Models.ProdMuestreo
+@{
+    ViewBag.Title = "Solicitud";
+}
+
+@if (ViewBag.sms != null)
+{
+    <div>
+        <div class="alert alert-primary alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-check-circle"></i> @ViewBag.sms</h4>
+        </div>
+    </div>
+}
+
+@if (ViewBag.error != null)
+{
+    <div>
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-times-circle"></i> Error al enviar solicitud</h4>
+            @ViewBag.error
+        </div>
+    </div>
+}
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 table-responsive">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="m-0 font-weight-bold text-secondary">Solicitar Muestreo</h3>
+                    </div>
+                    <form action="~/Muestreo/Muestreo" method="post">
+                        @using (Html.BeginForm())
+                        {
+                            <div class="modal-body">
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="row">
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Codigo:
+                                        @* @Html.DropDownListFor(model => model.Cod_Campo, new SelectList(" "), "--Seleccione un codigo--", new { @id = "IdCod_Prod", @class = "form-control" })*@
+                                        <input type="text" class="form-control form-control-sm" id="Cod_Prod" name="Cod_Prod" required="" maxlength="5" minlength="5" autocomplete="off" pattern="[0-9]{5}" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                        @Html.ValidationMessageFor(model => model.Cod_Prod, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Productor:
+                                        <input type="text" style="width:100%" class="form-control form-control-sm" id="nombreProductor" name="nombreProductor" readonly="" required="">
+                                    </div>
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Localidad:
+                                        <input type="text" class="form-control form-control-sm" id="Localidad" name="Localidad" readonly="" Style="text-transform: uppercase;" autocomplete="off" />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Campo:
+                                        <div>
+                                            @Html.DropDownListFor(model => model.Cod_Campo, new SelectList(" "), "--Seleccione un campo--", new { @id = "IdCodCampo", @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Nombre del campo:
+                                        <input type="text" class="form-control form-control-sm" id="DescCampo" name="DescCampo" readonly="" Style="text-transform: uppercase;" autocomplete="off" />
+                                        @*<input type="text" class="form-control form-control-sm" id="Referencia" name="Referencia" readonly="" Style="text-transform: uppercase;" autocomplete="off" />*@
+                                    </div>
+
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Telefono:
+                                        <input type="tel" class="form-control form-control-sm" id="Telefono" name="Telefono" required="" pattern="[0-9]{10}" maxlength="10" minlength="10" autocomplete="off" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Cultivo:
+                                        <input type="text" class="form-control form-control-sm" id="Tipo" name="Tipo" readonly="" Style="text-transform: uppercase;" autocomplete="off" />
+                                        @*<div>
+                                                @Html.DropDownListFor(model => model.Tipo, new SelectListItem[]{
+                                                new SelectListItem() {Text = "--Seleccione un cultivo--", Value=null},
+                                                new SelectListItem() {Text = "ARANDANO", Value="ARANDANO"},
+                                                new SelectListItem() {Text = "FRAMBUESA", Value="FRAMBUESA"},
+                                                new SelectListItem() {Text = "FRESA", Value="FRESA"},
+                                                new SelectListItem() {Text = "ZARZAMORA", Value="ZARZAMORA"}}, new { @class = "form-control form-control-sm", @id = "Cultivo" })
+                                            </div>*@
+                                    </div>
+
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Variedad:
+                                        <input type="text" class="form-control form-control-sm" id="Producto" name="Producto" readonly="" Style="text-transform: uppercase;" autocomplete="off" />
+                                        @* @Html.DropDownListFor(model => model.Producto, new SelectList(" "), "--Seleccione la variedad--", new { @id = "Variedad", @class = "form-control form-control-sm" })*@
+                                    </div>
+
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        Fecha de inicio de cosecha:
+                                        @Html.TextBoxFor(model => model.Inicio_cosecha, new { @class = "form-control", @type = "date", @required = "required" })
+                                        <span class="validity"></span>
+                                        @Html.ValidationMessageFor(model => model.Inicio_cosecha, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col font-weight-bold text-primary subtitulo">
+                                        <input type="checkbox" id="Compras_oportunidad" name="Compras_oportunidad" />
+                                        Compras de oportunidad
+                                        <span class="validity"></span>
+                                        @Html.ValidationMessageFor(model => model.ProdCamposCat.Compras_Oportunidad, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                    <div class="row">
+                                        <div class="col font-weight-bold text-danger subtitulo">
+                                            <div id="activo" style="background-color:yellow; font-size:20px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <div class="modal-footer">
+                                <input type="submit" value="ENVIAR SOLICITUD" class="btn btn-primary btn-sm active" style="font-weight:bold" />
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var codigo_C, txt;
+
+    $("#Cod_Prod").change(function () {
+        var cod_prod = $("#Cod_Prod").val();
+        if (cod_prod.length != 5) {
+            alert("El código del productor debe ser de 5 números, complete con 0 al principio");
+            document.getElementById("#Cod_Prod").focus();
+        }
+        else {
+            limpiar();
+            nombre_productor();
+            descripcion_campos();
+            resultados();
+        }
+    });
+
+    $("#Cultivo").change(function () {
+        descripcion_variedad();
+    });
+
+    $('#IdCodCampo').change(function () {
+        ubicacion();
+        localidad();
+        nom_campo();
+        tipo_p();
+    });
+
+    function limpiar() {
+        $('#nombreProductor').val('');
+        $('#Localidad').val('');
+        $('#DescCampo').val('');
+        //$('#Referencia').val('');
+        $('#Tipo').val('');
+        $('#Producto').val('');
+
+        ubicacion();
+        localidad();
+        nom_campo();
+        tipo_p();
+    }
+
+    function descripcion_campos() {
+        $.getJSON(siteURL + "Json/GetCamposList?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#IdCodCampo");
+            select.empty();
+            $.each(result, function (index, itemData) {
+                select.append($('<option/>', {
+                    value: itemData.Cod_Campo,
+                    text: itemData.Cod_Campo //Descripcion
+                }));
+            });
+        });
+    }
+
+    function nom_campo() {
+        codigo_C = $('#IdCodCampo').val();
+        if (codigo_C.length == 0) {
+            codigo_C = 1;
+        }
+        $.getJSON(siteURL + "Json/DescCampo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+            var select = $("#DescCampo");
+            select.val(result.Descripcion);
+
+            if (result.Activo == 'N') {
+                txt = "Campo inactivo! debe activarlo en SEASON antes de solicitar un muestreo";
+                $('#activo').text(txt);
+                $('#activo').show();
+            }
+            else {
+                txt = "";
+                $('#activo').text(txt);
+                $('#activo').hide();
+            }
+
+            if (result.Compras_Oportunidad == "S") {
+                console.log(result.Compras_Oportunidad);
+                $("#Compras_oportunidad").prop("checked", true);
+            } else {
+                $("#Compras_oportunidad").prop("checked", false);
+            }
+        });
+    }
+
+    function descripcion_variedad() {
+        $('#Cultivo').change(function () {
+            var cultivo = $(this).find('option:selected').text();
+            $.getJSON(siteURL + "Json/GetVariedadesList?Cultivo=" + cultivo, function (result) {
+                var select = $("#Variedad");
+                select.empty();
+                $.each(result, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Tipo,
+                        text: itemData.Descripcion
+                    }));
+                });
+            });
+        });
+    }
+
+    function nombre_productor() {
+        $.getJSON(siteURL + "Json/GetProductor?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#nombreProductor");
+            select.val(result.Nombre);
+        });
+    }
+
+    function ubicacion() {
+        codigo_C = $('#IdCodCampo').val();
+        if (codigo_C.length == 0) {
+            codigo_C = 1;
+        }
+        $.getJSON(siteURL + "Json/GetUbicacion_campo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+            var select = $("#Referencia");
+            select.val(result.Ubicacion);
+        });
+    }
+
+    function localidad() {
+        codigo_C = $('#IdCodCampo').val();
+        if (codigo_C.length == 0) {
+            codigo_C = 1;
+        }
+        $.getJSON(siteURL + "Json/GetLocalidad_campo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+            var select = $("#Localidad");
+            select.val(result.Descripcion);
+        });
+    }
+
+    function tipo_p() {
+        codigo_C = $('#IdCodCampo').val();
+        if (codigo_C.length == 0) {
+            codigo_C = 1;
+        }
+        $.getJSON(siteURL + "Json/GetTipoProducto?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+            var select = $("#Tipo");
+            select.val(result.Tipo);
+            var select = $("#Producto");
+            select.val(result.Producto);
+        });
+    }
+
+    function resultados() {
+        $.getJSON(siteURL + "Json/BuscarSolicitud?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + $("#Cod_Campo").val(), function (result) {
+            if (result != null) {
+                document.getElementById('#datos').innerHTML = "El registro ya existe";
+                select.val(result);
+            }
+        });
+    }
+</script>
+
+
+

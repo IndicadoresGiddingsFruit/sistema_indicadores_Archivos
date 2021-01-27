@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SeasonSun1213Model2" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CatSemanas">
+    <Key>
+      <PropertyRef Name="Temporada" />
+      <PropertyRef Name="Semana" />
+    </Key>
+    <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Semana" Type="Byte" Nullable="false" />
+    <Property Name="Inicio" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Fin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Yearr" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Mes" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProdAgenteCat">
+    <Key>
+      <PropertyRef Name="IdAgen" />
+    </Key>
+    <Property Name="IdAgen" Type="Int16" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Depto" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Abrev" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Activo" Type="Boolean" />
+    <Property Name="IdRegion" Type="Int16" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProdCamposCat">
+    <Key>
+      <PropertyRef Name="Cod_Empresa" />
+      <PropertyRef Name="Cod_Prod" />
+      <PropertyRef Name="Cod_Campo" />
+    </Key>
+    <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Tipo" Type="Int16" Nullable="false" />
+    <Property Name="Producto" Type="Int16" Nullable="false" />
+    <Property Name="Ubicacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GPS1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GPS2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Hectareas" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="codigo" Type="String" MaxLength="6" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Colindancia1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Colindancia2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Colindancia3" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Colindancia4" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="CodZona" Type="Int16" Nullable="false" />
+    <Property Name="IdArea" Type="Int16" />
+    <Property Name="CajasEstimadas" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="PeriodoInicial" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PeriodoFinal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Activo" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="IdZona" Type="Int16" Nullable="false" />
+    <Property Name="Gps_Latitude" Type="Double" />
+    <Property Name="Gps_Longitude" Type="Double" />
+    <Property Name="Gps_Altitude" Type="Double" />
+    <Property Name="rowguid" Type="Guid" Nullable="false" />
+    <Property Name="IdAgen" Type="Int16" Nullable="false" />
+    <Property Name="IdAgenC" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ProdVisitasCab">
+    <Key>
+      <PropertyRef Name="IdVisita" />
+    </Key>
+    <Property Name="IdVisita" Type="Int32" Nullable="false" />
+    <Property Name="IdAgen" Type="Int16" Nullable="false" />
+    <Property Name="Cod_prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
+    <Property Name="IdSector" Type="Int16" />
+    <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Comentarios" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Atendio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UidApp" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="rowguid" Type="Guid" />
+  </EntityType>
+  <EntityContainer Name="SeasonSun1213Entities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CatSemanas" EntityType="Self.CatSemanas" />
+    <EntitySet Name="ProdAgenteCat" EntityType="Self.ProdAgenteCat" />
+    <EntitySet Name="ProdCamposCat" EntityType="Self.ProdCamposCat" />
+    <EntitySet Name="ProdVisitasCab" EntityType="Self.ProdVisitasCab" />
+  </EntityContainer>
+</Schema>

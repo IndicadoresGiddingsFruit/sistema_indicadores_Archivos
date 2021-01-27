@@ -1,0 +1,308 @@
+﻿/*Estilo del Login*/
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-bottom: 150px;
+}
+
+    body.login {
+        padding: 20px;
+        /*background: #2980b9;*/
+    }
+
+        body.login .container {
+            width: 100%;
+            padding: 0;
+            padding-top: 20px;
+        }
+
+            body.login .container .login-logo {
+                width: 100%;
+                margin: 40px 0 40px;
+            }
+
+                body.login .container .login-logo a {
+                    font: 0/0 a;
+                    color: transparent;
+                    text-shadow: none;
+                    background-color: transparent;
+                    border: 0;
+                    width: 100%;
+                    min-height: 100px;
+                    display: block;
+                }
+
+                body.login .container .login-logo h1 {
+                    color: #ffffff;
+                    font-size: 17px;
+                    line-height: normal;
+                    text-align: center;
+                }
+
+            body.login .container form {
+                width: 100%;
+                background-color: #ffffff;
+                padding: 20px;
+                position: relative;
+                border-radius: 4px;
+            }
+
+                body.login .container form:before {
+                    border-color: transparent transparent #ffffff transparent;
+                    border-style: solid;
+                    border-width: 12px;
+                    content: "";
+                    height: 0;
+                    left: 47%;
+                    top: -24px;
+                    position: absolute;
+                    width: 0;
+                }
+
+                body.login .container form input[type="text"],
+                body.login .container form input[type="password"] {
+                    font-weight: bold;
+                    background-color: #dce4ec;
+                }
+
+                body.login .container form .btn {
+                    margin-top: 15px;
+                }
+
+                body.login .container form .lost-password {
+                    color: #999999;
+                    display: block;
+                    font-size: 13px;
+                    margin-top: 10px;
+                    text-align: center;
+                }
+
+@media (min-width: 480px) {
+    body.login {
+        padding: 220px 0 0 0;
+    }
+
+        body.login .container {
+            width: 600px;
+        }
+
+            body.login .container .login-logo {
+                width: 250px;
+                float: left;
+                margin: 0;
+            }
+
+                body.login .container .login-logo a {
+                    width: 100px;
+                    height: 100px;
+                    background-position: left center;
+                }
+
+                body.login .container .login-logo h1 {
+                    text-align: left;
+                }
+
+            body.login .container form {
+                float: right;
+                width: 320px;
+            }
+
+                body.login .container form:before {
+                    border-color: transparent #ffffff transparent transparent;
+                    border-width: 12px 12px 12px 0;
+                    left: -12px;
+                    top: 30px;
+                }
+}
+/*Estilo del Login*/
+
+/*Estilo del pie de pagina*/
+
+.footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+/*Estilo del pie de pagina*/
+
+
+/* Diseño del FULLCALENDAR */
+.fc-state-default {
+    background-color: #ffffff;
+    background-image: none;
+    background-repeat: repeat-x;
+    box-shadow: none;
+    color: #333333;
+    text-shadow: none;
+}
+
+.fc-state-default {
+    border: 1px solid;
+}
+
+.fc-button {
+    color: inherit;
+    border: 1px solid #e7eaec;
+    cursor: pointer;
+    display: inline-block;
+    height: 1.9em;
+    line-height: 1.9em;
+    overflow: hidden;
+    padding: 0 0.6em;
+    position: relative;
+    white-space: nowrap;
+}
+
+.fc-state-active {
+    background-color: #1ab394;
+    border-color: #1ab394;
+    color: #ffffff;
+}
+
+.fc-center h2 {
+    font-size: 30px;
+    font-weight: 600;
+    color: inherit;
+}
+
+.fc-content .fc-widget-header,
+.fc-content .fc-widget-content {
+    border-color: #e7eaec;
+    font-weight: normal;
+}
+
+.fc-border-separate tbody {
+    background-color: #F8F8F8;
+}
+
+.fc-state-highlight {
+    background: none repeat scroll 0 0 #FCF8E3;
+}
+
+.external-event {
+    /*padding: 5px 10px;*/
+    border-radius: 2px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.fc-ltr .fc-event-hori.fc-event-end,
+.fc-rtl .fc-event-hori.fc-event-start {
+    border-radius: 2px;
+}
+
+.fc-event,
+.fc-agenda .fc-event-time,
+.fc-event a {
+    /*padding: 4px 6px;*/
+    background-color: #1ab394;
+    /* background color */
+    border-color: #1ab394;
+    /* border color */
+}
+
+.fc-event-time,
+.fc-event-title {
+    color: #717171;
+    padding: 0 1px;
+}
+
+.ui-calendar .fc-event-time,
+.ui-calendar .fc-event-title {
+    color: #fff;
+}
+/* Diseño del FULLCALENDAR */
+
+/* Posisionamiento del backdrop para evitar tapar el datepicker */
+.modal-backdrop {
+    z-index: 4;
+}
+
+.modal {
+    z-index: 5;
+}
+/* Posisionamiento del backdrop para evitar tapar el datepicker */
+
+/* Diseño del submenu iconos */
+.context-menu-hover{
+    background-color: #1abc9c !important;
+}
+.context-menu-list li:before {
+    color: #1abc9c !important;
+}
+
+.context-menu-list li:hover:before {
+    color: #fff !important;
+}
+
+.context-menu-list li.context-menu-disabled:before {
+    color: #bbb !important;
+}
+
+.context-menu-list li.context-menu-disabled:hover:before {
+    color: #bbb !important;
+}
+
+/*
+    * Diseño de las tablas
+*/
+#dataTableCreditos th:nth-child(2) {
+    min-width: 135px;
+}
+
+#dataTableCreditos thead th,
+#dataTableCreditos tbody td {
+    padding: 10px;
+}
+
+#dataTableGestiones th:nth-child(2) {
+    min-width: 60px;
+}
+
+#dataTableGestiones th:nth-child(3) {
+    min-width: 380px;
+}
+
+#dataTableGestiones th:nth-child(4) {
+    min-width: 100px;
+}
+
+#dataTableGestiones thead th,
+#dataTableGestiones tbody td {
+    padding: 10px;
+    font-size: 15px !important;
+}
+
+#MovimientosTable thead th,
+#MovimientosTable tbody td {
+    padding: 10px;
+}
+
+#dataTableGestores th:nth-child(2) {
+    min-width: 150px;
+}
+
+#dataTableGestores th:nth-child(5) {
+    min-width: 150px;
+}
+
+#dataTableCreditos thead th,
+#dataTableGestores tbody td {
+    padding: 5px;
+}
+
+#AlertsTable th:nth-child(3) {
+    min-width: 300px;
+}
+
+#AlertsTable th:nth-child(4) {
+    min-width: 150px;
+}
+
+#AlertsTable thead th,
+#AlertsTable tbody td {
+    padding: 10px;
+}

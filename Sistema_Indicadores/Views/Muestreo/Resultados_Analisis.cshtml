@@ -1,0 +1,244 @@
+﻿@model IEnumerable<Sistema_Indicadores.Clases.ClassMuestreo>
+
+@{
+    ViewBag.Title = "Resultados_Analisis";
+}
+
+<h6>ANALISIS DE RESIDUOS DE PLAGUICIDAS TEMPORADA 2020-2021</h6>
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        @using (Html.BeginForm("Resultados_Analisis", "Muestreo", FormMethod.Get))
+        {
+
+            <div style="float: left; margin:5px 0 5px 5px;">
+                <div style="float: left;">
+                    @Html.DropDownList("status", (IEnumerable<SelectListItem>)ViewBag.List_Status, new { @class = "form-control form-control-sm" })
+                </div>
+                <div style="float: right;">
+                    <button class="d-none d-sm-inline-block btn btn-sm btn-info shadow-lg" type="submit" name="searchS"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            if ((short)Session["IdAgen"] == 205 || Session["IdAgen"].ToString() == "153" || Session["IdAgen"].ToString() == "281" || Session["IdAgen"].ToString() == "1")
+            {
+                <div style="float: left; margin:5px 0 5px 5px;">
+                    <div style="float: left;">
+                        @Html.DropDownList("c_zona", new SelectList(ViewBag.List_Zona, "Codigo", "DescZona"), "--Seleccione una zona--", new { @class = "form-control form-control-sm", @id = "c_zona" })
+                    </div>
+                    <div style="float: right;">
+                        <button class="d-none d-sm-inline-block btn btn-sm btn-info shadow-lg" type="submit" name="btnZona"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            }
+
+            <div style="float: right; margin:5px 0 5px 5px;">
+                <a href="@Url.Action("Resultados_Analisis", "Muestreo")" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm">Ver todo</a>
+            </div>
+
+            <div style="float: right; margin:5px 0 5px 0;">
+                <button class="d-none d-sm-inline-block btn btn-sm btn-info shadow-lg" type="submit" id="searchC" name="searchC"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div style="float: right;  margin:5px 0 5px 0">
+                @Html.TextBox("cod_prod", "", new { @class = "form-control form-control-sm", @autocomplete = "off", @placeholder = "Buscar código", @pattern = "[0-9]{5}", @maxlength = "5", @minlength = "5", @oninput = "if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" })
+            </div>
+        }
+    </div>
+    </div>
+
+<div class="row">
+    <div class="table-responsive table-condensed table-sm table-bordered tabla">
+        <table class="table table-hover" id="dataTableResultadosA">
+            @if (Model != null)
+            {
+                <thead class="thead-light" style="font-size:x-small; text-align:center">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Campo</th>
+                        <th>Sector</th>
+                        <th>Productor</th>
+                        <th>Tipo</th>
+                        <th>Producto</th>
+                        <th>Zona</th>
+                        <th>Envío</th>
+                        <th>Entrega</th>
+                        <th>Status</th>
+                        <th>Análisis</th>
+                        <th>Lab</th>
+                        <th>LiberacionUSA</th>
+                        <th>LiberacionEU</th>
+                        <th>Comentarios</th>
+                    </tr>
+                </thead>
+                @*<tbody>
+                        <tr>
+                        </tr>
+                    </tbody>*@
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cod_Prod)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cod_Campo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sector)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Productor)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tipo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Producto)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DescZona)
+                        </td>
+                        <td>
+                            @(String.Format("{0:dd/MM/yyyy}", item.Fecha_envio))
+                        </td>
+                        <td>
+                            @(String.Format("{0:dd/MM/yyyy}", item.Fecha_entrega))
+                        </td>
+
+                        @if (item.Analisis == "R")
+                        {
+                            <td style="background-color: #FD7676"> CON RESIDUOS </td>
+                        }
+                        else if (item.Analisis == "P")
+                        {
+                            <td style="background-color: #D2D4D1"> EN PROCESO </td>
+                        }
+                        else if (item.Analisis == "F")
+                        {
+                            <td style="background-color: #F7F979"> FUERA DEL LIMITE </td>
+                        }
+                        else if (item.Analisis == "L")
+                        {
+                            <td style="background-color: #9BFC6E"> LIBERADO </td>
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Num_analisis)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Laboratorio)
+                        </td>
+                        <td>
+                            @(String.Format("{0:dd/MM/yyyy}", item.LiberacionUSA))
+                        </td>
+                        <td>
+                            @(String.Format("{0:dd/MM/yyyy}", item.LiberacionEU))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comentarios)
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            }
+            else
+            {
+                <tr>
+                    <td>No se encontró ningún dato</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var estatus, c_zona, cod_prod;
+
+    $(document).ready(function () {
+        
+    });
+
+    if (typeof estatus === 'undefined' && typeof c_zona === 'undefined' && typeof cod_prod === 'undefined') {
+        estatus = "";
+        c_zona = "";
+        cod_prod = "";
+        tabla();
+    }
+
+    $('#searchC').click(function () {
+        cod_prod = $("#cod_Prod").val();
+        if (typeof cod_prod != '') {
+            tabla();
+            vaciar();
+        }
+    });
+
+    $("#status").click(function () {
+        select = $("#status option:selected").text();
+        estatus = $("#status").val();
+        if (typeof estatus != '--Resultado del analisis--') {
+            tabla();
+            vaciar();
+        }
+    });
+
+    $("#c_zona").click(function () {
+        select = $("#c_zona option:selected").text();
+        c_zona = $("#c_zona").val();
+        if (typeof estatus != '') {
+            tabla();
+            vaciar();
+        }
+    });
+
+    function vaciar() {
+        $('table tr:not(:first-child)').remove();
+    }
+
+    function tabla() {
+        $.getJSON(siteURL + "Muestreo/Resultados_Analisis_List?estatus=" + estatus + "&c_zona=" + c_zona + "&cod_prod=" + cod_prod, function (data) {
+            $.each(data, function (idx, opt) {
+                var status_style, status;
+                var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                var Fecha_envio = new Date(parseInt(opt.Fecha_envio.slice(6, -2)));
+                var Fecha_entrega = new Date(parseInt(opt.Fecha_entrega.slice(6, -2)));
+                var LiberacionUSA = new Date(parseInt(opt.LiberacionUSA.slice(6, -2)));
+                var LiberacionEU = new Date(parseInt(opt.LiberacionEU.slice(6, -2)));
+
+                if (opt.Estatus == 'R') {
+                    status = 'CON RESIDUOS';
+                    status_style = 'background-color:#FD7676';
+                }
+                else if (opt.Estatus == 'P') {
+                    status = 'EN PROCESO';
+                    status_style = 'background-color:#D2D4D1';
+                }
+                else if (opt.Estatus == 'F') {
+                    status = 'FUERA LIMITE';
+                    status_style = 'background-color:#F7F979';
+                }
+                else if (opt.Estatus == 'L') {
+                    status = 'LIBERADO';
+                    status_style = 'background-color:#9BFC6E';
+                }
+
+                $('#dataTableResultadosA').append('<tr><td>' + opt.Cod_Prod + '</td><td>' + opt.Cod_Campo + '</td><td>' + opt.Sector + '</td><td>' + opt.Productor + '</td><td>' + opt.Tipo + '</td><td>' + opt.Producto + '</td><td>' + opt.Zona + '</td><td>' + Fecha_envio.toLocaleDateString("es-ES", options) + '</td><td>' + Fecha_entrega.toLocaleDateString("es-ES", options) + '</td><td style="' + status_style + '">' + status + '</td><td>' + opt.Num_analisis + '</td><td>' + opt.Laboratorio + '</td><td>' + LiberacionUSA.toLocaleDateString("es-ES", options) + '</td><td>' + LiberacionEU.toLocaleDateString("es-ES", options) + '</td><td>' + opt.Comentarios + '</td></tr>');
+            });
+        }, 'json');
+    }
+</script>

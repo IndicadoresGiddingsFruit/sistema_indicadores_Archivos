@@ -1,0 +1,199 @@
+﻿@*@model IEnumerable<Sistema_Indicadores.Models.ProdAnalisis_Residuo>*@
+@model IEnumerable<Sistema_Indicadores.Clases.ClassMuestreo>
+
+@{
+    ViewBag.Title = "Liberar_Estatus";
+}
+
+<h6>Liberar Análisis fuera de límite</h6>
+
+@if ((short)Session["IdAgen"] == 205)
+{
+    <div class="row">
+        <div class="col-sm-12 table-responsive">
+            <div style="float: right;">
+                <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" name="saveLib" id="saveLib"><i class="fas fa-check"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="table-responsive table-condensed table-sm table-bordered tabla">
+        <table class="table table-hover" id="dataTableF_Limite" name="dataTableF_Limite">
+            @if (Model != null)
+            {
+                <thead class="thead-light" style="font-size:x-small; text-align:center">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Campo</th>
+                        <th>Sector</th>
+                        <th>Zona</th>
+                        <th>Fecha envio</th>
+                        <th>Fecha entrega</th>
+                        <th>Status</th>
+                        <th>Num de análisis</th>
+                        <th>Laboratorio</th>
+                        <th>Comentarios</th>
+                        <th>Fecha de liberación USA</th>
+                        <th>Fecha de liberación EU</th>
+                        @if ((short)Session["IdAgen"] == 205)
+                        {
+                            <th>Liberar</th>
+                        }
+                    </tr>
+                </thead>
+                @*<tbody>
+                        <tr>
+                        </tr>
+                    </tbody>*@
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cod_Prod)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cod_Campo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sector)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DescZona)
+                            </td>
+                            <td>
+                                @(String.Format("{0:dd/MM/yyyy}", item.Fecha_envio))
+                            </td>
+                            <td>
+                                @(String.Format("{0:dd/MM/yyyy}", item.Fecha_entrega))
+                            </td>
+
+                            @if ((item.Analisis).ToString() == "F")
+                            {
+                                <td style="background-color: #F7F979"> FUERA DEL LIMITE</td>
+                            }
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Num_analisis)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Laboratorio)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Comentarios)
+                            </td>
+                            <td>
+                                @(String.Format("{0:dd/MM/yyyy}", item.LiberacionUSA))
+                            </td>
+                            <td>
+                                @(String.Format("{0:dd/MM/yyyy}", item.LiberacionEU))
+                            </td>
+                            @if ((short)Session["IdAgen"] == 205)
+                            {
+                                <td>
+                                    <input type="checkbox" id="checkItem" name="valores[]" value="@item.IdAnalisis_Residuo" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            }
+            else
+            {
+                <tr>
+                    <td>No se encontró ningún dato</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+@if (@ViewBag.error != null)
+{
+    <div>
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"> &times;</span>
+            </button>
+            <h4><i class="fas fa-times-circle"></i> @ViewBag.error </h4>
+        </div>
+    </div>
+}
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var op_check;
+    var lista = [];
+
+    $(document).ready(function () {
+        //tabla();
+        $("#saveLib").click(function () {
+            $('input[type=checkbox]').each(function () {
+                if (this.checked) {
+                    lista.push([$(this).val()]);
+                }
+            });
+
+            if (lista.length > 0) {
+                lista.forEach(function (i) {
+                    //console.log(i);
+                    $.ajax({
+                        url: siteURL + "Muestreo/Liberar_Analisis?id_analisis=" + i,
+                        type: "POST",
+                    });
+                });
+                window.location.reload();
+            }
+            else {
+                alert('Debes seleccionar al menos una opción.');
+            }
+            return false;
+        });
+
+    });
+
+    function vaciar() {
+        $('table tr:not(:first-child)').remove();
+    }
+
+    function tabla() {
+        $.getJSON(siteURL + "Muestreo/Liberar_EstatusList", function (data) {
+            $.each(data, function (idx, opt) {
+                var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                var Fecha_envio = new Date(parseInt(opt.Fecha_envio.slice(6, -2)));
+                var Fecha_entrega = new Date(parseInt(opt.Fecha_entrega.slice(6, -2)));
+                var LiberacionUSA = new Date(parseInt(opt.LiberacionUSA.slice(6, -2)));
+                var LiberacionEU = new Date(parseInt(opt.LiberacionEU.slice(6, -2)));
+
+                $('#dataTableF_Limite').append('<tr><td>' + opt.Cod_Prod + '</td><td>' +
+                    opt.Cod_Campo + '</td><td>' +
+                    opt.Sector + '</td><td>' +
+                    opt.DescZona + '</td><td>' +
+                    Fecha_envio.toLocaleDateString("es-ES", options) + '</td><td>' +
+                    Fecha_entrega.toLocaleDateString("es-ES", options) + '</td><td>' +
+                    opt.Estatus + '</td><td>' +
+                    opt.Num_analisis + '</td><td>' +
+                    opt.Laboratorio + '</td><td>' +
+                    opt.Comentarios + '</td><td>' +
+                    LiberacionUSA.toLocaleDateString("es-ES", options) + '</td><td>' +
+                    LiberacionEU.toLocaleDateString("es-ES", options) + '</td><td>' +
+                    '<input type="checkbox" data-id="' + opt.IdAnalisis_Residuo + '" value="' + opt.IdAnalisis_Residuo + '" name="check_liberar" id ="check_liberar" class="click"></td></tr>');
+            });
+        }, 'json');
+    }
+</script>

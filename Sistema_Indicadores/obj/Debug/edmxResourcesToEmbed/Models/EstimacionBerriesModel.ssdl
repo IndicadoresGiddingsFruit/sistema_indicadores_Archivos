@@ -1,0 +1,478 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SeasonSun1213Model3.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CatSemanas">
+    <Key>
+      <PropertyRef Name="Temporada" />
+      <PropertyRef Name="Semana" />
+    </Key>
+    <Property Name="Temporada" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="Semana" Type="tinyint" Nullable="false" />
+    <Property Name="Inicio" Type="datetime" Nullable="false" />
+    <Property Name="Fin" Type="datetime" Nullable="false" />
+    <Property Name="Yearr" Type="char" MaxLength="2" Nullable="false" />
+    <Property Name="Mes" Type="char" MaxLength="2" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Estimacion_Berries">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Usuario" Type="int" />
+    <Property Name="Fecha" Type="datetime" />
+    <Property Name="Semanas" Type="int" />
+    <Property Name="Cantidad" Type="float" />
+    <Property Name="Concepto" Type="varchar" MaxLength="50" />
+    <Property Name="Cultivo" Type="int" />
+    <Property Name="Temporada" Type="nchar" MaxLength="4" />
+    <Property Name="Semana" Type="int" />
+  </EntityType>
+  <EntityType Name="ProdCamposCat">
+    <Key>
+      <PropertyRef Name="Cod_Empresa" />
+      <PropertyRef Name="Cod_Prod" />
+      <PropertyRef Name="Cod_Campo" />
+    </Key>
+    <Property Name="Cod_Empresa" Type="smallint" Nullable="false" />
+    <Property Name="Cod_Prod" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="Cod_Campo" Type="smallint" Nullable="false" />
+    <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Tipo" Type="smallint" Nullable="false" />
+    <Property Name="Producto" Type="smallint" Nullable="false" />
+    <Property Name="Ubicacion" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="GPS1" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="GPS2" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Hectareas" Type="money" Nullable="false" />
+    <Property Name="codigo" Type="varchar" MaxLength="6" Nullable="false" />
+    <Property Name="Colindancia1" Type="varchar" MaxLength="500" />
+    <Property Name="Colindancia2" Type="varchar" MaxLength="500" />
+    <Property Name="Colindancia3" Type="varchar" MaxLength="500" />
+    <Property Name="Colindancia4" Type="varchar" MaxLength="500" />
+    <Property Name="CodZona" Type="smallint" Nullable="false" />
+    <Property Name="IdArea" Type="smallint" />
+    <Property Name="CajasEstimadas" Type="money" />
+    <Property Name="PeriodoInicial" Type="varchar" MaxLength="20" />
+    <Property Name="PeriodoFinal" Type="varchar" MaxLength="20" />
+    <Property Name="Activo" Type="char" MaxLength="1" />
+    <Property Name="IdZona" Type="smallint" Nullable="false" />
+    <Property Name="Gps_Latitude" Type="float" />
+    <Property Name="Gps_Longitude" Type="float" />
+    <Property Name="Gps_Altitude" Type="float" />
+    <Property Name="rowguid" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="IdAgen" Type="smallint" Nullable="false" />
+    <Property Name="IdAgenC" Type="int" />
+  </EntityType>
+  <EntityType Name="ProdProductoresCat">
+    <Key>
+      <PropertyRef Name="Cod_Prod" />
+    </Key>
+    <Property Name="Cod_Prod" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Contacto" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="RFC" Type="varchar" MaxLength="13" Nullable="false" />
+    <Property Name="CodZona" Type="smallint" Nullable="false" />
+    <Property Name="Cta" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SCta" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SSCta" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SSSCta" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="Cod_Alm" Type="smallint" Nullable="false" />
+    <Property Name="Cod_Sub" Type="smallint" Nullable="false" />
+    <Property Name="Cod_Prov" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="Calle" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="noExterior" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="noInterior" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="Colonia" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="referencia" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CP" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="Ciudad" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="municipio" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Estado" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Pais" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Telefono" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="Fax" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="Correo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Pagina" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Banco" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="Sucursal" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="CLABE" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="TopeAutoFact" Type="money" Nullable="false" />
+    <Property Name="Activo" Type="bit" Nullable="false" />
+    <Property Name="ConsCampos" Type="smallint" Nullable="false" />
+    <Property Name="Fecha_Alta" Type="datetime" Nullable="false" />
+    <Property Name="CtaD" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SCtaD" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SSCtaD" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SSSCtaD" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="TipoCta" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="pila" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="paterno" Type="varchar" MaxLength="150" Nullable="false" />
+    <Property Name="materno" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="tipopago" Type="smallint" Nullable="false" />
+    <Property Name="AgenteZ" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TipoAnt" Type="smallint" Nullable="false" />
+    <Property Name="IdArea" Type="smallint" Nullable="false" />
+    <Property Name="CodMoneda" Type="smallint" Nullable="false" />
+    <Property Name="IdAgen" Type="smallint" Nullable="false" />
+    <Property Name="CtaM" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SCtaM" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SSCtaM" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="SSSCtaM" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="FinancCont" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="Matcont" Type="varchar" MaxLength="40" Nullable="false" />
+    <Property Name="DesctoMat" Type="bit" Nullable="false" />
+    <Property Name="IdRango" Type="smallint" Nullable="false" />
+    <Property Name="Liquida" Type="bit" Nullable="false" />
+    <Property Name="SalidaMat" Type="bit" />
+    <Property Name="FechaContrato" Type="datetime" />
+    <Property Name="Movil" Type="varchar" MaxLength="15" />
+    <Property Name="Nextel" Type="varchar" MaxLength="15" />
+    <Property Name="CtaAgro" Type="char" MaxLength="4" />
+    <Property Name="SCtaAgro" Type="char" MaxLength="4" />
+    <Property Name="SSCtaAgro" Type="char" MaxLength="4" />
+    <Property Name="SSSCtaAgro" Type="char" MaxLength="4" />
+    <Property Name="FinanAgroCont" Type="varchar" MaxLength="40" />
+    <Property Name="TipoProd" Type="varchar" MaxLength="30" />
+    <Property Name="CURP" Type="varchar" MaxLength="20" />
+    <Property Name="CalleP" Type="varchar" MaxLength="200" />
+    <Property Name="NumExteriorP" Type="varchar" MaxLength="20" />
+    <Property Name="NumInteriorP" Type="varchar" MaxLength="20" />
+    <Property Name="ColoniaP" Type="varchar" MaxLength="50" />
+    <Property Name="LocalidadP" Type="varchar" MaxLength="50" />
+    <Property Name="MunicipioP" Type="varchar" MaxLength="50" />
+    <Property Name="CPP" Type="varchar" MaxLength="10" />
+    <Property Name="NIP" Type="varchar" MaxLength="20" />
+    <Property Name="Verifico_Domicilio" Type="bit" />
+    <Property Name="EstadoP" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.SIPGProyeccion' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="SIPGProyeccion">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Estado" Type="nchar" MaxLength="1" />
+    <Property Name="Estado_M" Type="nchar" MaxLength="1" />
+    <Property Name="IdAgen" Type="smallint" />
+    <Property Name="Cod_Prod" Type="varchar" MaxLength="5" />
+    <Property Name="Cod_Campo" Type="int" />
+    <Property Name="Ubicacion" Type="varchar" MaxLength="50" />
+    <Property Name="Num_corte" Type="int" />
+    <Property Name="Sector" Type="int" />
+    <Property Name="Ha" Type="float" />
+    <Property Name="Variedad" Type="varchar(max)" />
+    <Property Name="Numplantas_xha" Type="varchar" MaxLength="50" />
+    <Property Name="Manejo" Type="varchar" MaxLength="20" />
+    <Property Name="Tipo_plantacion" Type="varchar" MaxLength="20" />
+    <Property Name="Fecha_plantacion" Type="date" />
+    <Property Name="Fecha_poda" Type="date" />
+    <Property Name="Fecha_defoliacion" Type="date" />
+    <Property Name="Fecha_corte1" Type="date" />
+    <Property Name="Fecha_redefoliacion" Type="date" />
+    <Property Name="Fecha_corte2" Type="date" />
+    <Property Name="Sem1" Type="int" />
+    <Property Name="Plantacion" Type="varchar" MaxLength="20" />
+    <Property Name="Sem2" Type="int" />
+    <Property Name="Caja1" Type="float" />
+    <Property Name="Caja2" Type="float" />
+    <Property Name="Estructura" Type="varchar" MaxLength="20" />
+    <Property Name="Tipo_certificacion" Type="varchar" MaxLength="20" />
+    <Property Name="Tesco" Type="varchar" MaxLength="2" />
+    <Property Name="Edad_planta" Type="varchar" MaxLength="20" />
+    <Property Name="Tipo_plantacion2" Type="varchar" MaxLength="20" />
+    <Property Name="Fecha_podamediacaña" Type="date" />
+    <Property Name="RendxKg" Type="varchar" MaxLength="20" />
+    <Property Name="RendxHa" Type="varchar" MaxLength="20" />
+    <Property Name="TotalCajas" Type="float" />
+    <Property Name="Temporada" Type="nchar" MaxLength="4" />
+    <Property Name="Fecha" Type="datetime" />
+    <Property Name="Zona" Type="smallint" />
+    <Property Name="Acopio" Type="smallint" />
+    <Property Name="Just_Estado" Type="varchar(max)" />
+    <Property Name="27" Type="float" />
+    <Property Name="28" Type="float" />
+    <Property Name="29" Type="float" />
+    <Property Name="30" Type="float" />
+    <Property Name="31" Type="float" />
+    <Property Name="32" Type="float" />
+    <Property Name="33" Type="float" />
+    <Property Name="34" Type="float" />
+    <Property Name="35" Type="float" />
+    <Property Name="36" Type="float" />
+    <Property Name="37" Type="float" />
+    <Property Name="38" Type="float" />
+    <Property Name="39" Type="float" />
+    <Property Name="40" Type="float" />
+    <Property Name="41" Type="float" />
+    <Property Name="42" Type="float" />
+    <Property Name="43" Type="float" />
+    <Property Name="44" Type="float" />
+    <Property Name="45" Type="float" />
+    <Property Name="46" Type="float" />
+    <Property Name="47" Type="float" />
+    <Property Name="48" Type="float" />
+    <Property Name="49" Type="float" />
+    <Property Name="50" Type="float" />
+    <Property Name="51" Type="float" />
+    <Property Name="52" Type="float" />
+    <Property Name="1" Type="float" />
+    <Property Name="2" Type="float" />
+    <Property Name="3" Type="float" />
+    <Property Name="4" Type="float" />
+    <Property Name="5" Type="float" />
+    <Property Name="6" Type="float" />
+    <Property Name="7" Type="float" />
+    <Property Name="8" Type="float" />
+    <Property Name="9" Type="float" />
+    <Property Name="10" Type="float" />
+    <Property Name="11" Type="float" />
+    <Property Name="12" Type="float" />
+    <Property Name="13" Type="float" />
+    <Property Name="14" Type="float" />
+    <Property Name="15" Type="float" />
+    <Property Name="16" Type="float" />
+    <Property Name="17" Type="float" />
+    <Property Name="18" Type="float" />
+    <Property Name="19" Type="float" />
+    <Property Name="20" Type="float" />
+    <Property Name="21" Type="float" />
+    <Property Name="22" Type="float" />
+    <Property Name="23" Type="float" />
+    <Property Name="24" Type="float" />
+    <Property Name="25" Type="float" />
+    <Property Name="26" Type="float" />
+  </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="UV_ProdRecepcion">
+    <Key>
+      <PropertyRef Name="Empresa" />
+      <PropertyRef Name="Ticket" />
+      <PropertyRef Name="Fecha" />
+      <PropertyRef Name="Hora" />
+      <PropertyRef Name="Cod_prod" />
+      <PropertyRef Name="CodProducto" />
+      <PropertyRef Name="CodTamano" />
+      <PropertyRef Name="CodClasificacion" />
+      <PropertyRef Name="DescClasificacion" />
+      <PropertyRef Name="CodEnvase" />
+      <PropertyRef Name="CodEtiqueta" />
+      <PropertyRef Name="CajasRecibidas" />
+      <PropertyRef Name="Rechazo" />
+      <PropertyRef Name="Reembalaje" />
+      <PropertyRef Name="Disponibles" />
+      <PropertyRef Name="Grupo" />
+      <PropertyRef Name="Estatus" />
+      <PropertyRef Name="CodEstatus" />
+      <PropertyRef Name="CodEmpaque" />
+      <PropertyRef Name="Mercado" />
+      <PropertyRef Name="Certificado" />
+    </Key>
+    <Property Name="Empresa" Type="char" MaxLength="3" Nullable="false" />
+    <Property Name="FolioNota" Type="varchar" MaxLength="10" />
+    <Property Name="Ticket" Type="bigint" Nullable="false" />
+    <Property Name="Fecha" Type="datetime" Nullable="false" />
+    <Property Name="Hora" Type="datetime" Nullable="false" />
+    <Property Name="Cod_prod" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="200" />
+    <Property Name="CodTipo" Type="varchar" MaxLength="10" />
+    <Property Name="DescProducto" Type="varchar" MaxLength="20" />
+    <Property Name="CodProducto" Type="smallint" Nullable="false" />
+    <Property Name="DescVariedad" Type="varchar" MaxLength="51" />
+    <Property Name="CodTamano" Type="smallint" Nullable="false" />
+    <Property Name="DescTamano" Type="varchar" MaxLength="31" />
+    <Property Name="CodClasificacion" Type="smallint" Nullable="false" />
+    <Property Name="DescClasificacion" Type="varchar" MaxLength="111" Nullable="false" />
+    <Property Name="CodEnvase" Type="smallint" Nullable="false" />
+    <Property Name="DescEnvase" Type="varchar" MaxLength="41" />
+    <Property Name="CodEtiqueta" Type="smallint" Nullable="false" />
+    <Property Name="Producto" Type="varchar" MaxLength="399" />
+    <Property Name="CajasRecibidas" Type="smallint" Nullable="false" />
+    <Property Name="Rechazo" Type="smallint" Nullable="false" />
+    <Property Name="Reembalaje" Type="smallint" Nullable="false" />
+    <Property Name="Disponibles" Type="smallint" Nullable="false" />
+    <Property Name="Cod_Campo" Type="smallint" />
+    <Property Name="DescCampo" Type="varchar" MaxLength="50" />
+    <Property Name="Hectareas" Type="money" />
+    <Property Name="Factor" Type="float" />
+    <Property Name="Temporada" Type="char" MaxLength="4" />
+    <Property Name="Semana" Type="tinyint" />
+    <Property Name="Cajas" Type="smallint" />
+    <Property Name="Grupo" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CodChofer" Type="smallint" />
+    <Property Name="Chofer" Type="char" MaxLength="50" />
+    <Property Name="Acopio" Type="char" MaxLength="50" />
+    <Property Name="CodAcopio" Type="int" />
+    <Property Name="Estatus" Type="varchar" MaxLength="9" Nullable="false" />
+    <Property Name="CodEstatus" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="CodEmpaque" Type="smallint" Nullable="false" />
+    <Property Name="Empaque" Type="char" MaxLength="40" />
+    <Property Name="DescEtiqueta" Type="char" MaxLength="40" />
+    <Property Name="Mercado" Type="varchar" MaxLength="11" Nullable="false" />
+    <Property Name="Convertidas" Type="float" />
+    <Property Name="Mes" Type="char" MaxLength="2" />
+    <Property Name="Yearr" Type="char" MaxLength="2" />
+    <Property Name="Zona" Type="char" MaxLength="30" />
+    <Property Name="Area" Type="varchar" MaxLength="50" />
+    <Property Name="Agente" Type="varchar" MaxLength="100" />
+    <Property Name="REGION" Type="varchar" MaxLength="9" />
+    <Property Name="IdAgen" Type="smallint" />
+    <Property Name="Organico" Type="bit" />
+    <Property Name="Certificado" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="SeasonSun1213Model3StoreContainer">
+    <EntitySet Name="CatSemanas" EntityType="Self.CatSemanas" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Estimacion_Berries" EntityType="Self.Estimacion_Berries" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProdCamposCat" EntityType="Self.ProdCamposCat" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProdProductoresCat" EntityType="Self.ProdProductoresCat" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SIPGProyeccion" EntityType="Self.SIPGProyeccion" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [SIPGProyeccion].[Id] AS [Id], 
+    [SIPGProyeccion].[Estado] AS [Estado], 
+    [SIPGProyeccion].[Estado_M] AS [Estado_M], 
+    [SIPGProyeccion].[IdAgen] AS [IdAgen], 
+    [SIPGProyeccion].[Cod_Prod] AS [Cod_Prod], 
+    [SIPGProyeccion].[Cod_Campo] AS [Cod_Campo], 
+    [SIPGProyeccion].[Ubicacion] AS [Ubicacion], 
+    [SIPGProyeccion].[Num_corte] AS [Num_corte], 
+    [SIPGProyeccion].[Sector] AS [Sector], 
+    [SIPGProyeccion].[Ha] AS [Ha], 
+    [SIPGProyeccion].[Variedad] AS [Variedad], 
+    [SIPGProyeccion].[Numplantas_xha] AS [Numplantas_xha], 
+    [SIPGProyeccion].[Manejo] AS [Manejo], 
+    [SIPGProyeccion].[Tipo_plantacion] AS [Tipo_plantacion], 
+    [SIPGProyeccion].[Fecha_plantacion] AS [Fecha_plantacion], 
+    [SIPGProyeccion].[Fecha_poda] AS [Fecha_poda], 
+    [SIPGProyeccion].[Fecha_defoliacion] AS [Fecha_defoliacion], 
+    [SIPGProyeccion].[Fecha_corte1] AS [Fecha_corte1], 
+    [SIPGProyeccion].[Fecha_redefoliacion] AS [Fecha_redefoliacion], 
+    [SIPGProyeccion].[Fecha_corte2] AS [Fecha_corte2], 
+    [SIPGProyeccion].[Sem1] AS [Sem1], 
+    [SIPGProyeccion].[Plantacion] AS [Plantacion], 
+    [SIPGProyeccion].[Sem2] AS [Sem2], 
+    [SIPGProyeccion].[Caja1] AS [Caja1], 
+    [SIPGProyeccion].[Caja2] AS [Caja2], 
+    [SIPGProyeccion].[Estructura] AS [Estructura], 
+    [SIPGProyeccion].[Tipo_certificacion] AS [Tipo_certificacion], 
+    [SIPGProyeccion].[Tesco] AS [Tesco], 
+    [SIPGProyeccion].[Edad_planta] AS [Edad_planta], 
+    [SIPGProyeccion].[Tipo_plantacion2] AS [Tipo_plantacion2], 
+    [SIPGProyeccion].[Fecha_podamediacaña] AS [Fecha_podamediacaña], 
+    [SIPGProyeccion].[RendxKg] AS [RendxKg], 
+    [SIPGProyeccion].[RendxHa] AS [RendxHa], 
+    [SIPGProyeccion].[TotalCajas] AS [TotalCajas], 
+    [SIPGProyeccion].[Temporada] AS [Temporada], 
+    [SIPGProyeccion].[Fecha] AS [Fecha], 
+    [SIPGProyeccion].[Zona] AS [Zona], 
+    [SIPGProyeccion].[Acopio] AS [Acopio], 
+    [SIPGProyeccion].[Just_Estado] AS [Just_Estado], 
+    [SIPGProyeccion].[27] AS [27], 
+    [SIPGProyeccion].[28] AS [28], 
+    [SIPGProyeccion].[29] AS [29], 
+    [SIPGProyeccion].[30] AS [30], 
+    [SIPGProyeccion].[31] AS [31], 
+    [SIPGProyeccion].[32] AS [32], 
+    [SIPGProyeccion].[33] AS [33], 
+    [SIPGProyeccion].[34] AS [34], 
+    [SIPGProyeccion].[35] AS [35], 
+    [SIPGProyeccion].[36] AS [36], 
+    [SIPGProyeccion].[37] AS [37], 
+    [SIPGProyeccion].[38] AS [38], 
+    [SIPGProyeccion].[39] AS [39], 
+    [SIPGProyeccion].[40] AS [40], 
+    [SIPGProyeccion].[41] AS [41], 
+    [SIPGProyeccion].[42] AS [42], 
+    [SIPGProyeccion].[43] AS [43], 
+    [SIPGProyeccion].[44] AS [44], 
+    [SIPGProyeccion].[45] AS [45], 
+    [SIPGProyeccion].[46] AS [46], 
+    [SIPGProyeccion].[47] AS [47], 
+    [SIPGProyeccion].[48] AS [48], 
+    [SIPGProyeccion].[49] AS [49], 
+    [SIPGProyeccion].[50] AS [50], 
+    [SIPGProyeccion].[51] AS [51], 
+    [SIPGProyeccion].[52] AS [52], 
+    [SIPGProyeccion].[1] AS [1], 
+    [SIPGProyeccion].[2] AS [2], 
+    [SIPGProyeccion].[3] AS [3], 
+    [SIPGProyeccion].[4] AS [4], 
+    [SIPGProyeccion].[5] AS [5], 
+    [SIPGProyeccion].[6] AS [6], 
+    [SIPGProyeccion].[7] AS [7], 
+    [SIPGProyeccion].[8] AS [8], 
+    [SIPGProyeccion].[9] AS [9], 
+    [SIPGProyeccion].[10] AS [10], 
+    [SIPGProyeccion].[11] AS [11], 
+    [SIPGProyeccion].[12] AS [12], 
+    [SIPGProyeccion].[13] AS [13], 
+    [SIPGProyeccion].[14] AS [14], 
+    [SIPGProyeccion].[15] AS [15], 
+    [SIPGProyeccion].[16] AS [16], 
+    [SIPGProyeccion].[17] AS [17], 
+    [SIPGProyeccion].[18] AS [18], 
+    [SIPGProyeccion].[19] AS [19], 
+    [SIPGProyeccion].[20] AS [20], 
+    [SIPGProyeccion].[21] AS [21], 
+    [SIPGProyeccion].[22] AS [22], 
+    [SIPGProyeccion].[23] AS [23], 
+    [SIPGProyeccion].[24] AS [24], 
+    [SIPGProyeccion].[25] AS [25], 
+    [SIPGProyeccion].[26] AS [26]
+    FROM [dbo].[SIPGProyeccion] AS [SIPGProyeccion]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="UV_ProdRecepcion" EntityType="Self.UV_ProdRecepcion" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [UV_ProdRecepcion].[Empresa] AS [Empresa], 
+    [UV_ProdRecepcion].[FolioNota] AS [FolioNota], 
+    [UV_ProdRecepcion].[Ticket] AS [Ticket], 
+    [UV_ProdRecepcion].[Fecha] AS [Fecha], 
+    [UV_ProdRecepcion].[Hora] AS [Hora], 
+    [UV_ProdRecepcion].[Cod_prod] AS [Cod_prod], 
+    [UV_ProdRecepcion].[Nombre] AS [Nombre], 
+    [UV_ProdRecepcion].[CodTipo] AS [CodTipo], 
+    [UV_ProdRecepcion].[DescProducto] AS [DescProducto], 
+    [UV_ProdRecepcion].[CodProducto] AS [CodProducto], 
+    [UV_ProdRecepcion].[DescVariedad] AS [DescVariedad], 
+    [UV_ProdRecepcion].[CodTamano] AS [CodTamano], 
+    [UV_ProdRecepcion].[DescTamano] AS [DescTamano], 
+    [UV_ProdRecepcion].[CodClasificacion] AS [CodClasificacion], 
+    [UV_ProdRecepcion].[DescClasificacion] AS [DescClasificacion], 
+    [UV_ProdRecepcion].[CodEnvase] AS [CodEnvase], 
+    [UV_ProdRecepcion].[DescEnvase] AS [DescEnvase], 
+    [UV_ProdRecepcion].[CodEtiqueta] AS [CodEtiqueta], 
+    [UV_ProdRecepcion].[Producto] AS [Producto], 
+    [UV_ProdRecepcion].[CajasRecibidas] AS [CajasRecibidas], 
+    [UV_ProdRecepcion].[Rechazo] AS [Rechazo], 
+    [UV_ProdRecepcion].[Reembalaje] AS [Reembalaje], 
+    [UV_ProdRecepcion].[Disponibles] AS [Disponibles], 
+    [UV_ProdRecepcion].[Cod_Campo] AS [Cod_Campo], 
+    [UV_ProdRecepcion].[DescCampo] AS [DescCampo], 
+    [UV_ProdRecepcion].[Hectareas] AS [Hectareas], 
+    [UV_ProdRecepcion].[Factor] AS [Factor], 
+    [UV_ProdRecepcion].[Temporada] AS [Temporada], 
+    [UV_ProdRecepcion].[Semana] AS [Semana], 
+    [UV_ProdRecepcion].[Cajas] AS [Cajas], 
+    [UV_ProdRecepcion].[Grupo] AS [Grupo], 
+    [UV_ProdRecepcion].[CodChofer] AS [CodChofer], 
+    [UV_ProdRecepcion].[Chofer] AS [Chofer], 
+    [UV_ProdRecepcion].[Acopio] AS [Acopio], 
+    [UV_ProdRecepcion].[CodAcopio] AS [CodAcopio], 
+    [UV_ProdRecepcion].[Estatus] AS [Estatus], 
+    [UV_ProdRecepcion].[CodEstatus] AS [CodEstatus], 
+    [UV_ProdRecepcion].[CodEmpaque] AS [CodEmpaque], 
+    [UV_ProdRecepcion].[Empaque] AS [Empaque], 
+    [UV_ProdRecepcion].[DescEtiqueta] AS [DescEtiqueta], 
+    [UV_ProdRecepcion].[Mercado] AS [Mercado], 
+    [UV_ProdRecepcion].[Convertidas] AS [Convertidas], 
+    [UV_ProdRecepcion].[Mes] AS [Mes], 
+    [UV_ProdRecepcion].[Yearr] AS [Yearr], 
+    [UV_ProdRecepcion].[Zona] AS [Zona], 
+    [UV_ProdRecepcion].[Area] AS [Area], 
+    [UV_ProdRecepcion].[Agente] AS [Agente], 
+    [UV_ProdRecepcion].[REGION] AS [REGION], 
+    [UV_ProdRecepcion].[IdAgen] AS [IdAgen], 
+    [UV_ProdRecepcion].[Organico] AS [Organico], 
+    [UV_ProdRecepcion].[Certificado] AS [Certificado]
+    FROM [dbo].[UV_ProdRecepcion] AS [UV_ProdRecepcion]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

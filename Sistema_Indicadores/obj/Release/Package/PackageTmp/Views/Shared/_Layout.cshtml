@@ -1,0 +1,527 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Style/Index.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/sb-admin-2.css" rel="stylesheet" />
+    <link href="~/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+
+    <title>Fruit Giddings Mexico</title>
+    <!-- Custom fonts for this template-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.css" />
+    <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="cache-control" content="no-cache" />
+
+    <style>
+        .form-horizontal .has-feedback .form-control-feedback {
+            top: 3px;
+            right: 37px;
+        }
+        /*Diseño del loeder*/
+        .Cargando {
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.7);
+            z-index: 100000;
+        }
+
+            .Cargando label {
+                position: absolute;
+                top: 365px;
+                left: 45%;
+            }
+
+            .Cargando i {
+                position: absolute;
+                top: 400px;
+                left: 48%;
+            }
+    </style>
+</head>
+<body>
+    @*<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                <i class="fa fa-bars"></i>
+            </button>
+            <!-- Topbar Search -->
+            <div>
+                <a style="font-weight:bold; float:left" href="@Url.Action("SetSolicitud","Muestreo")" class="btn btn-light"><i class="fab fa-raspberry-pi"></i> GiddingsFruit</a>
+                @if (@ViewData["agente"] != null)
+                {
+                    <h7 style="float:left;padding:6px" class="m-0 font-weight-bold text-secondary">BIENVENIDO @ViewData["agente"]</h7>
+                }
+            </div>
+
+            <!-- Topbar Navbar -->
+            <div class="navbar-nav ml-auto">
+                <div class="topbar-divider d-none d-sm-block"></div>
+                <!-- Nav Item - User Information -->
+                <li class="nav-item dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Opciones</span>
+                        <i class="fas fa-user-tie"></i>
+                    </a>
+                    <!-- Dropdown - User Information -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                        @*<a class="dropdown-item" href="#" data-toggle="modal" data-target="#ChangePass">
+                                <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Cambiar contraseña
+                            </a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Logout">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Salir
+                        </a>
+
+                    </div>
+                </li>
+            </div>
+        </nav>*@
+
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+            <!-- Icon BlackBerry -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fab fa-raspberry-pi"></i>
+                </div>
+            </a>
+            @if (Session["Id"] != null)
+            {
+                if (Session["Id"].ToString() == "117")
+                {
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#eberries" aria-expanded="true" aria-controls="eberries">
+                            <i class="fas fa-seedling"></i>
+                            <span>Cultivos</span>
+                        </a>
+                        <div id="eberries" class="collapse" aria-labelledby="headingeberries" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="@Url.Action("Zarzamora", "EstimacionBerries")">Zarzamora</a>
+                                <a class="collapse-item" href="@Url.Action("Frambuesa", "EstimacionBerries")">Frambuesa</a>
+                                <a class="collapse-item" href="@Url.Action("Arandano", "EstimacionBerries")">Arándano</a>
+                                <a class="collapse-item" href="@Url.Action("Fresa", "EstimacionBerries")">Fresa</a>
+                                @if (Session["IdAgen"].ToString() == "1")
+                                {
+                                    <hr />
+                                    <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    if (Session["Id"].ToString() == "121")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                <i class="fas fa-users-cog"></i>
+                                <span>Indicadores</span>
+                            </a>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                <div class="bg-white py-2 collapse-inner rounded">
+                                    <h6 class="collapse-header">Consultar:</h6>
+                                    <a class="collapse-item" href="@Url.Action("Activos_Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                    else
+                    {
+                        if (Session["Tipo"].ToString() == "P")
+                        {
+                            <li class="nav-item">
+                                @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
+                                {
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#indicadores" aria-expanded="true" aria-controls="indicadores">
+                                        <i class="fas fa-users-cog"></i>
+                                        <span>Indicadores</span>
+                                    </a>
+                                    <div id="indicadores" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <h6 class="collapse-header">Consultar:</h6>
+                                           <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                            <a class="collapse-item" href="@Url.Action("Produccion", "Indicadores")"><i class="fas fa-truck-loading"></i> Produccion</a>
+                                        </div>
+                                    </div>
+                                }
+                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#visitas" aria-expanded="true" aria-controls="visitas">
+                                    <i class="fas fa-map-marked-alt"></i>
+                                    <span>Visitas</span>
+                                </a>
+                                <div id="visitas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                    <div class="bg-white py-2 collapse-inner rounded">
+                                        <h6 class="collapse-header">Consultar:</h6>
+                                        <a class="collapse-item" href="@Url.Action("Visitas", "Indicadores")"><i class="fas fa-map-marker-alt"></i> Resultados</a>
+                                        @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
+                                        {
+                                            <a class="collapse-item" href="@Url.Action("ReporteVisitas", "Indicadores")"><i class="fas fa-file-image"></i> Reporte </a>
+                                        }
+                                        </div>
+                                </div>
+                            </li>
+
+                            @*<li class="nav-item">
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                                        <i class="fas fa-hand-holding-usd"></i>
+                                        <span>Solicitud</span>
+                                    </a>
+                                    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            @*<a class="collapse-item" href="Financiamiento.aspx"><i class="fas fa-dollar-sign"></i>Financiamiento</a>
+                                        </div>
+                                    </div>
+                                </li>*@
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                <i class="fas fa-spa"></i>
+                                <span>Muestreos</span>
+                            </a>
+                            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                <div class="bg-white py-2 collapse-inner rounded">
+                                    <h6 class="collapse-header">Consultar:</h6>
+                                    <a class="collapse-item" href="@Url.Action("Muestreo", "Muestreo")"><i class="fas fa-seedling"></i> Solicitar</a>
+                                    <a class="collapse-item" href="@Url.Action("SetSolicitud", "Muestreo")"><i class="fas fa-spa"></i> Ver todo</a>
+                                    <a class="collapse-item" href="@Url.Action("Evaluacion", "Muestreo")"><i class="fas fa-chart-line"></i> Evaluacion</a>
+                                    <a class="collapse-item" href="@Url.Action("Muestreos_Liberados", "Muestreo")"><i class="fas fa-check-circle"></i> Liberados</a>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                <i class="fas fa-spa"></i>
+                                <span>Análisis</span>
+                            </a>
+                            <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                <div class="bg-white py-2 collapse-inner rounded">
+                                    <a class="collapse-item" href="@Url.Action("Resultados_Analisis", "Muestreo")"><i class="fas fa-seedling"></i> Resultados</a>
+                                    @if ((short)Session["IdAgen"] == 205)
+                                    {
+                                        <a class="collapse-item" href="@Url.Action("Nuevo_Analisis_Residuo", "Muestreo")"><i class="fas fa-file-signature"></i> Nuevo</a>
+                                    }
+                                </div>
+                            </div>
+                        </li>
+
+                    }
+                }
+            }
+            else
+            {
+                { Response.Redirect(url: "~/~/Index/Login"); }
+            }
+            <!-- Divider -->
+            @*@if (Session["Tipo"] != null)
+                {
+                    <hr class="sidebar-divider">
+
+                    <div class="sidebar-heading">
+                        Otro
+                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComments" aria-expanded="true" aria-controls="collapseComments">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>Comentarios</span>
+                        </a>
+                        <div id="collapseComments" class="collapse" aria-labelledby="headingComments" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <a class="collapse-item" href="@Url.Action("Comentarios", "Indicadores")"><i class="fas fa-comments"></i> Enviar un comentario</a>
+                            </div>
+                        </div>
+                    </li>
+                }*@
+        </ul>
+
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <div class="d-none d-sm-inline-block form-inline">
+                        <div class="input-group">
+                            @if (ViewData["Nombre"] != null)
+                            {
+                                <h7 style="float:left;padding:6px" class="m-0 font-weight-bold text-secondary">@ViewData["Nombre"]</h7>
+                            }
+                            <div class="input-group-append">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            @if ((short)Session["IdAgen"] == 205 || (short)Session["IdAgen"] == 182 || (short)Session["IdAgen"] == 167)
+                            {
+                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell fa-fw"></i>
+                                    <span style="display:none" id="counter_alert" class="badge badge-danger badge-counter"><div id="notif"></div></span>
+                                </a>
+                                <!-- Dropdown - Alerts -->
+                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="alertsDropdown">
+                                    <h6 class="dropdown-header">
+                                        Notificaciones
+                                    </h6>
+                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <div class="mr-3">
+                                            <div id="y_icon" class="icon-circle bg-warning" style="font-size:20px">
+                                                <i class="fas fa-exclamation"></i>
+                                            </div>
+                                            <div id="n_icon" class="icon-circle bg-info" style="font-size:20px">
+                                                <i class="fas fa-check"></i>
+                                            </div>
+
+                                        </div>
+                                        <div>
+                                            <div class="small text-gray-500" id="fecha_actual"></div>
+                                            <span id="y_notificacion" class="font-weight-bold">Existen análisis fuera de límite listos para ser liberados!</span>
+                                            <span id="n_notificacion" class="font-weight-bold">No hay notificaciones nuevas!</span>
+                                        </div>
+                                    </a>
+                                    <a class="dropdown-item text-center small text-gray-500" href="@Url.Action("Liberar_Estatus", "Muestreo")" id="btn_notif">Ver todo</a>
+                                </div>
+                            }
+                        </li>
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Opciones</span>
+                                <i class="fas fa-user-tie"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ChangePass">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Cambiar contraseña
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Logout">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Salir
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="container body-content">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright &copy; Indicadores <a href="http://www.giddingsfruit.com">www.giddingsfruit.com</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal salir -->
+    <div class="modal fade" id="Logout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold; font-size: 15px;">GiddingsFruit</h5>
+                </div>
+                <div class="modal-body" style="font-weight: bold;">
+                    ¿Desea cerrar sesión?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="btnLogout" value="Salir" />
+                    @*<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="@Url.Action("Index","Login")"><span class="fa fa-sign-out"></span> Salir</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal cambiar contraseña -->
+    <div class="modal fade" id="ChangePass" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1CP" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1CP" style="font-weight: bold; font-size: 15px;"><i class="fas fa-key"></i> Cambiar contraseña</h5>
+                </div>
+                <div class="modal-body" style="font-weight: bold;">
+                    <div class="form-group">
+                        <div class="m-0 font-weight-bold text-primary subtitulo"><i class="fas fa-unlock-alt"></i> Contraseña actual:</div>
+                        <input type="password" style="width:100%" class="form-control form-control-sm" id="mypass" name="mypass" required="">
+                        <div class="m-0 font-weight-bold text-primary subtitulo"><i class="fas fa-lock"></i> Nueva contraseña:</div>
+                        <input type="password" style="width:100%" class="form-control form-control-sm" id="newpass" name="newpass" required="">
+                        <div class="m-0 font-weight-bold text-primary subtitulo"><i class="fas fa-lock"></i> Confirmar nueva contraseña:</div>
+                        <input type="password" style="width:100%" class="form-control form-control-sm" id="confnewpass" name="confnewpass" required="">
+                    </div>
+                    @if (ViewBag.BadPass != null)
+                    {
+                        <h6 class="alert alert-danger alert-dismissable"><i class="fas fa-times-circle"></i> @ViewBag.BadPass</h6>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" data-dismiss="modal">Cancelar</button>
+                    <input type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="btnUpdatePass" value="Guardar" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page level custom scripts -->
+    <script src="~/Content/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Content/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Content/vendor/jquery/jquery.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/Content/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/Scripts/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="~/Content/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- DateTime -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
+
+    @*<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script> *@
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+
+    <!--Tablas editables-->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    @*<script src="~/Scripts/bootstrap3-editable/js/bootstrap-editable.js"></script>*@
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/Content/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/vendor/bootstrap/js/bootstrap.js"></script>
+
+    <script src="~/Content/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/js/DataTables/jquery.dataTables.min.js"></script>
+    <script>var siteURL = "@Url.Content("~")";</script>
+    <!--Cambiar contraseña-->
+    <script>
+        $(document).ready(function () {
+            proximos_liberar();
+
+            $('#btnLogout').click(function () {
+                $.ajax({
+                    url: siteURL + "Login/Home?logout=" + "yes",
+                    type: "POST",
+                    success: function (data) {
+                        console.log('Exito');
+                        window.location.href = siteURL + 'Login/Index';
+                    },
+                    error: function (jqxhr, status, exception) {
+                        console.log(jqxhr.responseText);
+                    }
+                });
+            });
+
+            $('#btnUpdatePass').click(function () {
+                console.log($('#mypass').val());
+                console.log($('#newpass').val());
+                console.log($('#confnewpass').val());
+
+                if ($('#newpass').val() == $('#confnewpass').val()) {
+                    update_password()
+                }
+                else {
+                    alert('Las contraseñas no coinciden');
+                }
+            });
+
+            //function mypass() {
+            //    $.getJSON("/Login/GetPass?mypass=" + $("#mypass").val(), function (result)
+            //    {
+            //        var select = (result.Id);
+            //        if (select != null)
+            //        {
+            //            console.log('bien');
+            //            update_password();
+            //        }
+            //        else {
+            //            console.log('mal');
+            //            alert('La contraseña es incorrecta');
+            //        }
+            //    });
+            //}
+
+            function update_password() {
+                $.ajax({
+                    url: siteURL + "Login/Index?mypass=" + $('#mypass').val() + "&newpass=" + $('#newpass').val(),
+                    type: "POST",
+                    success: function (data) {
+                        console.log('Exito');
+                        window.location.href = siteURL + 'Login/Index';
+                    },
+                    error: function (jqxhr, status, exception) {
+                        console.log(jqxhr.responseText);
+                    }
+                });
+            }
+        });
+
+        function proximos_liberar() {
+            $.getJSON(siteURL + "Home/Liberar_FLimite_List", function (result) {
+                var proximos_liberar = result.proximos_liberar;
+
+                if (proximos_liberar == 0) {
+                    $('#counter_alert').hide();
+                    $('#notif').hide();
+                    $('#y_icon').hide();
+                    $('#y_notificacion').hide();
+                    $('#n_notificacion').show();
+                    $('#n_icon').show();
+                    $('#btn_notif').hide();
+                }
+                else {
+                    var txt = proximos_liberar + "+";
+                    $('#notif').text(txt);
+                    $('#counter_alert').show();
+                    $('#notif').show();
+                    $('#y_icon').show();
+                    $('#y_notificacion').show();
+                    $('#n_notificacion').hide();
+                    $('#n_icon').hide();
+                    $('#btn_notif').show();
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

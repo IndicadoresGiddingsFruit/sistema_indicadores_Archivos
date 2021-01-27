@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SeasonSun1213ModelStoreContainer" CdmEntityContainer="SeasonSun1213Entities">
+    <EntitySetMapping Name="SIPGUsuarios">
+      <EntityTypeMapping TypeName="SeasonSun1213Model.SIPGUsuarios">
+        <MappingFragment StoreEntitySet="SIPGUsuarios">
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Clave" ColumnName="Clave" />
+          <ScalarProperty Name="Completo" ColumnName="Completo" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
+          <ScalarProperty Name="IdRegion" ColumnName="IdRegion" />
+          <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

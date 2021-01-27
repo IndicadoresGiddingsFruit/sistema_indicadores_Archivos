@@ -1,0 +1,480 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SeasonSun1213Model1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CatLocalidades">
+    <Key>
+      <PropertyRef Name="CodLocalidad" />
+    </Key>
+    <Property Name="CodLocalidad" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodMunicipio" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="CodEstado" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Area" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="CatProductos">
+    <Key>
+      <PropertyRef Name="Tipo" />
+      <PropertyRef Name="Producto" />
+    </Key>
+    <Property Name="Tipo" Type="Int16" Nullable="false" />
+    <Property Name="Producto" Type="Int16" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="40" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="DescripcionIngles" Type="String" MaxLength="40" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Consecutivo" Type="Int16" Nullable="false" />
+    <Property Name="CodCaades" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="CtaEmb" Type="Int16" Nullable="false" />
+    <Property Name="SubCtaGral" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="ConsecClasif" Type="Int16" Nullable="false" />
+    <Property Name="Temperatura" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="NomBotanico" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodTrazabilidad" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="organico" Type="Boolean" Nullable="false" />
+    <Property Name="Pedido" Type="Boolean" />
+    <Property Name="Abreviacion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Propia" Type="Boolean" Nullable="false" />
+    <Property Name="Contrato" Type="Int16" />
+    <Property Name="Grupo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CatTiposProd">
+    <Key>
+      <PropertyRef Name="Tipo" />
+    </Key>
+    <Property Name="Tipo" Type="Int16" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="20" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="HPreEnfria" Type="Byte" Nullable="false" />
+    <Property Name="MPreEnfria" Type="Byte" Nullable="false" />
+    <Property Name="Consecutivo" Type="Int16" Nullable="false" />
+    <Property Name="SeparaCto" Type="Boolean" Nullable="false" />
+    <Property Name="DescIngles" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DescripcionAd" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FraccionArancelaria" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CodigoSAT" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="Cod_UniMed" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Cod_UniMedProd" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="CodigoSATProd" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ProdAgenteCat">
+    <Key>
+      <PropertyRef Name="IdAgen" />
+    </Key>
+    <Property Name="IdAgen" Type="Int16" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Depto" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Abrev" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Activo" Type="Boolean" />
+    <Property Name="IdRegion" Type="Int16" Nullable="false" />
+    <Property Name="Codigo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ProdMuestreo" Relationship="Self.FK_IdAgen" FromRole="ProdAgenteCat" ToRole="ProdMuestreo" />
+    <NavigationProperty Name="ProdMuestreo1" Relationship="Self.FK_IdAgenI" FromRole="ProdAgenteCat" ToRole="ProdMuestreo" />
+    <NavigationProperty Name="ProdProductoresCat" Relationship="Self.FK_ProdProductoresCat_ProdAgenteCat" FromRole="ProdAgenteCat" ToRole="ProdProductoresCat" />
+  </EntityType>
+  <EntityType Name="ProdAnalisis_Residuo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
+    <Property Name="CodZona" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="Fecha_envio" Type="DateTime" Precision="3" />
+    <Property Name="Fecha_entrega" Type="DateTime" Precision="3" />
+    <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Num_analisis" Type="Int32" />
+    <Property Name="Laboratorio" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Comentarios" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IdAgen" Type="Int16" />
+    <Property Name="Fecha" Type="DateTime" Precision="3" />
+    <Property Name="Id_Muestreo" Type="Int32" />
+    <Property Name="LiberacionUSA" Type="DateTime" Precision="3" />
+    <Property Name="LiberacionEU" Type="DateTime" Precision="3" />
+    <Property Name="IdSector" Type="Int32" />
+    <NavigationProperty Name="ProdMuestreoSector" Relationship="Self.FK__ProdAnali__IdSec__78D8AF65" FromRole="ProdAnalisis_Residuo" ToRole="ProdMuestreoSector" />
+    <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
+    <Property Name="Folio" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="ProdCalidadMuestreo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Incidencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Propuesta" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Fecha" Type="DateTime" Precision="3" />
+    <Property Name="IdAgen" Type="Int16" />
+    <Property Name="Id_Muestreo" Type="Int32" />
+    <NavigationProperty Name="ProdMuestreo" Relationship="Self.FK__ProdIncid__Id_Mu__4F177FC3" FromRole="ProdCalidadMuestreo" ToRole="ProdMuestreo" />
+  </EntityType>
+  <EntityType Name="ProdCamposCat">
+    <Key>
+      <PropertyRef Name="Cod_Empresa" />
+      <PropertyRef Name="Cod_Prod" />
+      <PropertyRef Name="Cod_Campo" />
+    </Key>
+    <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Tipo" Type="Int16" Nullable="false" />
+    <Property Name="Producto" Type="Int16" Nullable="false" />
+    <Property Name="Ubicacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GPS1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GPS2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Hectareas" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="codigo" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Colindancia1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Colindancia2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Colindancia3" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Colindancia4" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="CodZona" Type="Int16" Nullable="false" />
+    <Property Name="IdArea" Type="Int16" />
+    <Property Name="CajasEstimadas" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="PeriodoInicial" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PeriodoFinal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Activo" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="IdZona" Type="Int16" Nullable="false" />
+    <Property Name="Gps_Latitude" Type="Double" />
+    <Property Name="Gps_Longitude" Type="Double" />
+    <Property Name="Gps_Altitude" Type="Double" />
+    <Property Name="rowguid" Type="Guid" Nullable="false" />
+    <Property Name="IdAgen" Type="Int16" Nullable="false" />
+    <Property Name="IdAgenC" Type="Int32" />
+    <Property Name="IdAgenI" Type="Int16" />
+    <Property Name="CodLocalidad" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IdAcopio" Type="Int32" />
+    <Property Name="IdChofer" Type="Int32" />
+    <Property Name="Compras_Oportunidad" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="CodArea" Type="Int32" />
+    <NavigationProperty Name="ProdMuestreo" Relationship="Self.FK_Cod_Empresa_Cod_Prod_Cod_Campo" FromRole="ProdCamposCat" ToRole="ProdMuestreo" />
+    <NavigationProperty Name="ProdMuestreo1" Relationship="Self.FK_Cod_Prov" FromRole="ProdCamposCat" ToRole="ProdMuestreo" />
+    <NavigationProperty Name="ProdZonasRastreoCat" Relationship="SeasonSun1213Model1.FK_ProdCamposCat_ProdZonasRastreoCat" FromRole="ProdCamposCat" ToRole="ProdZonasRastreoCat" />
+  </EntityType>
+  <EntityType Name="ProdMuestreo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
+    <Property Name="Fecha_solicitud" Type="DateTime" Precision="3" />
+    <Property Name="Telefono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Inicio_cosecha" Type="DateTime" Precision="3" />
+    <Property Name="IdAgen" Type="Int16" />
+    <Property Name="Liberacion" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Tarjeta" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="Fecha_ejecucion" Type="DateTime" Precision="3" />
+    <Property Name="IdSector" Type="Int32" />
+    <Property Name="IdAgenI" Type="Int16" />
+    <Property Name="IdAgen_Tarjeta" Type="Int16" />
+    <Property Name="Liberar_Tarjeta" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ProdAgenteCat" Relationship="Self.FK_IdAgen" FromRole="ProdMuestreo" ToRole="ProdAgenteCat" />
+    <NavigationProperty Name="ProdAgenteCat1" Relationship="Self.FK_IdAgenI" FromRole="ProdMuestreo" ToRole="ProdAgenteCat" />
+    <NavigationProperty Name="ProdCalidadMuestreo" Relationship="Self.FK__ProdIncid__Id_Mu__4F177FC3" FromRole="ProdMuestreo" ToRole="ProdCalidadMuestreo" />
+    <NavigationProperty Name="ProdCamposCat" Relationship="Self.FK_Cod_Empresa_Cod_Prod_Cod_Campo" FromRole="ProdMuestreo" ToRole="ProdCamposCat" />
+    <NavigationProperty Name="ProdCamposCat1" Relationship="Self.FK_Cod_Prov" FromRole="ProdMuestreo" ToRole="ProdCamposCat" />
+    <NavigationProperty Name="ProdMuestreoSector" Relationship="Self.FK__ProdMuest__IdSec__2D8181CE" FromRole="ProdMuestreo" ToRole="ProdMuestreoSector" />
+    <NavigationProperty Name="ProdProductoresCat" Relationship="Self.FK_Cod_Prod" FromRole="ProdMuestreo" ToRole="ProdProductoresCat" />
+  </EntityType>
+  <EntityType Name="ProdMuestreoSector">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Cod_Campo" Type="Int16" />
+    <Property Name="Sector" Type="Int16" />
+    <NavigationProperty Name="ProdAnalisis_Residuo" Relationship="Self.FK__ProdAnali__IdSec__78D8AF65" FromRole="ProdMuestreoSector" ToRole="ProdAnalisis_Residuo" />
+    <NavigationProperty Name="ProdMuestreo" Relationship="Self.FK__ProdMuest__IdSec__2D8181CE" FromRole="ProdMuestreoSector" ToRole="ProdMuestreo" />
+  </EntityType>
+  <EntityType Name="ProdProductoresCat">
+    <Key>
+      <PropertyRef Name="Cod_Prod" />
+    </Key>
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Contacto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="RFC" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodZona" Type="Int16" Nullable="false" />
+    <Property Name="Cta" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SCta" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SSCta" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SSSCta" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Alm" Type="Int16" Nullable="false" />
+    <Property Name="Cod_Sub" Type="Int16" Nullable="false" />
+    <Property Name="Cod_Prov" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Calle" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="noExterior" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="noInterior" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Colonia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="referencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CP" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Ciudad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="municipio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Estado" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Pais" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Telefono" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Fax" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Pagina" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Banco" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Sucursal" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CLABE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TopeAutoFact" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+    <Property Name="Activo" Type="Boolean" Nullable="false" />
+    <Property Name="ConsCampos" Type="Int16" Nullable="false" />
+    <Property Name="Fecha_Alta" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CtaD" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SCtaD" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SSCtaD" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SSSCtaD" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="TipoCta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="pila" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="paterno" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="materno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="tipopago" Type="Int16" Nullable="false" />
+    <Property Name="AgenteZ" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TipoAnt" Type="Int16" Nullable="false" />
+    <Property Name="IdArea" Type="Int16" Nullable="false" />
+    <Property Name="CodMoneda" Type="Int16" Nullable="false" />
+    <Property Name="IdAgen" Type="Int16" Nullable="false" />
+    <Property Name="CtaM" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SCtaM" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SSCtaM" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="SSSCtaM" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="FinancCont" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Matcont" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DesctoMat" Type="Boolean" Nullable="false" />
+    <Property Name="IdRango" Type="Int16" Nullable="false" />
+    <Property Name="Liquida" Type="Boolean" Nullable="false" />
+    <Property Name="SalidaMat" Type="Boolean" />
+    <Property Name="FechaContrato" Type="DateTime" Precision="3" />
+    <Property Name="Movil" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="Nextel" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CtaAgro" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+    <Property Name="SCtaAgro" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+    <Property Name="SSCtaAgro" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+    <Property Name="SSSCtaAgro" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+    <Property Name="FinanAgroCont" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="TipoProd" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CURP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CalleP" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="NumExteriorP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="NumInteriorP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ColoniaP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LocalidadP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MunicipioP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CPP" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="NIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Verifico_Domicilio" Type="Boolean" />
+    <Property Name="EstadoP" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ProdAgenteCat" Relationship="Self.FK_ProdProductoresCat_ProdAgenteCat" FromRole="ProdProductoresCat" ToRole="ProdAgenteCat" />
+    <NavigationProperty Name="ProdMuestreo" Relationship="Self.FK_Cod_Prod" FromRole="ProdProductoresCat" ToRole="ProdMuestreo" />
+  </EntityType>
+  <EntityType Name="SIPGUsuarios">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Completo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IdAgen" Type="Int16" />
+    <Property Name="IdRegion" Type="Int16" />
+    <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <Association Name="FK_IdAgen">
+    <End Role="ProdAgenteCat" Type="Self.ProdAgenteCat" Multiplicity="0..1" />
+    <End Role="ProdMuestreo" Type="Self.ProdMuestreo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdAgenteCat">
+        <PropertyRef Name="IdAgen" />
+      </Principal>
+      <Dependent Role="ProdMuestreo">
+        <PropertyRef Name="IdAgen" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IdAgenI">
+    <End Role="ProdAgenteCat" Type="Self.ProdAgenteCat" Multiplicity="0..1" />
+    <End Role="ProdMuestreo" Type="Self.ProdMuestreo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdAgenteCat">
+        <PropertyRef Name="IdAgen" />
+      </Principal>
+      <Dependent Role="ProdMuestreo">
+        <PropertyRef Name="IdAgenI" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProdProductoresCat_ProdAgenteCat">
+    <End Role="ProdAgenteCat" Type="Self.ProdAgenteCat" Multiplicity="1" />
+    <End Role="ProdProductoresCat" Type="Self.ProdProductoresCat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdAgenteCat">
+        <PropertyRef Name="IdAgen" />
+      </Principal>
+      <Dependent Role="ProdProductoresCat">
+        <PropertyRef Name="IdAgen" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProdAnali__IdSec__78D8AF65">
+    <End Role="ProdMuestreoSector" Type="Self.ProdMuestreoSector" Multiplicity="0..1" />
+    <End Role="ProdAnalisis_Residuo" Type="Self.ProdAnalisis_Residuo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdMuestreoSector">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ProdAnalisis_Residuo">
+        <PropertyRef Name="IdSector" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProdIncid__Id_Mu__4F177FC3">
+    <End Role="ProdMuestreo" Type="Self.ProdMuestreo" Multiplicity="0..1" />
+    <End Role="ProdCalidadMuestreo" Type="Self.ProdCalidadMuestreo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdMuestreo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProdCalidadMuestreo">
+        <PropertyRef Name="Id_Muestreo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cod_Empresa_Cod_Prod_Cod_Campo">
+    <End Role="ProdCamposCat" Type="Self.ProdCamposCat" Multiplicity="1" />
+    <End Role="ProdMuestreo" Type="Self.ProdMuestreo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdCamposCat">
+        <PropertyRef Name="Cod_Empresa" />
+        <PropertyRef Name="Cod_Prod" />
+        <PropertyRef Name="Cod_Campo" />
+      </Principal>
+      <Dependent Role="ProdMuestreo">
+        <PropertyRef Name="Cod_Empresa" />
+        <PropertyRef Name="Cod_Prod" />
+        <PropertyRef Name="Cod_Campo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cod_Prov">
+    <End Role="ProdCamposCat" Type="Self.ProdCamposCat" Multiplicity="1" />
+    <End Role="ProdMuestreo" Type="Self.ProdMuestreo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdCamposCat">
+        <PropertyRef Name="Cod_Empresa" />
+        <PropertyRef Name="Cod_Prod" />
+        <PropertyRef Name="Cod_Campo" />
+      </Principal>
+      <Dependent Role="ProdMuestreo">
+        <PropertyRef Name="Cod_Empresa" />
+        <PropertyRef Name="Cod_Prod" />
+        <PropertyRef Name="Cod_Campo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProdMuest__IdSec__2D8181CE">
+    <End Role="ProdMuestreoSector" Type="Self.ProdMuestreoSector" Multiplicity="0..1" />
+    <End Role="ProdMuestreo" Type="Self.ProdMuestreo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdMuestreoSector">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ProdMuestreo">
+        <PropertyRef Name="IdSector" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Cod_Prod">
+    <End Role="ProdProductoresCat" Type="Self.ProdProductoresCat" Multiplicity="1" />
+    <End Role="ProdMuestreo" Type="Self.ProdMuestreo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdProductoresCat">
+        <PropertyRef Name="Cod_Prod" />
+      </Principal>
+      <Dependent Role="ProdMuestreo">
+        <PropertyRef Name="Cod_Prod" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SeasonSun1213Entities15" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CatLocalidades" EntityType="Self.CatLocalidades" />
+    <EntitySet Name="CatProductos" EntityType="Self.CatProductos" />
+    <EntitySet Name="CatTiposProd" EntityType="Self.CatTiposProd" />
+    <EntitySet Name="ProdAgenteCat" EntityType="Self.ProdAgenteCat" />
+    <EntitySet Name="ProdAnalisis_Residuo" EntityType="Self.ProdAnalisis_Residuo" />
+    <EntitySet Name="ProdCalidadMuestreo" EntityType="Self.ProdCalidadMuestreo" />
+    <EntitySet Name="ProdCamposCat" EntityType="Self.ProdCamposCat" />
+    <EntitySet Name="ProdMuestreo" EntityType="Self.ProdMuestreo" />
+    <EntitySet Name="ProdMuestreoSector" EntityType="Self.ProdMuestreoSector" />
+    <EntitySet Name="ProdProductoresCat" EntityType="Self.ProdProductoresCat" />
+    <EntitySet Name="SIPGUsuarios" EntityType="Self.SIPGUsuarios" />
+    <AssociationSet Name="FK_IdAgen" Association="Self.FK_IdAgen">
+      <End Role="ProdAgenteCat" EntitySet="ProdAgenteCat" />
+      <End Role="ProdMuestreo" EntitySet="ProdMuestreo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IdAgenI" Association="Self.FK_IdAgenI">
+      <End Role="ProdAgenteCat" EntitySet="ProdAgenteCat" />
+      <End Role="ProdMuestreo" EntitySet="ProdMuestreo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProdProductoresCat_ProdAgenteCat" Association="Self.FK_ProdProductoresCat_ProdAgenteCat">
+      <End Role="ProdAgenteCat" EntitySet="ProdAgenteCat" />
+      <End Role="ProdProductoresCat" EntitySet="ProdProductoresCat" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProdAnali__IdSec__78D8AF65" Association="Self.FK__ProdAnali__IdSec__78D8AF65">
+      <End Role="ProdMuestreoSector" EntitySet="ProdMuestreoSector" />
+      <End Role="ProdAnalisis_Residuo" EntitySet="ProdAnalisis_Residuo" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProdIncid__Id_Mu__4F177FC3" Association="Self.FK__ProdIncid__Id_Mu__4F177FC3">
+      <End Role="ProdMuestreo" EntitySet="ProdMuestreo" />
+      <End Role="ProdCalidadMuestreo" EntitySet="ProdCalidadMuestreo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cod_Empresa_Cod_Prod_Cod_Campo" Association="Self.FK_Cod_Empresa_Cod_Prod_Cod_Campo">
+      <End Role="ProdCamposCat" EntitySet="ProdCamposCat" />
+      <End Role="ProdMuestreo" EntitySet="ProdMuestreo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cod_Prov" Association="Self.FK_Cod_Prov">
+      <End Role="ProdCamposCat" EntitySet="ProdCamposCat" />
+      <End Role="ProdMuestreo" EntitySet="ProdMuestreo" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProdMuest__IdSec__2D8181CE" Association="Self.FK__ProdMuest__IdSec__2D8181CE">
+      <End Role="ProdMuestreoSector" EntitySet="ProdMuestreoSector" />
+      <End Role="ProdMuestreo" EntitySet="ProdMuestreo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Cod_Prod" Association="Self.FK_Cod_Prod">
+      <End Role="ProdProductoresCat" EntitySet="ProdProductoresCat" />
+      <End Role="ProdMuestreo" EntitySet="ProdMuestreo" />
+    </AssociationSet>
+    <EntitySet Name="ProdZonasRastreoCat" EntityType="SeasonSun1213Model1.ProdZonasRastreoCat" />
+    <AssociationSet Name="FK_ProdCamposCat_ProdZonasRastreoCat" Association="SeasonSun1213Model1.FK_ProdCamposCat_ProdZonasRastreoCat">
+      <End Role="ProdZonasRastreoCat" EntitySet="ProdZonasRastreoCat" />
+      <End Role="ProdCamposCat" EntitySet="ProdCamposCat" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="ProdZonasRastreoCat">
+    <Key>
+      <PropertyRef Name="IdZona" />
+    </Key>
+    <Property Name="IdZona" Type="Int16" Nullable="false" />
+    <Property Name="Codigo" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="DescZona" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Pedido" Type="Boolean" />
+    <Property Name="IdRegion" Type="Int32" />
+    <Property Name="SRegion" Type="Int32" />
+    <NavigationProperty Name="ProdCamposCat" Relationship="SeasonSun1213Model1.FK_ProdCamposCat_ProdZonasRastreoCat" FromRole="ProdZonasRastreoCat" ToRole="ProdCamposCat" />
+  </EntityType>
+  <Association Name="FK_ProdCamposCat_ProdZonasRastreoCat">
+    <End Type="SeasonSun1213Model1.ProdZonasRastreoCat" Role="ProdZonasRastreoCat" Multiplicity="1" />
+    <End Type="SeasonSun1213Model1.ProdCamposCat" Role="ProdCamposCat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProdZonasRastreoCat">
+        <PropertyRef Name="IdZona" />
+      </Principal>
+      <Dependent Role="ProdCamposCat">
+        <PropertyRef Name="IdZona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

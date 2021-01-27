@@ -1,0 +1,153 @@
+﻿@model IEnumerable<Sistema_Indicadores.Models.ProdVisitasCab>
+
+@{
+    ViewBag.Title = "Visitas";
+}
+
+<h5 class="font-weight-bold text-danger">REPORTE DE VISITAS A PRODUCTORES</h5>
+
+@if((short)Session["IdAgen"] == 1)
+{
+<div style="width: 100%;">
+    <div style="float: right;">
+        <button class="d-none d-sm-inline-block btn btn-sm btn-light shadow-lg" type="submit" id="btnAgen" name="btnAgen" style=" border-radius:50%"><i class="fas fa-search"></i></button>
+    </div>
+    <div style="float: right;">
+        @Html.DropDownList("asesorP", new SelectList(ViewBag.agentesP, "IdAgen", "Nombre"), new { @class = "form-control form-control-sm", @id = "asesorP" })
+    </div>
+</div>
+}
+
+<div id="Vchart" style="width: 1090px; height: 300px; margin-top:50px"></div>
+
+<h6 class="font-weight-bold text-secondary" style="float: left; width:100%">Eficiencia: Dias con visitas/Total dias laborales</h6>
+<h6 class="font-weight-bold text-secondary" style="float: left; width:100%">Efectividad: Visitas del mes/Total campos</h6>
+
+<div class="table-responsive table-condensed table-sm table-bordered tabla">
+    <table class="table table-hover content-tabla" id="dataTableVisitas">
+        <thead style="background-color:wheat">
+            <tr>
+                <td>Mes</td>
+                <td>Total Campos</td>
+                <td>Campos Visitados</td>
+                <td>Eficiencia</td>
+                <td>Efectividad</td>
+                <td>Promedio</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+                <td>13</td>
+                <td>14</td>
+                <td>15</td>
+                <td>16</td>
+                <td>17</td>
+                <td>18</td>
+                <td>19</td>
+                <td>20</td>
+                <td>21</td>
+                <td>22</td>
+                <td>23</td>
+                <td>24</td>
+                <td>25</td>
+                <td>26</td>
+                <td>27</td>
+                <td>28</td>
+                <td>29</td>
+                <td>30</td>
+                <td>31</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    var valor = 0;    
+
+    $(document).ready(function () {          
+        tabla(valor);        
+        grafica(valor);
+                    
+        $("#asesorP").click(function () {
+            $("#asesorP").click(function () {
+                select = $("#asesorP option:selected").text();
+                valor = $("#asesorP").val();
+            });
+
+            $('#btnAgen').click(function () {
+                if (typeof valor != 0 && typeof valor != 'undefined') {                        
+                    tabla(valor);
+                    grafica(valor);
+                    limpiar();
+                    //window.location.reload();
+                }
+                else {
+                    alert('Seleccione una opción!');
+                }
+            });
+        });
+    });
+
+    function limpiar() {
+        $('table tr:not(:first-child)').remove();
+        valor = 0;
+    }
+
+    function tabla(valor) {
+        console.log(valor);
+        $.getJSON(siteURL + "Indicadores/VisitasList?idAgen=" + valor, function (data) {
+            $.each(data, function (idx, opt) {
+                $('#dataTableVisitas').append('<tr><td>' + opt.Mes + '</td><td>' + opt.TotalCampos + '</td><td>' + opt.TotalCamposVisit + '</td><td>' + opt.Eficiencia + '</td><td>' + opt.Efectividad + '</td><td>' + opt.Promedio + '</td><td>' + opt._1 + '</td><td>' + opt._2 + '</td><td>' + opt._3 + '</td><td>' + opt._4 + '</td><td>' + opt._5 + '</td><td>' + opt._6 + '</td><td>' + opt._7 + '</td><td>' + opt._8 + '</td><td>' + opt._9 + '</td><td>' + opt._10 + '</td><td>' + opt._11 + '</td><td>' + opt._12 + '</td><td>' + opt._13 + '</td><td>' + opt._14 + '</td><td>' + opt._15 + '</td><td>' + opt._16 + '</td><td>' + opt._17 + '</td><td>' + opt._18 + '</td><td>' + opt._19 + '</td><td>' + opt._20 + '</td><td>' + opt._21 + '</td><td>' + opt._22 + '</td><td>' + opt._23 + '</td><td>' + opt._24 + '</td><td>' + opt._25 + '</td><td>' + opt._26 + '</td><td>' + opt._27 + '</td><td>' + opt._28 + '</td><td>' + opt._29 + '</td><td>' + opt._30 + '</td><td>' + opt._31 + '</td></tr>');
+            });
+        }, 'json');
+    }
+
+    function grafica(valor) {
+        console.log(valor);
+        google.load("visualization", "1", { packages: ["corechart"] });
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.ajax({
+                url: siteURL + "Indicadores/Grafica?idAgen=" + valor,
+                type: "GET",
+                ContentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    var array = [['Mes', 'Visitas']];
+
+                    $.each(data, function (index, value) {
+                        array.push([value.Mes, value.Total]);
+                    });
+                    var options = {
+                        //title: 'Visitas al mes',
+                        curveType: 'function',
+                        legend: { position: 'bottom', textStyle: { color: '#000000', fontSize: 14 } },
+                        colors: ['red']
+                    };
+                    var figures = google.visualization.arrayToDataTable(array)
+                    var chart = new google.visualization.LineChart(document.getElementById('Vchart'));
+                    chart.draw(figures, options);
+
+                },
+                error: function (jqxhr, status, exception) {
+                    console.log(jqxhr.responseText);
+                }
+            });
+        }
+    }
+</script>

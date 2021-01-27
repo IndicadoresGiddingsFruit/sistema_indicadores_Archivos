@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "Evaluacion";
+}
+
+<div class="row">
+    <div class="col-sm">
+        @Html.DropDownList("status", (IEnumerable<SelectListItem>)ViewBag.List_Status, new { @class = "form-control form-control-sm", @id = "status" })
+    </div>
+
+    <div class="col-sm">
+        <div style="float: left; margin:5px 0 5px 5px;">
+            <button class="d-none d-sm-inline-block btn btn-sm shadow-lg" type="submit" id="btnN" name="btnN" style="background-color:black; border-radius: 50%;"><i class="fas fa-ban"></i></button>
+        </div>
+        <div style="float: left; margin:5px 0 5px 5px;">
+            <button class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-lg" type="submit" id="btnR" name="btnR" style=" border-radius: 50%;"><i class="fas fa-times-circle"></i></button>
+        </div>
+        <div style="float: left; margin:5px 0 5px 5px;">
+            <button class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-lg" type="submit" id="btnA" name="btnA" style=" border-radius: 50%;"><i class="fas fa-exclamation-triangle"></i></button>
+        </div>
+        <div style="float: left; margin:5px 0 5px 5px;">
+            <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" id="btnV" name="btnV" style=" border-radius: 50%;"><i class="fas fa-check-circle"></i></button>
+        </div>
+    </div>
+
+    <div class="col-sm">
+        <div style="float: right; margin:5px 0 5px 5px;">
+            <a href="@Url.Action("Evaluacion", "Muestreo")" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm">Ver todo</a>
+        </div>
+
+        <div style="float: right; margin:5px 0 5px 0;">
+            <button class="d-none d-sm-inline-block btn btn-sm btn-info shadow-lg" type="submit" id="searchC" name="searchC"><i class="fas fa-search"></i></button>
+        </div>
+
+        <div style="float: right;  margin:5px 0 5px 0">
+            @Html.TextBox("cod_Prod", "", new { @class = "form-control form-control-sm", @autocomplete = "off", @placeholder = "Buscar código", @pattern = "[0-9]{5}", @maxlength = "5", @minlength = "5", @oninput = "if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="table-responsive table-condensed table-sm table-bordered tabla">
+        <table class="table table-hover" id="dataTableEvaluacion">
+            <thead class="thead-light" style="font-size:x-small; text-align:center">
+                <tr>
+                    <th>Asesor</th>                    
+                    <th>Codigo</th>
+                    <th>Productor</th>
+                    <th>Campo</th>
+                    <th>Ubicacion</th>
+                    <th>Inicio cosecha</th>
+                    <th>Fecha de entrega</th>
+                    <th>Fecha de análisis</th>
+                    <th>Estatus</th>
+                    <th>Análisis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var estatus, cod_prod, param, query;
+
+    $(document).ready(function () {
+        if (typeof estatus === 'undefined' && typeof cod_prod === 'undefined' && typeof query === 'undefined' && typeof param === 'undefined') {
+            estatus = "";
+            cod_prod = "";
+            query = "";
+            param = "";
+            tabla();
+        }
+
+        $('#btnN').click(function () {
+            param = "N";
+            if (typeof param != '') {
+                tabla();
+                vaciar();
+            }
+        });
+
+        $('#btnR').click(function () {
+            param = "R";
+            if (typeof param != '') {
+                tabla();
+                vaciar();
+            }
+        });
+
+        $('#btnA').click(function () {
+            param = "A";
+            if (typeof param != '') {
+                tabla();
+                vaciar();
+            }
+        });
+
+        $('#btnV').click(function () {
+            param = "V";
+            if (typeof param != '') {
+                tabla();
+                vaciar();
+            }
+        });
+
+        $('#searchC').click(function () {
+            cod_prod = $("#cod_Prod").val();
+            if (typeof cod_prod != '') {
+                tabla();
+                vaciar();
+            }
+        });
+
+        $("#status").click(function () {
+            select = $("#status option:selected").text();
+            estatus = $("#status").val();
+            if (typeof estatus != '--Resultado del analisis--') {
+                tabla();
+                vaciar();
+            }
+        });
+    });
+
+    function vaciar() {
+        $('table tr:not(:first-child)').remove();
+    }
+
+    function tabla() {
+        if (param != "") {
+            query = "Muestreo/EvaluacionListF?param=" + param;
+        }
+        else {
+            query = "Muestreo/EvaluacionList?estatus=" + estatus + "&cod_prod=" + cod_prod;
+        }
+
+        $.getJSON(siteURL + query, function (data) {
+            $.each(data, function (idx, opt) {
+                var analisis, retraso;
+                var options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                var inicio_cosecha = new Date(parseInt(opt.Inicio_cosecha.slice(6, -2)));
+                var fecha_analisis = new Date(parseInt(opt.Fecha_analisis.slice(6, -2)));
+
+                if (opt.Analisis == 'CON RESIDUOS') {
+                    analisis = 'background-color:#FD7676';
+                }
+                else if (opt.Analisis == 'EN PROCESO') {
+                    analisis = 'background-color:#D2D4D1';
+                }
+                else if (opt.Analisis == 'FUERA DE LIMITE') {
+                    analisis = 'background-color:#F7F979';
+                }
+                else if (opt.Analisis == 'LIBERADO') {
+                    analisis = 'background-color:#9BFC6E';
+                }
+                if (opt.Dias > 5) {
+                    retraso = 'background-color:#FD7676';
+                }
+                else if (opt.Dias > 3) {
+                    retraso = 'background-color:#F7F979';
+                }
+                else if (opt.Dias < 3) {
+                    retraso = 'background-color:#9BFC6E';
+                }
+
+                $('#dataTableEvaluacion').append(
+                    '<tr><td>' + opt.Asesor +
+                    '</td><td>' + opt.Cod_Prod +
+                    '</td><td>' + opt.Productor +
+                    '</td><td>' + opt.Campo +
+                    '</td><td>' + opt.Ubicacion +
+                    '</td><td style="' + retraso + '">' + inicio_cosecha.toLocaleDateString("es-ES", options) +
+                    '</td><td>' + opt.Fecha_real +
+                    '</td><td>' + fecha_analisis.toLocaleDateString("es-ES", options) +
+                    '</td><td>' + opt.Estatus +
+                    '</td><td style="' + analisis + '">' + opt.Analisis +
+                    '</td></tr>');
+            });
+        }, 'json');
+    }
+</script>

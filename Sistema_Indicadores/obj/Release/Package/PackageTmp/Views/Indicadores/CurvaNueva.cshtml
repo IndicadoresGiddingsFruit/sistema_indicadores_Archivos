@@ -1,0 +1,311 @@
+﻿@model Sistema_Indicadores.Models.SIPGProyeccion
+
+@{
+    ViewBag.Title = "CurvaNueva";
+}
+
+@if (ViewBag.sms != null)
+{
+    <div>
+        <div class="alert alert-primary alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-check-circle"></i> @ViewBag.sms</h4>
+        </div>
+    </div>
+}
+
+@if (ViewBag.error != null)
+{
+    <div>
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-times-circle"></i> Error al enviar solicitud</h4>
+            @ViewBag.error
+        </div>
+    </div>
+}
+
+<form action="~/Indicadores/CurvaNueva" method="post">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div style="padding:0; margin:0;">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-xl-4 col-md-12 mb-6 col-sm-12">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Productor:</div>
+                    <input type="text" style="width:18%; float:left; margin:0 5px 0 0" class="form-control form-control-sm" id="Cod_Prod" name="Cod_Prod" maxlength="5" minlength="5" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Cod_Prod, "", new { @class = "text-danger" })
+                    <input type="text" style="width:100%;float:left;" class="form-control form-control-sm" id="nombreProductor" name="nombreProductor" readonly="" placeholder="Nombre del productor" required="" autocomplete="off" />
+                </div>
+
+                <div class="col-xl-8 col-md-12 mb-6 col-sm-12">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Campo:</div>
+                    @Html.DropDownListFor(model => model.Cod_Campo, new SelectList(" "), "--Seleccione--", new { @id = "IdCodCampo", @class = "form-control form-control-sm", @style = "width:50%;float:left;" })
+                    @Html.ValidationMessageFor(model => model.Cod_Campo, "", new { @class = "text-danger" })
+                    <input type="text" style="width:50%;float:left; margin:0 0 0 10px" class="form-control form-control-sm" id="nombreCampo" name="Ubicacion" placeholder="Ubicacion" required="" autocomplete="off" />
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Cultivo:</div>
+                    <div>
+                        @Html.DropDownList("cultivo", ViewData["List_Cultivos"] as SelectList, new { @id = "cultivo", @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Variedad:</div>
+                    @*@Html.DropDownListFor(model => model.Variedad, new SelectList(" "), "--Variedad--", new { @id = "Variedad", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Variedad, "", new { @class = "text-danger" })*@
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Manejo:</div>
+                    @Html.DropDownList("manejo", ViewData["List_Manejo"] as SelectList, new { @id = "manejo", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Manejo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Sector:</div>
+                    <input type="text" class="form-control form-control-sm" id="Sector" name="Sector" maxlength="2" minlength="1" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Sector, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Num corte:</div>
+                    @Html.DropDownList("Num_corte", ViewData["List_Num_corte"] as SelectList, new { @id = "Num_corte", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Num_corte, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-1 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Ha:</div>
+                    <input type="text" class="form-control form-control-sm" id="Ha" name="Ha" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Ha, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Tipo plantacion:</div>
+                    @Html.DropDownList("Tipo_plantacion", ViewData["List_Tipo_plantacion"] as SelectList, new { @id = "Tipo_plantacion", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Tipo_plantacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Estructura:</div>
+                    @Html.DropDownList("Estructura", ViewData["List_Estructura"] as SelectList, new { @id = "Estructura", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Estructura, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Tipo certificacion:</div>
+                    <input type="text" class="form-control form-control-sm" id="Tipo_certificacion" name="Tipo_certificacion" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Tipo_certificacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Edad_planta:</div>
+                    @Html.DropDownList("Edad_planta", ViewData["List_Edad_planta"] as SelectList, new { @id = "Edad_planta", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Edad_planta, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Plantacion:</div>
+                    @Html.DropDownList("Tipo_plantacion2", ViewData["List_Plantacion"] as SelectList, new { @id = "Tipo_plantacion2", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Tipo_plantacion2, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-1 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Tesco:</div>
+                    @Html.DropDownList("Tesco", ViewData["List_Tesco"] as SelectList, new { @id = "Tesco", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Tesco, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Acopio:</div>
+                    @Html.DropDownListFor(model => model.Acopio, new SelectList(" "), "--Seleccione--", new { @id = "IdAcopio", @class = "form-control form-control-sm" })
+                    @Html.ValidationMessageFor(model => model.Acopio, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Fecha plantacion:</div>
+                    <input type="date" class="form-control form-control-sm" id="Fecha_plantacion" name="Fecha_plantacion" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Fecha_plantacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Fecha poda:</div>
+                    <input type="date" class="form-control form-control-sm" id="Fecha_poda" name="Fecha_poda" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Fecha_poda, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-6 col-md-12 mb-6 col-sm-12 top">
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Fecha defoliacion:</div>
+                    <input type="date" class="form-control form-control-sm" id="Fecha_defoliacion" name="Fecha_defoliacion" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Fecha_defoliacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Inicio primer corte:</div>
+                    <input type="date" class="form-control form-control-sm" id="Fecha_corte1" name="Fecha_corte1" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Fecha_corte1, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-1 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Cajas:</div>
+                    <input type="text" class="form-control form-control-sm" id="Caja1" name="Caja1" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Caja1, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-1 col-md-12 mb-6 col-sm-12 top">
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Fecha redefoliacion:</div>
+                    <input type="date" class="form-control form-control-sm" id="Fecha_redefoliacion" name="Fecha_redefoliacion" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Fecha_redefoliacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Inicio segundo corte:</div>
+                    <input type="date" class="form-control form-control-sm" id="Fecha_corte2" name="Fecha_corte2" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Fecha_corte2, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-1 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Cajas:</div>
+                    <input type="text" class="form-control form-control-sm" id="Caja2" name="Caja2" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Caja2, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Num plantas por ha:</div>
+                    <input type="text" class="form-control form-control-sm" id="Numplantas_xha" name="Numplantas_xha" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Numplantas_xha, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Plantacion:</div>
+                    <input type="text" class="form-control form-control-sm" id="Plantacion" name="Plantacion" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Plantacion, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">Poda a media caña:</div>
+                    <input type="date" class="form-control form-control-sm" id="Fecha_podamediacaña" name="Fecha_podamediacaña" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.Fecha_podamediacaña, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">RendxKg:</div>
+                    <input type="text" class="form-control form-control-sm" id="RendxKg" name="RendxKg" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.RendxKg, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-xl-2 col-md-12 mb-6 col-sm-12 top">
+                    <div class="m-0 font-weight-bold text-primary subtitulo">RendxHa:</div>
+                    <input type="text" class="form-control form-control-sm" id="RendxHa" name="RendxHa" required="" autocomplete="off">
+                    @Html.ValidationMessageFor(model => model.RendxHa, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div style="margin:20px;float:right">
+                <input type="submit" value="GUARDAR" class="btn btn-info mb-2" style="font-weight:bold" />
+            </div>
+        </div>
+    }
+</form>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        descripcion_variedad();
+        GetAcopios();
+    });
+
+    $("#Cod_Prod").change(function () {
+        nombre_productor();
+        nombre_campo();
+        ubicacion();
+        //resultados();
+    });
+
+    function nombre_campo() {
+        $.getJSON(siteURL + "Indicadores/GetCamposList?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#IdCodCampo");
+            select.empty();
+            $.each(result, function (index, itemData) {
+                select.append($('<option/>', {
+                    value: itemData.Cod_Campo,
+                    text: itemData.Descripcion
+                }));
+            });
+        });
+    }
+
+    function descripcion_variedad() {
+        $('#cultivo').change(function () {
+            var cultivo = $(this).find('option:selected').text();
+            console.log(cultivo);
+            $.getJSON(siteURL + "Indicadores/GetVariedadesList?Cultivo=" + cultivo, function (result) {
+                var select = $("#Variedad");
+                select.empty();
+                $.each(result, function (index, itemData) {
+                    select.append($('<option/>', {
+                        value: itemData.Tipo,
+                        text: itemData.Descripcion
+                    }));
+                });
+            });
+        });
+    }
+
+    function nombre_productor() {
+        $.getJSON(siteURL + "Indicadores/GetProductor?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#nombreProductor");
+            select.val(result.Nombre);
+        });
+    }
+
+    function ubicacion() {
+        $('#IdCodCampo').change(function () {
+            var codigo_C = $(this).val();
+            console.log(codigo_C);
+            $.getJSON(siteURL + "Indicadores/GetUbicacion_campo?Cod_Campo=" + codigo_C, function (result) {
+                var select = $("#Ubicacion");
+                select.val(result.Ubicacion);
+            });
+        });
+    }
+
+    function GetAcopios() {
+        $.getJSON(siteURL + "Indicadores/GetAcopios", function (result) {
+            var select = $("#IdAcopio");
+            select.empty();
+            $.each(result, function (index, itemData) {
+                select.append($('<option/>', {
+                    value: itemData.IdAcopio,
+                    text: itemData.Acopio
+                }));
+            });
+        });
+    }
+
+    //function resultados() {
+    //    $.getJSON(siteURL+"Muestreo/BuscarSolicitud?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + $("#Cod_Campo").val(), function (result) {
+    //        if (result != null) {
+    //            document.getElementById('#datos').innerHTML = "El registro ya existe";
+    //            select.val(result);
+    //            console.log(result);
+    //        }
+    //    });
+    //}
+
+</script>

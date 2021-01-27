@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ad404ef305e545c5b3045440f857356d" Name="Diagram1" ZoomLevel="98">
+        <EntityTypeShape EntityType="SeasonSun1213Model4.CatAcopios" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model4.CatSemanas" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model4.ProdAgenteCat" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model4.ProdCamposCat" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model4.ProdProductoresCat" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model4.SIPGProyeccion" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model4.UV_ProdRecepcion" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="SeasonSun1213Model4.FK_ProdProductoresCat_ProdAgenteCat" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SeasonSun1213Model4.SIPGVisitas" Width="1.5" PointX="12.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

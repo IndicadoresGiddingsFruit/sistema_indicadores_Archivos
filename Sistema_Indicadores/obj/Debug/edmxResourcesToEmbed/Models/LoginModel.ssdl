@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SeasonSun1213Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="SIPGUsuarios">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Nombre" Type="varchar" MaxLength="50" />
+    <Property Name="Clave" Type="varchar" MaxLength="50" />
+    <Property Name="Completo" Type="varchar" MaxLength="50" />
+    <Property Name="correo" Type="varchar" MaxLength="50" />
+    <Property Name="IdAgen" Type="smallint" />
+    <Property Name="IdRegion" Type="smallint" />
+    <Property Name="Tipo" Type="nchar" MaxLength="1" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="SeasonSun1213ModelStoreContainer">
+    <EntitySet Name="SIPGUsuarios" EntityType="Self.SIPGUsuarios" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

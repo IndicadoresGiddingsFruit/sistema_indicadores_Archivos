@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SeasonSun1213Model3StoreContainer" CdmEntityContainer="SeasonSun1213Entities5">
+    <EntitySetMapping Name="CatSemanas">
+      <EntityTypeMapping TypeName="SeasonSun1213Model3.CatSemanas">
+        <MappingFragment StoreEntitySet="CatSemanas">
+          <ScalarProperty Name="Temporada" ColumnName="Temporada" />
+          <ScalarProperty Name="Semana" ColumnName="Semana" />
+          <ScalarProperty Name="Inicio" ColumnName="Inicio" />
+          <ScalarProperty Name="Fin" ColumnName="Fin" />
+          <ScalarProperty Name="Yearr" ColumnName="Yearr" />
+          <ScalarProperty Name="Mes" ColumnName="Mes" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Estimacion_Berries">
+      <EntityTypeMapping TypeName="SeasonSun1213Model3.Estimacion_Berries">
+        <MappingFragment StoreEntitySet="Estimacion_Berries">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="Semanas" ColumnName="Semanas" />
+          <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+          <ScalarProperty Name="Concepto" ColumnName="Concepto" />
+          <ScalarProperty Name="Cultivo" ColumnName="Cultivo" />
+          <ScalarProperty Name="Temporada" ColumnName="Temporada" />
+          <ScalarProperty Name="Semana" ColumnName="Semana" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UV_ProdRecepcion">
+      <EntityTypeMapping TypeName="SeasonSun1213Model3.UV_ProdRecepcion">
+        <MappingFragment StoreEntitySet="UV_ProdRecepcion">
+          <ScalarProperty Name="Refrigerada" ColumnName="Refrigerada" />
+          <ScalarProperty Name="CantidadEnvase" ColumnName="CantidadEnvase" />
+          <ScalarProperty Name="Empresa" ColumnName="Empresa" />
+          <ScalarProperty Name="FolioNota" ColumnName="FolioNota" />
+          <ScalarProperty Name="Ticket" ColumnName="Ticket" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="Hora" ColumnName="Hora" />
+          <ScalarProperty Name="Cod_prod" ColumnName="Cod_prod" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="CodTipo" ColumnName="CodTipo" />
+          <ScalarProperty Name="DescProducto" ColumnName="DescProducto" />
+          <ScalarProperty Name="CodProducto" ColumnName="CodProducto" />
+          <ScalarProperty Name="DescVariedad" ColumnName="DescVariedad" />
+          <ScalarProperty Name="CodTamano" ColumnName="CodTamano" />
+          <ScalarProperty Name="DescTamano" ColumnName="DescTamano" />
+          <ScalarProperty Name="CodClasificacion" ColumnName="CodClasificacion" />
+          <ScalarProperty Name="DescClasificacion" ColumnName="DescClasificacion" />
+          <ScalarProperty Name="CodEnvase" ColumnName="CodEnvase" />
+          <ScalarProperty Name="DescEnvase" ColumnName="DescEnvase" />
+          <ScalarProperty Name="CodEtiqueta" ColumnName="CodEtiqueta" />
+          <ScalarProperty Name="Producto" ColumnName="Producto" />
+          <ScalarProperty Name="CajasRecibidas" ColumnName="CajasRecibidas" />
+          <ScalarProperty Name="Rechazo" ColumnName="Rechazo" />
+          <ScalarProperty Name="Reembalaje" ColumnName="Reembalaje" />
+          <ScalarProperty Name="Disponibles" ColumnName="Disponibles" />
+          <ScalarProperty Name="Cod_Campo" ColumnName="Cod_Campo" />
+          <ScalarProperty Name="DescCampo" ColumnName="DescCampo" />
+          <ScalarProperty Name="Hectareas" ColumnName="Hectareas" />
+          <ScalarProperty Name="Factor" ColumnName="Factor" />
+          <ScalarProperty Name="Temporada" ColumnName="Temporada" />
+          <ScalarProperty Name="Semana" ColumnName="Semana" />
+          <ScalarProperty Name="Cajas" ColumnName="Cajas" />
+          <ScalarProperty Name="Grupo" ColumnName="Grupo" />
+          <ScalarProperty Name="CodChofer" ColumnName="CodChofer" />
+          <ScalarProperty Name="Chofer" ColumnName="Chofer" />
+          <ScalarProperty Name="Acopio" ColumnName="Acopio" />
+          <ScalarProperty Name="CodAcopio" ColumnName="CodAcopio" />
+          <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+          <ScalarProperty Name="CodEstatus" ColumnName="CodEstatus" />
+          <ScalarProperty Name="CodEmpaque" ColumnName="CodEmpaque" />
+          <ScalarProperty Name="Empaque" ColumnName="Empaque" />
+          <ScalarProperty Name="DescEtiqueta" ColumnName="DescEtiqueta" />
+          <ScalarProperty Name="Mercado" ColumnName="Mercado" />
+          <ScalarProperty Name="Convertidas" ColumnName="Convertidas" />
+          <ScalarProperty Name="Mes" ColumnName="Mes" />
+          <ScalarProperty Name="Yearr" ColumnName="Yearr" />
+          <ScalarProperty Name="Zona" ColumnName="Zona" />
+          <ScalarProperty Name="Area" ColumnName="Area" />
+          <ScalarProperty Name="Agente" ColumnName="Agente" />
+          <ScalarProperty Name="REGION" ColumnName="REGION" />
+          <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
+          <ScalarProperty Name="Organico" ColumnName="Organico" />
+          <ScalarProperty Name="Certificado" ColumnName="Certificado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

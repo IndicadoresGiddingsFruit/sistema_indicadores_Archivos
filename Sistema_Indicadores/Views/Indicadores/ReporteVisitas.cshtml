@@ -1,0 +1,168 @@
+﻿
+<div class="row">
+    <div class="col-sm-12 table-responsive">
+        <div style="float: left; margin:5px 0 5px 5px;">
+            <input type="date" class="form-control form-control-sm" id="Fecha" name="Fecha" required="" autocomplete="off" />
+        </div>
+        @*<div style="float: left; margin:5px 0 5px 5px;">
+            <input type="date" class="form-control form-control-sm" id="Fecha_fin" name="Fecha_fin" required="" autocomplete="off" />
+        </div>*@
+        <div style="float: left; margin:5px 0 5px 0;">
+            <button class="d-none d-sm-inline-block btn btn-sm btn-light shadow-lg" type="submit" id="btnReport" name="btnReport"><i class="fas fa-search"></i></button>
+        </div>
+        @using (Html.BeginForm("ReporteVisitasExcel", "Indicadores", FormMethod.Get))
+        {
+            <input type="hidden" name="fecha" id="fecha" value="" />
+            @*<input type="hidden" name="fecha_fin" id="fecha_fin" value="" />*@
+            <div style="float: right; margin:5px 0 5px 0;">
+                <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" id="btnRprtVisit" name="btnRprtVisit"><i class="fas fa-download"></i> Descargar</button>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="table-responsive table-condensed table-sm table-bordered tabla">
+    <table class="table table-hover content-tabla" id="dataTableVisitasReport">
+        <thead style="background-color:lightsteelblue">
+            <tr>
+                <td>
+                    Código
+                </td>
+                <td>
+                    Productor
+                </td>
+                <td>
+                    Campo
+                </td>
+                <td>
+                    Descripción
+                </td>
+                <td>
+                    Sector
+                </td>
+                <td>
+                    Producto
+                </td>
+                <td>
+                    Fecha
+                </td>
+                <td>
+                    Comentarios
+                </td>
+                <td>
+                    Atendió
+                </td>
+                <td>
+                    Etapa
+                </td>
+                @*<td>
+                    Incidencia
+                </td>*@
+                <td>
+                    Folio
+                </td>
+                <td>
+                    Imagen
+                </td>
+            </tr>
+        </thead>
+        <tbody style="background-color:white">
+            <tr>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+@*Modal Imagen*@
+<div class="modal fade" id="ModalImagen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"> &times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <img id="img_visita" src="" alt="" style="width:100%;height:100%" />
+                </div>
+                <div class="col font-weight-bold text-primary subtitulo">
+                    Incidencias: 
+                </div>
+                <div class="col font-weight-bold text-secondary subtitulo" style="font-size:15px; width:100%" id="Incidencia"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" data-dismiss="modal"> Cerrar </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var fecha, fecha_fin, IdVisita;
+
+    $('#btnReport').click(function () {
+        fecha = $("#Fecha").val();
+        //fecha_fin = $("#Fecha_fin").val();
+        if (typeof fecha != 'undefined') {
+            tabla();
+            limpiar();
+            //window.location.reload();
+        }
+        else {
+            alert('Seleccione una fecha válida!');
+        }
+    });
+
+    $('#btnRprtVisit').click(function () {
+        $('#fecha').val(fecha);
+        //$('#fecha_fin').val(fecha_fin);
+    });
+
+    function OpenImage(IdVisita) {
+        $.ajax({
+            type: "POST",
+            url: siteURL + "Indicadores/obtenerImagen?IdVisita=" + IdVisita,
+            success: function (data) {
+                 
+                    $("#img_visita").attr("src", data);
+                    $("#ModalImagen").modal('show');
+                
+            }
+        });
+    }
+
+    function limpiar() {
+        $('table tr:not(:first-child)').remove();
+        valor = 0;
+    }
+
+    function tabla() {
+        $.getJSON(siteURL + "Indicadores/ReporteVisitasList?fecha=" + fecha, function (data) {
+            if (data.length > 0) {
+                $.each(data, function (idx, opt) {
+                    IdVisita = opt.IdVisita;
+                    $('#Incidencia').text(opt.DescIncidencia);
+                    $('#dataTableVisitasReport').append('<tr><td style="display:none">' + opt.IdVisita + '</td><td>' +
+                        opt.Cod_Prod + '</td><td>' +
+                        opt.Productor + '</td><td>' +
+                        opt.Cod_Campo + '</td><td>' +
+                        opt.Campo + '</td><td>' +
+                        opt.IdSector + '</td><td>' +
+                        opt.Tipo + '</td><td>' +
+                        opt.Fecha + '</td><td>' +
+                        opt.Comentarios + '</td><td>' +
+                        opt.Atendio + '</td><td>' +
+                        opt.Etapa + '</td><td>' +
+                        //opt.DescIncidencia + '</td><td>' +
+                        opt.Folio + '</td > <td>' +
+                        '<input type="button" onclick="OpenImage(' + IdVisita + ')" class="d-none d-sm-inline-block btn btn-sm btn-info shadow-sm" style="font-size:smaller;" value="Abrir"/>' + '</td></tr>');
+                });
+            }
+            else {
+                alert('No se encontraron datos!');
+            }
+        }, 'json');
+    }
+</script>

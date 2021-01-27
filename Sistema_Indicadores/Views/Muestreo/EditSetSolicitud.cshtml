@@ -1,0 +1,144 @@
+﻿@model Sistema_Indicadores.Models.ProdMuestreo
+
+<div>
+    @*@using (Html.BeginForm())
+        {*@
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="m-0 font-weight-bold text-secondary">Levantamiento de muestra</h3>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(x => x.Id, new { id = "IdMuestreo" })
+                <h6 class="m-0 font-weight-bold text-secondary">Productor:</h6>
+                @Html.TextBoxFor(x => x.Cod_Prod, new { @class = "form-control", @readonly = true })
+                <h6 class="m-0 font-weight-bold text-secondary">Campo</h6>
+                @Html.TextBoxFor(x => x.Cod_Campo, new { @class = "form-control", @readonly = true })
+                <h6 class="m-0 font-weight-bold text-secondary">Fecha:</h6>
+                @Html.TextBoxFor(x => x.Fecha_ejecucion, new { @class = "form-control", @type = "date", @id= "Fecha_ejecucion"})
+                <span class="validity"></span>
+                <h6 class="m-0 font-weight-bold text-secondary">Sector</h6>
+                <input type="text" class="form-control form-control-sm" id="Sector" name="Sector" autocomplete="off" />
+
+                <input type="submit" value="AGREGAR" id="btnAdd" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-lg" style="font-weight:bold" />
+
+                <div class="row" id="tblSectores" style="margin:20px 100px 0 100px">
+                    <div class="table-responsive table-condensed table-sm table-bordered tabla" style="margin:15px">
+                        <table class="table table-hover" id="dataTableSectores">
+                            <thead class="thead-dark" style="  text-align:center">
+                                <tr class="info">
+                                    <th>Sectores agregados</th>
+                                    <th>Borrar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <i class="fas fa-arrow-circle-left"></i>
+                @Html.ActionLink("REGRESAR", "SetSolicitud", new { @class = "d-none d-sm-inline-block btn btn-sm btn-secondary shadow-lg", @style = "font-weight:bold" })
+            </div>
+        </div>
+    </div>
+    @*}*@
+</div>
+
+@if (@ViewBag.error != null)
+{
+    <div>
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-times-circle"></i> @ViewBag.error</h4>
+        </div>
+    </div>
+}
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var IdMuestreo, IdSector;//, Sector, Fecha_ejecucion;
+
+    $(document).ready(function () {
+        IdMuestreo = $("#IdMuestreo").val();
+        tablaSectores();
+
+        $("#btnAdd").click(function () {
+            add_sector();
+        });
+    });
+
+    function add_sector() {
+        var data = {
+            IdMuestreo: IdMuestreo,
+            IdSector: IdSector,
+            Sector: $("#Sector").val(),
+            Fecha_ejecucion: $("#Fecha_ejecucion").val()
+        };
+        console.log(data);
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Muestreo/Sectores",
+            success: function (data) {
+                //var res = $.parseJSON(data);
+                //console.log(res);
+                window.location.reload();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+    }
+
+    function delRow(currElement) {
+        $("#dataTableSectores tr").click(function () {
+            $(this).find("#id_sector").each(function () {
+                delete_sector($(this).html());
+            });
+        });
+    }
+
+    function delete_sector(IdSector) {
+        var data = {
+            IdMuestreo: IdMuestreo,
+            IdSector: IdSector,
+            Sector: 0,
+            Fecha_ejecucion : ''
+        };
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Muestreo/Sectores",
+            success: function (data) {
+                //var res = $.parseJSON(data);
+                //console.log(res);
+                window.location.reload();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+    }
+
+    function tablaSectores() {
+        $.getJSON(siteURL + "Muestreo/Sectores?IdMuestreo=" + IdMuestreo, function (data) {
+            $.each(data, function (idx, opt) {
+                $('#dataTableSectores').append('<tr><td id="id_sector" style="display:none">' + opt.IdSector + '</td><td>' + opt.Sector + '</td> <td><input type="button" class="btn btn-danger btn-sm" style="border-radius: 50%;" onclick="delRow(this)" value="Borrar"/></td></tr>');
+            });
+        }, 'json');
+    }
+</script>
+
+

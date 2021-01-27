@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="700a09bb2e5245739b7c94f7bacd0f74" Name="Diagram1" ZoomLevel="112">
+        <EntityTypeShape EntityType="SeasonSun1213Model1.CatLocalidades" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.CatProductos" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.CatTiposProd" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdAgenteCat" Width="1.5" PointX="0.75" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdAnalisis_Residuo" Width="2" PointX="5" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdCalidadMuestreo" Width="1.875" PointX="10.125" PointY="28.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdCamposCat" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdMuestreo" Width="1.75" PointX="7.75" PointY="28.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdMuestreoSector" Width="1.75" PointX="2.25" PointY="28.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdProductoresCat" Width="1.5" PointX="3" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SeasonSun1213Model1.SIPGUsuarios" Width="1.5" PointX="7.75" PointY="5.75" IsExpanded="true" />
+        <AssociationConnector Association="SeasonSun1213Model1.FK_IdAgen" ManuallyRouted="true" >
+          <ConnectorPoint PointX="1.46875" PointY="14.566793619791666" />
+          <ConnectorPoint PointX="1.46875" PointY="33.23331510384137" />
+          <ConnectorPoint PointX="5.6771875000000005" PointY="33.23331510384137" />
+          <ConnectorPoint PointX="5.6771875000000005" PointY="33.376916294238363" />
+          <ConnectorPoint PointX="7.065971875" PointY="33.376916294238363" />
+          <ConnectorPoint PointX="7.065971875" PointY="32.6749072265625" />
+          <ConnectorPoint PointX="7.5082422926320715" PointY="32.6749072265625" />
+          <ConnectorPoint PointX="7.6749089592987376" PointY="32.6749072265625" />
+          <ConnectorPoint PointX="7.75" PointY="32.6749072265625" />
+        </AssociationConnector>
+        <AssociationConnector Association="SeasonSun1213Model1.FK_IdAgenI" ManuallyRouted="true" >
+          <ConnectorPoint PointX="1.8593775" PointY="14.566793619791666" />
+          <ConnectorPoint PointX="1.8593775" PointY="32.921135216615212" />
+          <ConnectorPoint PointX="5.8060945749999995" PointY="32.921135216615212" />
+          <ConnectorPoint PointX="5.8060945749999995" PointY="33.117935811813709" />
+          <ConnectorPoint PointX="7.10851120975" PointY="33.117935811813709" />
+          <ConnectorPoint PointX="7.10851120975" PointY="32.293902936197924" />
+          <ConnectorPoint PointX="7.4257764641990924" PointY="32.293902936197924" />
+          <ConnectorPoint PointX="7.6749089592987367" PointY="32.293902936197924" />
+          <ConnectorPoint PointX="7.75" PointY="32.293902936197924" />
+        </AssociationConnector>
+        <AssociationConnector Association="SeasonSun1213Model1.FK_ProdProductoresCat_ProdAgenteCat" ManuallyRouted="false" />
+        <AssociationConnector Association="SeasonSun1213Model1.FK__ProdAnali__IdSec__78D8AF65" ManuallyRouted="false" />
+        <AssociationConnector Association="SeasonSun1213Model1.FK__ProdIncid__Id_Mu__4F177FC3" ManuallyRouted="false" />
+        <AssociationConnector Association="SeasonSun1213Model1.FK_Cod_Empresa_Cod_Prod_Cod_Campo" ManuallyRouted="false" />
+        <AssociationConnector Association="SeasonSun1213Model1.FK_Cod_Prov" ManuallyRouted="false" />
+        <AssociationConnector Association="SeasonSun1213Model1.FK__ProdMuest__IdSec__2D8181CE" ManuallyRouted="true" >
+          <ConnectorPoint PointX="3.125" PointY="30.672587890625" />
+          <ConnectorPoint PointX="3.125" PointY="32.091496305498275" />
+          <ConnectorPoint PointX="7.5915756259654046" PointY="32.091496305498275" />
+          <ConnectorPoint PointX="7.5915756259654046" PointY="32.778996165799889" />
+          <ConnectorPoint PointX="7.75" PointY="32.778996165799889" />
+        </AssociationConnector>
+        <AssociationConnector Association="SeasonSun1213Model1.FK_Cod_Prod" ManuallyRouted="true" >
+          <ConnectorPoint PointX="4.28125" PointY="27.085592447916667" />
+          <ConnectorPoint PointX="4.28125" PointY="27.356052775064324" />
+          <ConnectorPoint PointX="1.9427108333333332" PointY="27.356052775064324" />
+          <ConnectorPoint PointX="1.7760441666666667" PointY="27.356052775064324" />
+          <ConnectorPoint PointX="1.5520833333333333" PointY="27.356052775064324" />
+          <ConnectorPoint PointX="1.3854166666666667" PointY="27.356052775064324" />
+          <ConnectorPoint PointX="1.0468750182938358" PointY="27.356052775064324" />
+          <ConnectorPoint PointX="1.0468750182938358" PointY="32.675945570601392" />
+          <ConnectorPoint PointX="1.3854166666666667" PointY="32.675945570601392" />
+          <ConnectorPoint PointX="1.5520833333333333" PointY="32.675945570601392" />
+          <ConnectorPoint PointX="1.7760441666666667" PointY="32.675945570601392" />
+          <ConnectorPoint PointX="1.9427108333333332" PointY="32.675945570601392" />
+          <ConnectorPoint PointX="5.5379687560369657" PointY="32.675945570601392" />
+          <ConnectorPoint PointX="5.5379687560369657" PointY="32.882046760998385" />
+          <ConnectorPoint PointX="7.0200296894921985" PointY="32.882046760998385" />
+          <ConnectorPoint PointX="7.0200296894921985" PointY="32.407344380204393" />
+          <ConnectorPoint PointX="7.0251778764166666" PointY="32.407344380204393" />
+          <ConnectorPoint PointX="7.1918445430833327" PointY="32.407344380204393" />
+          <ConnectorPoint PointX="7.5091097975324255" PointY="32.407344380204393" />
+          <ConnectorPoint PointX="7.5091097975324255" PointY="32.103400791015638" />
+          <ConnectorPoint PointX="7.75" PointY="32.103400791015638" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="SeasonSun1213Model1.ProdZonasRastreoCat" Width="1.5" PointX="0.75" PointY="4.5" />
+        <AssociationConnector Association="SeasonSun1213Model1.FK_ProdCamposCat_ProdZonasRastreoCat" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

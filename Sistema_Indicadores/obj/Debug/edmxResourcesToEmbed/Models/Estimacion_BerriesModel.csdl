@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SeasonSun1213Model3" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="CatSemanas">
+    <Key>
+      <PropertyRef Name="Temporada" />
+      <PropertyRef Name="Semana" />
+    </Key>
+    <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Semana" Type="Byte" Nullable="false" />
+    <Property Name="Inicio" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Fin" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Yearr" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Mes" Type="String" MaxLength="2" FixedLength="true" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Estimacion_Berries">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Usuario" Type="Int32" />
+    <Property Name="Fecha" Type="DateTime" Precision="3" />
+    <Property Name="Semanas" Type="Int32" />
+    <Property Name="Cantidad" Type="Double" />
+    <Property Name="Concepto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Cultivo" Type="Int32" />
+    <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+    <Property Name="Semana" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UV_ProdRecepcion">
+    <Key>
+      <PropertyRef Name="Empresa" />
+      <PropertyRef Name="Ticket" />
+      <PropertyRef Name="Fecha" />
+      <PropertyRef Name="Hora" />
+      <PropertyRef Name="Cod_prod" />
+      <PropertyRef Name="CodProducto" />
+      <PropertyRef Name="CodTamano" />
+      <PropertyRef Name="CodClasificacion" />
+      <PropertyRef Name="DescClasificacion" />
+      <PropertyRef Name="CodEnvase" />
+      <PropertyRef Name="CodEtiqueta" />
+      <PropertyRef Name="CajasRecibidas" />
+      <PropertyRef Name="Rechazo" />
+      <PropertyRef Name="Reembalaje" />
+      <PropertyRef Name="Disponibles" />
+      <PropertyRef Name="Grupo" />
+      <PropertyRef Name="Estatus" />
+      <PropertyRef Name="CodEstatus" />
+      <PropertyRef Name="CodEmpaque" />
+      <PropertyRef Name="Mercado" />
+      <PropertyRef Name="Certificado" />
+      <PropertyRef Name="Refrigerada" />
+    </Key>
+    <Property Name="Empresa" Type="String" MaxLength="3" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="FolioNota" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Ticket" Type="Int64" Nullable="false" />
+    <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hora" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Cod_prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CodTipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="DescProducto" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CodProducto" Type="Int16" Nullable="false" />
+    <Property Name="DescVariedad" Type="String" MaxLength="51" FixedLength="false" Unicode="false" />
+    <Property Name="CodTamano" Type="Int16" Nullable="false" />
+    <Property Name="DescTamano" Type="String" MaxLength="31" FixedLength="false" Unicode="false" />
+    <Property Name="CodClasificacion" Type="Int16" Nullable="false" />
+    <Property Name="DescClasificacion" Type="String" MaxLength="111" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodEnvase" Type="Int16" Nullable="false" />
+    <Property Name="DescEnvase" Type="String" MaxLength="41" FixedLength="false" Unicode="false" />
+    <Property Name="CodEtiqueta" Type="Int16" Nullable="false" />
+    <Property Name="Producto" Type="String" MaxLength="399" FixedLength="false" Unicode="false" />
+    <Property Name="CajasRecibidas" Type="Int16" Nullable="false" />
+    <Property Name="Rechazo" Type="Int16" Nullable="false" />
+    <Property Name="Reembalaje" Type="Int16" Nullable="false" />
+    <Property Name="Disponibles" Type="Int16" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" />
+    <Property Name="DescCampo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Hectareas" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Factor" Type="Double" />
+    <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+    <Property Name="Semana" Type="Byte" />
+    <Property Name="Cajas" Type="Int16" />
+    <Property Name="Grupo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodChofer" Type="Int16" />
+    <Property Name="Chofer" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="Acopio" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="CodAcopio" Type="Int32" />
+    <Property Name="Estatus" Type="String" MaxLength="9" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodEstatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="CodEmpaque" Type="Int16" Nullable="false" />
+    <Property Name="Empaque" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+    <Property Name="DescEtiqueta" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+    <Property Name="Mercado" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Convertidas" Type="Double" />
+    <Property Name="Mes" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="Yearr" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="Zona" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+    <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Agente" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="REGION" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
+    <Property Name="IdAgen" Type="Int16" />
+    <Property Name="Organico" Type="Boolean" />
+    <Property Name="Certificado" Type="Int32" Nullable="false" />
+    <Property Name="CantidadEnvase" Type="Int16" />
+    <Property Name="Refrigerada" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityContainer Name="SeasonSun1213Entities5" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="CatSemanas" EntityType="Self.CatSemanas" />
+    <EntitySet Name="Estimacion_Berries" EntityType="Self.Estimacion_Berries" />
+    <EntitySet Name="UV_ProdRecepcion" EntityType="Self.UV_ProdRecepcion" />
+  </EntityContainer>
+</Schema>

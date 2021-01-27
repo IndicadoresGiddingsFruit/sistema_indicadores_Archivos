@@ -1,0 +1,149 @@
+﻿@model IEnumerable<Sistema_Indicadores.Clases.ClassMuestreo>
+
+@{
+    ViewBag.Title = "Muestreos_Liberados";
+}
+
+<div class="row">
+
+    <div class="col font-weight-bold text-success subtitulo">
+        MUESTREOS LIBERADOS
+    </div>
+    <div class="table-responsive table-condensed table-sm table-bordered tabla">
+        <table class="table table-hover" id="dataTableMuestreos" name="dataTableMuestreos">
+            @if (Model != null)
+            {
+                <thead class="thead-light" style="font-size:x-small; text-align:center">
+                    <tr>
+                        @if (Session["Tipo"].ToString() != "P" || Session["IdAgen"].ToString() == "1")
+                        {
+                            <th>Asesor</th>
+                        }
+                        <th>Codigo</th>
+                        <th>Campo</th>
+                        <th>Sector</th>
+                        <th>Compra-oprtu</th>
+                        @*<th>Fecha solicitud</th>*@
+                        <th>Inicio cosecha</th>
+                        <th>Ubicación</th>
+                        <th>Telefono</th>
+                        <th>Fecha muestreo</th>
+                        <th>Calidad</th>
+                        <th>Tarjeta</th>
+                        @if (Session["Tipo"].ToString() != "C" || Session["IdAgen"].ToString() == "167" || Session["IdAgen"].ToString() == "182")
+                        {
+                            <th>Asesor Calidad</th>
+                        }
+
+
+                        @if (Session["Tipo"].ToString() != "I" || Session["IdAgen"].ToString() == "205")
+                        {
+                            <th>Asesor Inoc</th>
+                        }
+                        <th>Fecha Liberacion</th>
+                    </tr>
+                </thead>
+                <tbody style="background-color:white">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            @if (Session["Tipo"].ToString() != "P" || Session["IdAgen"].ToString() == "1")
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Asesor)
+                                </td>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cod_Prod)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cod_Campo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sector)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Compras_oportunidad)
+                            </td>
+                            @*<td>
+                                    @(String.Format("{0:dd/MM/yyyy}", item.Fecha_solicitud))
+                                </td>*@
+                            <td>
+                                @(String.Format("{0:dd/MM/yyyy}", item.Inicio_cosecha))
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Ubicacion)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Telefono)
+                            </td>
+                            <td>
+                                @(String.Format("{0:dd/MM/yyyy}", item.Fecha_ejecucion))
+                            </td>
+
+                            @if (item.Calidad_fruta == "1")
+                            {
+                                <td class="alert alert-success"> APTA </td>
+                            }
+                            else if (item.Calidad_fruta == "2")
+                            {
+                                <td class="alert alert-success"> APTA CON CONDICIONES</td>
+                            }
+                            else
+                            {
+                                <td> </td>
+                            }
+                            @if (item.Tarjeta == "S")
+                            {
+                                <td class="alert alert-success">
+                                    <i class="fas fa-check"></i>
+                                </td>
+                            }
+                            else
+                            {
+                                <td> </td>
+                            }
+                            @if (Session["Tipo"].ToString() != "C" || Session["IdAgen"].ToString() == "167" || Session["IdAgen"].ToString() == "182")
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AsesorCS)
+                                </td>
+                            }
+                            @if (Session["Tipo"].ToString() != "I" || Session["IdAgen"].ToString() == "205")
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AsesorI)
+                                </td>
+                            }
+
+                            <td>
+                                @(String.Format("{0:dd/MM/yyyy}", item.Fecha_analisis))
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            }
+            else
+            {
+                <tr>
+                    <td>No se encontró ningún dato</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                    <td> &nbsp;</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
