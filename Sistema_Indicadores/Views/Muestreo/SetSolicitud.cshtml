@@ -40,7 +40,7 @@
             {
                 <div style="float: left; margin:5px 0 5px 5px;">
                     <div style="float: left;">
-                        <a href="@Url.Action("SetSolicitud", "Muestreo", new { pendientes = "pendientes" })"  class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="color:black">Pendientes <i class="fas fa-exclamation"></i> </a>
+                        <a href="@Url.Action("SetSolicitud", "Muestreo", new { pendientes = "pendientes" })" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="color:black">Pendientes <i class="fas fa-exclamation"></i> </a>
                     </div>
                 </div>
             }
@@ -152,50 +152,57 @@
                             liberacion = "alert alert-success";
                             icon = "fas fa-check - circle";
                         }
-                    <tr>
-                        <td style="display:none">@Html.DisplayFor(modelItem => item.IdMuestreo)</td>
-                        <td style="display:none">@Html.DisplayFor(modelItem => item.IdAnalisis_Residuo)</td>
-                        @if (Session["Tipo"].ToString() == "I" || Session["Tipo"].ToString() == "C" || Session["IdAgen"].ToString() == "1" || Session["IdAgen"].ToString() == "5")
-                        {
-                            <td>@Html.DisplayFor(modelItem => item.Asesor)</td>
-                        }
-
-                        <td>@Html.DisplayFor(modelItem => item.Cod_Prod)</td>
-
-                        @if (Session["IdAgen"].ToString() != "205")
-                        {
-                            <td>@Html.DisplayFor(modelItem => item.Productor)</td>
-                        }
-
-                        <td>@Html.DisplayFor(modelItem => item.Cod_Campo)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Campo)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Sector)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Ha)</td>
-                        @if (item.Compras_oportunidad != null)
-                        {
-                            <td>SI</td>
-                        }
-                        else
-                        {
-                            <td>NO</td>
-                        }
-
-                        <td id="fecha_solicitud">@(String.Format("{0:dd/MM/yyyy}", item.Fecha_solicitud))</td>
-                        <td id="inicio_cosecha">@(String.Format("{0:dd/MM/yyyy}", item.Inicio_cosecha))</td>
-                        <td>@Html.DisplayFor(modelItem => item.Ubicacion)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
-                        @*<td class="@liberacion">
-            <div class="@icon"></div>
-        </td>*@
-                        @if (Session["Tipo"].ToString() == "P")
-                        {
-                            if (item.Liberacion != "S")
+                        <tr>
+                            <td style="display:none">@Html.DisplayFor(modelItem => item.IdMuestreo)</td>
+                            <td style="display:none">@Html.DisplayFor(modelItem => item.IdAnalisis_Residuo)</td>
+                            @if (Session["Tipo"].ToString() == "I" || Session["Tipo"].ToString() == "C" || Session["IdAgen"].ToString() == "1" || Session["IdAgen"].ToString() == "5")
                             {
-                                <td>
-                                    <a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenDialog d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;">
-                                        <i class="fas fa-plus-circle"></i>
-                                    </a>
-                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Asesor)</td>
+                            }
+
+                            <td>@Html.DisplayFor(modelItem => item.Cod_Prod)</td>
+
+                            @if (Session["IdAgen"].ToString() != "205")
+                            {
+                                <td>@Html.DisplayFor(modelItem => item.Productor)</td>
+                            }
+
+                            <td>@Html.DisplayFor(modelItem => item.Cod_Campo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Campo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Sector)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Ha)</td>
+                            @if (item.Compras_oportunidad != null)
+                            {
+                                <td>SI</td>
+                            }
+                            else
+                            {
+                                <td>NO</td>
+                            }
+
+                            <td id="fecha_solicitud">@(String.Format("{0:dd/MM/yyyy}", item.Fecha_solicitud))</td>
+                            <td id="inicio_cosecha">@(String.Format("{0:dd/MM/yyyy}", item.Inicio_cosecha))</td>
+                            <td>@Html.DisplayFor(modelItem => item.Ubicacion)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Telefono)</td>
+                            @*<td class="@liberacion">
+                                    <div class="@icon"></div>
+                                </td>*@
+                            @if (Session["Tipo"].ToString() == "P")
+                            {
+                                if (item.Liberacion != "S")
+                                {
+                                    <td>
+                                        <a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenDialog d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;">
+                                            <i class="fas fa-plus-circle"></i>
+                                        </a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="@liberacion">
+                                        <div class="@icon"></div>
+                                    </td>
+                                }
                             }
                             else
                             {
@@ -203,171 +210,164 @@
                                     <div class="@icon"></div>
                                 </td>
                             }
-                        }
-                        else
-                        {
-                            <td class="@liberacion">
-                                <div class="@icon"></div>
+
+                            @if (Session["Tipo"].ToString() == "I" || Session["IdAgen"].ToString() == "263")
+                            {
+                                if ((short)Session["IdAgen"] == 205 && item.Fecha_solicitud == null)
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        @if (item.Fecha_ejecucion == null)
+                                        {
+                                            <div class="faltante"><i class="fas fa-exclamation"></i>  </div>
+                                        }
+                                        else
+                                        {
+
+                                            @(String.Format("{0:dd/MM/yyyy}", item.Fecha_ejecucion))
+                                        }
+                                        @Html.ActionLink("Agregar", "EditSetSolicitud", new { id = item.IdMuestreo })
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                if (item.Fecha_ejecucion == null)
+                                {
+                                    <td class="faltante"><i class="fas fa-exclamation"></i></td>
+                                }
+                                else
+                                {
+                                    <td>@(String.Format("{0:dd/MM/yyyy}", item.Fecha_ejecucion))</td>
+                                }
+                            }
+
+                            @*@if (item.Fecha_ejecucion == null)
+                                {
+                                    <td class="faltante"><i class="fas fa-exclamation"></i></td>
+                                }
+                                else
+                                {
+                                    <td>@(String.Format("{0:dd/MM/yyyy}", item.Fecha_ejecucion))</td>
+                                }*@
+
+                            @if ((short)Session["IdAgen"] == 205)
+                            {
+                                //if (item.Liberacion != null && item.Fecha_ejecucion != null)
+                                //{
+                                <td>@Html.ActionLink("Agregar", "Analisis_Residuos", new { Cod_Prod = item.Cod_Prod, Cod_Campo = item.Cod_Campo })</td>
+                                //}
+                                @*else if (item.Fecha_solicitud == null)
+                                    {
+                                        <td>@Html.ActionLink("Agregar", "Analisis_Residuos", new { id = item.IdAnalisis_Residuo })</td>
+                                    }*@
+                                //else
+                                //{
+                                //    <td class="faltante"><i class="fas fa-exclamation"></i></td>
+                                //}
+                            }
+
+                            @if (item.IdAnalisis_Residuo != null)
+                            {
+                                if (item.Analisis == "R")
+                                {
+                                    <td style="background-color: #FD7676"> CON RESIDUOS </td>
+                                }
+                                else if (item.Analisis == "P")
+                                {
+                                    <td style="background-color: #D2D4D1"> EN PROCESO </td>
+                                }
+                                else if (item.Analisis == "F")
+                                {
+                                    <td style="background-color: #F7F979"> FUERA LIMITE </td>
+                                }
+                                else if (item.Analisis == "L")
+                                {
+                                    <td style="background-color: #9BFC6E"> LIBERADO </td>
+                                }
+                            }
+                            else
+                            {
+                                <td class="faltante"><i class="fas fa-exclamation"></i></td>
+                            }
+
+                            @if (item.Calidad_fruta == null)
+                            {
+                                <td class="faltante"><i class="fas fa-exclamation"></i></td>
+                            }
+                            else
+                            {
+                                if (item.Calidad_fruta == "1")
+                                {
+                                    <td style="background-color: #9BFC6E">
+                                        APTA
+                                        <br />
+                                        @if (Session["IdAgen"].ToString() == "167")
+                                        {
+                                            @Html.DisplayFor(modelItem => item.AsesorC)
+                                        }
+                                    </td>
+                                }
+                                else if (item.Calidad_fruta == "2")
+                                {
+                                    <td style="background-color: #9BFC6E">
+                                        APTA CON CONDICIONES
+                                        <br />
+                                        @if (Session["IdAgen"].ToString() == "167")
+                                        {
+                                            @Html.DisplayFor(modelItem => item.AsesorC)
+                                        }
+                                    </td>
+                                }
+                                else if (item.Calidad_fruta == "3")
+                                {
+                                    <td style="background-color: #FD7676">
+                                        PENDIENTE
+                                        <br />
+                                        @if (Session["IdAgen"].ToString() == "167")
+                                        {
+                                            @Html.DisplayFor(modelItem => item.AsesorC)
+                                        }
+                                    </td>
+                                }
+                            }
+
+                            <td>
+                                <a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenCalidad_Fruta d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;"> <i class="fas fa-plus-circle"></i></a>
                             </td>
-                        }
-
-                        @if (Session["Tipo"].ToString() == "I")
-                        {
-                            if ((short)Session["IdAgen"] == 205 && item.Fecha_solicitud == null)
+                            @if (Session["IdAgen"].ToString() == "167")
                             {
-                                <td></td>
+                                <td>@Html.DisplayFor(modelItem => item.AsesorCS)</td>
                             }
-                            else
+                            @if (item.Tarjeta != null && item.IdAnalisis_Residuo != null)
                             {
-                                <td>
-                                    @if (item.Fecha_ejecucion == null)
-                                    {
-                                        <div class="faltante"><i class="fas fa-exclamation"></i>  </div>
-                                    }
-                                    else
-                                    {
-
-                                        @(String.Format("{0:dd/MM/yyyy}", item.Fecha_ejecucion))
-                                    }
-                                    @Html.ActionLink("Agregar", "EditSetSolicitud", new { id = item.IdMuestreo })
-                                </td>
-                            }
-                        }
-                        else
-                        {
-                            if (item.Fecha_ejecucion == null)
-                            {
-                                <td class="faltante"><i class="fas fa-exclamation"></i></td>
-                            }
-                            else
-                            {
-                                <td>@(String.Format("{0:dd/MM/yyyy}", item.Fecha_ejecucion))</td>
-                            }
-                        }
-
-                        @*@if (item.Fecha_ejecucion == null)
-        {
-            <td class="faltante"><i class="fas fa-exclamation"></i></td>
-        }
-        else
-        {
-            <td>@(String.Format("{0:dd/MM/yyyy}", item.Fecha_ejecucion))</td>
-        }*@
-
-                        @if ((short)Session["IdAgen"] == 205)
-                        {
-                            //if (item.Liberacion != null && item.Fecha_ejecucion != null)
-                            //{
-                            <td>@Html.ActionLink("Agregar", "Analisis_Residuos", new { Cod_Prod = item.Cod_Prod, Cod_Campo = item.Cod_Campo })</td>
-                            //}
-                            @*else if (item.Fecha_solicitud == null)
-            {
-                <td>@Html.ActionLink("Agregar", "Analisis_Residuos", new { id = item.IdAnalisis_Residuo })</td>
-            }*@
-                            //else
-                            //{
-                            //    <td class="faltante"><i class="fas fa-exclamation"></i></td>
-                            //}
-                        }
-
-                        @if (item.IdAnalisis_Residuo != null)
-                        {
-                            if (item.Analisis == "R")
-                            {
-                                <td style="background-color: #FD7676"> CON RESIDUOS </td>
-                            }
-                            else if (item.Analisis == "P")
-                            {
-                                <td style="background-color: #D2D4D1"> EN PROCESO </td>
-                            }
-                            else if (item.Analisis == "F")
-                            {
-                                <td style="background-color: #F7F979"> FUERA LIMITE </td>
-                            }
-                            else if (item.Analisis == "L")
-                            {
-                                <td style="background-color: #9BFC6E"> LIBERADO </td>
-                            }
-                        }
-                        else
-                        {
-                            <td class="faltante"><i class="fas fa-exclamation"></i></td>
-                        }
-
-                        @if (item.Calidad_fruta == null)
-                        {
-                            <td class="faltante"><i class="fas fa-exclamation"></i></td>
-                        }
-                        else
-                        {
-                            if (item.Calidad_fruta == "1")
-                            {
-                                <td style="background-color: #9BFC6E">
-                                    APTA
-                                    <br />
-                                    @if (Session["IdAgen"].ToString() == "167")
-                                    {
-                                        @Html.DisplayFor(modelItem => item.AsesorC)
-                                    }
-                                </td>
-                            }
-                            else if (item.Calidad_fruta == "2")
-                            {
-                                <td style="background-color: #9BFC6E">
-                                    APTA CON CONDICIONES
-                                    <br />
-                                    @if (Session["IdAgen"].ToString() == "167")
-                                    {
-                                        @Html.DisplayFor(modelItem => item.AsesorC)
-                                    }
-                                </td>
-                            }
-                            else if (item.Calidad_fruta == "3")
-                            {
-                                <td style="background-color: #FD7676">
-                                    PENDIENTE
-                                    <br />
-                                    @if (Session["IdAgen"].ToString() == "167")
-                                    {
-                                        @Html.DisplayFor(modelItem => item.AsesorC)
-                                    }
-                                </td>
-                            }
-                        }
-
-                        <td>
-                            <a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenCalidad_Fruta d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;"> <i class="fas fa-plus-circle"></i></a>
-                        </td>
-                        @if (Session["IdAgen"].ToString() == "167")
-                        {
-                            <td>@Html.DisplayFor(modelItem => item.AsesorCS)</td>
-                        }
-                        @if (item.Tarjeta != null && item.IdAnalisis_Residuo != null)
-                        {
-                            if (item.Tarjeta == "S" && item.Analisis == "L")
-                            {
-                                <td style="background-color: #9BFC6E">  <i class="fas fa-check"></i> </td>
-                            }
-                            else if (item.Tarjeta == "N")
-                            {
-                                <td style="background-color: #FD7676"> <i class="fas fa-times"></i> </td>
+                                if (item.Tarjeta == "S" && item.Analisis == "L")
+                                {
+                                    <td style="background-color: #9BFC6E">  <i class="fas fa-check"></i> </td>
+                                }
+                                else if (item.Tarjeta == "N")
+                                {
+                                    <td style="background-color: #FD7676"> <i class="fas fa-times"></i> </td>
+                                }
+                                else
+                                {
+                                    <td class="faltante"><i class="fas fa-exclamation"></i></td>
+                                }
                             }
                             else
                             {
                                 <td class="faltante"><i class="fas fa-exclamation"></i></td>
                             }
-                        }
-                        else
-                        {
-                            <td class="faltante"><i class="fas fa-exclamation"></i></td>
-                        }
 
-                        @if (Session["IdAgen"].ToString() == "153" || Session["IdAgen"].ToString() == "281" || Session["IdAgen"].ToString() == "1")
-                        {
-                            <td><a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenLiberar_T d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;"><i class="fas fa-plus-circle"></i></a></td>
-                        }
-                        <td> <a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenAsignar d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;"> <i class="fas fa-plus-circle"></i></a></td>
-                    </tr>
+                            @if (Session["IdAgen"].ToString() == "153" || Session["IdAgen"].ToString() == "281" || Session["IdAgen"].ToString() == "1")
+                            {
+                                <td><a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenLiberar_T d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;"><i class="fas fa-plus-circle"></i></a></td>
+                            }
+                            <td> <a href="javascript:void(0);" data-id="@item.IdMuestreo" class="OpenAsignar d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="font-size:smaller;"> <i class="fas fa-plus-circle"></i></a></td>
+                        </tr>
                     }
                 </tbody>
             }
@@ -443,7 +443,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                @if (Session["Tipo"].ToString() == "C")
+                @if (Session["Tipo"].ToString() == "C" || Session["IdAgen"].ToString() == "263")
                 {
                     <div class="row">
                         <div class="col font-weight-bold text-primary subtitulo">
@@ -493,7 +493,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm" data-dismiss="modal"> Cerrar </button>
-                @if (Session["Tipo"].ToString() == "C")
+                @if (Session["Tipo"].ToString() == "C" || Session["IdAgen"].ToString() == "263")
                 {
                     <input type="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="btnGuardarCF" value="Guardar" />
                 }
@@ -536,7 +536,7 @@
                 {
                     @Html.DropDownList("re-agente", new SelectList(ViewBag.agentesI, "IdAgen", "Nombre"), new { @class = "form-control form-control-sm", @id = "re-agente", @name = "re-agente" })
                 }
-                else if (Session["Tipo"].ToString() == "C")
+                else if (Session["Tipo"].ToString() == "C" || Session["IdAgen"].ToString() == "263")
                 {
                     @Html.DropDownList("re-agente", new SelectList(ViewBag.agentesC, "IdAgen", "Nombre"), new { @class = "form-control form-control-sm", @id = "re-agente", @name = "re-agente" })
                 }

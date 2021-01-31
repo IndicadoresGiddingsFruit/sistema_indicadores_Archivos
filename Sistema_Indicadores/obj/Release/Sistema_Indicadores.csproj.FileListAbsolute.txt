@@ -132,4 +132,11 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Syste
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Net.Http.Formatting.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Http.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Http.WebHost.resources.dll
-C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Rotativa.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x64\msvcr120.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x64\SqlServerSpatial140.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x86\msvcr120.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x86\SqlServerSpatial140.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\BouncyCastle.Crypto.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\itextsharp.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Microsoft.SqlServer.Types.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\itextsharp.xml

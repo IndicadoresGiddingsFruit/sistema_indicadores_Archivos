@@ -1,23 +1,30 @@
-﻿
+﻿@model Sistema_Indicadores.Models.ProdVisitasCab
+
 <div class="row">
     <div class="col-sm-12 table-responsive">
-        <div style="float: left; margin:5px 0 5px 5px;">
-            <input type="date" class="form-control form-control-sm" id="Fecha" name="Fecha" required="" autocomplete="off" />
-        </div>
-        @*<div style="float: left; margin:5px 0 5px 5px;">
-            <input type="date" class="form-control form-control-sm" id="Fecha_fin" name="Fecha_fin" required="" autocomplete="off" />
-        </div>*@
+        @using (Html.BeginForm("ReporteView", "Indicadores", FormMethod.Post))
+        {
+            <div style="float: left; margin:5px 0 5px 5px;">
+                <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" required="" autocomplete="off" />
+            </div>
+            <div style="float: right; margin:5px 0 5px 0;">                 
+                <button class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-lg" type="submit" id="btnRprtPDF" name="btnRprtPDF"><i class="fas fa-download"></i> PDF</button>
+            </div>
+        }
+
         <div style="float: left; margin:5px 0 5px 0;">
             <button class="d-none d-sm-inline-block btn btn-sm btn-light shadow-lg" type="submit" id="btnReport" name="btnReport"><i class="fas fa-search"></i></button>
         </div>
-        @using (Html.BeginForm("ReporteVisitasExcel", "Indicadores", FormMethod.Get))
+
+        @*@using (Html.BeginForm("ReporteVisitasExcel", "Indicadores", FormMethod.Get))
         {
-            <input type="hidden" name="fecha" id="fecha" value="" />
+            <input type="hidden" name="fecha" id="fecha" value="" />*@
             @*<input type="hidden" name="fecha_fin" id="fecha_fin" value="" />*@
-            <div style="float: right; margin:5px 0 5px 0;">
-                <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" id="btnRprtVisit" name="btnRprtVisit"><i class="fas fa-download"></i> Descargar</button>
+            @*<div style="float: right; margin:5px 0 5px 0;">
+                <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" id="btnRprtVisit" name="btnRprtVisit"><i class="fas fa-download"></i> EXCEL</button>
             </div>
-        }
+        }*@
+
     </div>
 </div>
 
@@ -56,8 +63,8 @@
                     Etapa
                 </td>
                 @*<td>
-                    Incidencia
-                </td>*@
+                        Incidencia
+                    </td>*@
                 <td>
                     Folio
                 </td>
@@ -87,7 +94,7 @@
                     <img id="img_visita" src="" alt="" style="width:100%;height:100%" />
                 </div>
                 <div class="col font-weight-bold text-primary subtitulo">
-                    Incidencias: 
+                    Incidencias:
                 </div>
                 <div class="col font-weight-bold text-secondary subtitulo" style="font-size:15px; width:100%" id="Incidencia"></div>
             </div>
@@ -103,7 +110,7 @@
     var fecha, fecha_fin, IdVisita;
 
     $('#btnReport').click(function () {
-        fecha = $("#Fecha").val();
+        fecha = $("#fecha").val();
         //fecha_fin = $("#Fecha_fin").val();
         if (typeof fecha != 'undefined') {
             tabla();
@@ -125,10 +132,10 @@
             type: "POST",
             url: siteURL + "Indicadores/obtenerImagen?IdVisita=" + IdVisita,
             success: function (data) {
-                 
-                    $("#img_visita").attr("src", data);
-                    $("#ModalImagen").modal('show');
-                
+
+                $("#img_visita").attr("src", data);
+                $("#ModalImagen").modal('show');
+
             }
         });
     }

@@ -1,5 +1,6 @@
-﻿using OfficeOpenXml;
-using Rotativa;
+﻿using iTextSharp.text;
+using iTextSharp.text.pdf;
+using OfficeOpenXml;
 using Sistema_Indicadores.Clases;
 using Sistema_Indicadores.Models;
 using System;
@@ -9,7 +10,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Sistema_Indicadores.Controllers
@@ -22,11 +25,10 @@ namespace Sistema_Indicadores.Controllers
         SIPGComentarios SIPGComentarios = new SIPGComentarios();
         SIPGProyeccion SIPGProyeccion = new SIPGProyeccion();
         SIPGVisitas SIPGVisitas = new SIPGVisitas();
+        Image img = null;
 
         List<ClassVisitas> visitas = new List<ClassVisitas>();
         string idregion = "";
-
-
         public ActionResult Index()
         {
             return View();
@@ -140,10 +142,172 @@ namespace Sistema_Indicadores.Controllers
             }
             return View();
         }
-        public ActionResult Reporte_Visitas()
+
+        public ActionResult ReporteView(string fecha)
         {
-            return new ActionAsPdf("ReporteVisitasList?fecha=" + DateTime.Now)
-            { FileName = Session["Nombre"].ToString() + ".pdf" };
+            if (Session["Nombre"] != null)
+            {
+                ViewData["Nombre"] = Session["Nombre"].ToString();
+                RptView(fecha);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            return View();
+        }
+
+        public void RptView(string fecha)
+        {
+            Document doc = new Document(PageSize.LETTER, 20, 20, 10,20);//left, rigth, top, bottom
+            var output = new MemoryStream();
+            PdfWriter pw = PdfWriter.GetInstance(doc, output);
+            doc.AddTitle(fecha); 
+            doc.AddCreator(Session["Nombre"].ToString());           
+
+            doc.Open();
+            doc.Add(new Paragraph("Asesor: " + Session["Nombre"].ToString()));
+            doc.Add(new Paragraph("Fecha: " + fecha));
+            doc.Add(Chunk.NEWLINE);
+
+            Font _standardFont = new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK);
+
+            PdfPTable tbl = new PdfPTable(9);
+            tbl.WidthPercentage = 100;
+            tbl.HorizontalAlignment = Element.ALIGN_CENTER;
+
+            float[] values = new float[9];
+            values[0] = 80;
+            values[1] = 200;
+            values[2] = 150;
+            values[3] = 75;
+            values[4] = 200;
+            values[5] = 150;
+            values[6] = 150;
+            values[7] = 200;
+            values[8] = 300;
+            tbl.SetWidths(values);           
+
+            // Configuramos el título de las columnas de la tabla  
+            PdfPCell clCod_prod = new PdfPCell(new Phrase("Código", _standardFont));
+            clCod_prod.BorderWidth = 0;
+            clCod_prod.BorderWidthBottom = 0.75f;
+
+            PdfPCell clProductor = new PdfPCell(new Phrase("Productor", _standardFont));
+            clProductor.BorderWidth = 0;
+            clProductor.BorderWidthBottom = 0.75f;
+
+            PdfPCell clCampo = new PdfPCell(new Phrase("Campo", _standardFont));
+            clCampo.BorderWidth = 0;
+            clCampo.BorderWidthBottom = 0.75f;
+
+            PdfPCell clSector = new PdfPCell(new Phrase("Sector", _standardFont));
+            clSector.BorderWidth = 0;
+            clSector.BorderWidthBottom = 0.75f;
+
+            PdfPCell clProducto = new PdfPCell(new Phrase("Producto", _standardFont));
+            clProducto.BorderWidth = 0;
+            clProducto.BorderWidthBottom = 0.75f;    
+
+            PdfPCell clAtendio = new PdfPCell(new Phrase("Atendió", _standardFont));
+            clAtendio.BorderWidth = 0;
+            clAtendio.BorderWidthBottom = 0.75f;
+
+            PdfPCell clEtapa = new PdfPCell(new Phrase("Etapa", _standardFont));
+            clEtapa.BorderWidth = 0;
+            clEtapa.BorderWidthBottom = 0.75f;
+
+            PdfPCell clComentarios = new PdfPCell(new Phrase("Comentarios", _standardFont));
+            clComentarios.BorderWidth = 0;
+            clComentarios.BorderWidthBottom = 0.75f;
+
+            PdfPCell X = new PdfPCell(new Phrase("Fotografía", _standardFont));
+            X.BorderWidth = 0;
+            X.BorderWidthBottom = 0.75f;
+
+            // Añadimos las celdas a la tabla            
+            tbl.AddCell(clCod_prod);
+            tbl.AddCell(clProductor);
+            tbl.AddCell(clCampo);
+            tbl.AddCell(clSector);
+            tbl.AddCell(clProducto);
+            tbl.AddCell(clAtendio);
+            tbl.AddCell(clEtapa);
+            tbl.AddCell(clComentarios);
+            tbl.AddCell(X);
+
+            ReporteVisitasList(fecha);
+            
+            int x = 2;
+            foreach (var item in visitas)
+            {
+                clCod_prod = new PdfPCell(new Phrase(item.Cod_Prod, _standardFont));
+                clCod_prod.BorderWidth = 0;
+               
+                clProductor = new PdfPCell(new Phrase(item.Productor, _standardFont));
+                clProductor.BorderWidth = 0;
+
+                clCampo = new PdfPCell(new Phrase(Convert.ToString(item.Cod_Campo + " - " + item.Campo), _standardFont));
+                clCampo.BorderWidth = 0;
+
+                clSector = new PdfPCell(new Phrase(Convert.ToString(item.IdSector), _standardFont));
+                clSector.BorderWidth = 0;
+
+                clProducto = new PdfPCell(new Phrase(item.Tipo, _standardFont));
+                clProducto.BorderWidth = 0;
+
+                clAtendio = new PdfPCell(new Phrase(item.Atendio, _standardFont));
+                clAtendio.BorderWidth = 0;
+
+                clEtapa = new PdfPCell(new Phrase(item.Etapa, _standardFont));
+                clEtapa.BorderWidth = 0;
+
+                clComentarios = new PdfPCell(new Phrase(item.Comentarios, _standardFont));
+                clComentarios.BorderWidth = 0;
+
+                tbl.AddCell(clCod_prod);
+                tbl.AddCell(clProductor);
+                tbl.AddCell(clCampo);
+                tbl.AddCell(clSector);
+                tbl.AddCell(clProducto);
+                tbl.AddCell(clAtendio);
+                tbl.AddCell(clEtapa);
+                tbl.AddCell(clComentarios);
+
+                if (ImgExist(item.IdVisita))
+                {
+                    img.BorderWidth = 0;
+                    img.Alignment = Element.ALIGN_CENTER;
+                    float percentage = 0.0f;
+                    percentage = 150 / img.Width;
+                    img.ScalePercent(percentage * 100);
+                }
+                tbl.AddCell(img);
+                x++;
+            }
+
+            doc.Add(tbl);
+            doc.Close();
+            pw.Close();
+
+            Response.Clear();
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("Content-Disposition", string.Format("attachment;filename="+fecha+".pdf", "some string"));
+            Response.BinaryWrite(output.ToArray());
+            Response.End();
+        }
+
+        public bool ImgExist(int IdVisita)
+        {
+            try
+            {
+                img = Image.GetInstance("//192.168.0.21/recursos season/VisitasProd/" + IdVisita + "/1.jpg");
+                return true;
+            }
+            catch (Exception e) {
+                e.ToString();
+                return false;
+            }            
         }
 
         public void ReportVisitList(string fecha)

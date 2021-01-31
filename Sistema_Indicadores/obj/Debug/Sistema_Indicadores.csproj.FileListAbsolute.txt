@@ -1,3 +1,7 @@
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x64\msvcr120.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x64\SqlServerSpatial140.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x86\msvcr120.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\SqlServerTypes\x86\SqlServerSpatial140.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Models\CurvaModel.Context.tt
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Models\CurvaModel.tt
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Models\Estimacion_BerriesModel.Context.tt
@@ -67,6 +71,7 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\rosly
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\roslyn\VBCSCompiler.exe
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Antlr3.Runtime.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\BouncyCastle.Crypto.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ClosedXML.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\DocumentFormat.OpenXml.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\EntityFramework.dll
@@ -75,11 +80,12 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\EPPlu
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ExcelDataReader.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ExcelNumberFormat.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\FastMember.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\itextsharp.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Microsoft.AspNet.TelemetryCorrelation.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Microsoft.SqlServer.Types.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Newtonsoft.Json.dll
-C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Rotativa.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Diagnostics.DiagnosticSource.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.IO.FileSystem.Primitives.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.IO.Packaging.dll
@@ -103,6 +109,7 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\EPPlu
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ExcelDataReader.pdb
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ExcelDataReader.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ExcelNumberFormat.xml
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\itextsharp.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Net.Http.Formatting.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Http.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Http.WebHost.xml
