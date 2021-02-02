@@ -418,81 +418,86 @@ else
 
             function curva(filtro) {
                 $.getJSON(siteURL + "Indicadores/CurvaList?filtro=" + filtro, function (data) {
-                    $.each(data, function (idx, opt) {
-                        var estilo1 = '', estilo2 = '';
+                    if (data.length == 0) {
+                        alert('No se encontraron datos');
+                    }
+                    else {
+                        $.each(data, function (idx, opt) {
+                            var estilo1 = '', estilo2 = '';
 
-                        //Diferencias AA
-                        if (opt.DiferenciaAA >= 0 && opt.DiferenciaAA <= 5 || opt.DiferenciaAA <= 0 && opt.DiferenciaAA >= -5) {
-                            estilo1 = 'background-color:LightGreen';
-                        }
-                        else if (opt.DiferenciaAA > 5 && opt.DiferenciaAA <= 25 || opt.DiferenciaAA < -5 && opt.DiferenciaAA >= -25) {
-                            estilo1 = 'background-color:Yellow';
-                        }
-                        else if (opt.DiferenciaAA > 25 && opt.DiferenciaAA <= 50 || opt.DiferenciaAA < -25 && opt.DiferenciaAA >= -50) {
-                            estilo1 = 'background-color:Tomato';
-                        }
-                        else if (opt.DiferenciaAA > 50 && opt.DiferenciaAA <= 100 || opt.DiferenciaAA < -50 && opt.DiferenciaAA >= -100 || opt.DiferenciaAA > 100) {
-                            estilo1 = 'background-color:black; color:red';
-                        }
+                            //Diferencias AA
+                            if (opt.DiferenciaAA >= 0 && opt.DiferenciaAA <= 5 || opt.DiferenciaAA <= 0 && opt.DiferenciaAA >= -5) {
+                                estilo1 = 'background-color:LightGreen';
+                            }
+                            else if (opt.DiferenciaAA > 5 && opt.DiferenciaAA <= 25 || opt.DiferenciaAA < -5 && opt.DiferenciaAA >= -25) {
+                                estilo1 = 'background-color:Yellow';
+                            }
+                            else if (opt.DiferenciaAA > 25 && opt.DiferenciaAA <= 50 || opt.DiferenciaAA < -25 && opt.DiferenciaAA >= -50) {
+                                estilo1 = 'background-color:Tomato';
+                            }
+                            else if (opt.DiferenciaAA > 50 && opt.DiferenciaAA <= 100 || opt.DiferenciaAA < -50 && opt.DiferenciaAA >= -100 || opt.DiferenciaAA > 100) {
+                                estilo1 = 'background-color:black; color:red';
+                            }
 
-                        //Diferencias SA
-                        if (opt.DiferenciaSA >= 0 && opt.DiferenciaSA <= 5 || opt.DiferenciaSA <= 0 && opt.DiferenciaSA >= -5) {
-                            estilo2 = 'background-color:LightGreen';
-                        }
-                        else if (opt.DiferenciaSA > 5 && opt.DiferenciaSA <= 25 || opt.DiferenciaSA < -5 && opt.DiferenciaSA >= -25) {
-                            estilo2 = 'background-color:Yellow';
-                        }
-                        else if (opt.DiferenciaSA > 25 && opt.DiferenciaSA <= 50 || opt.DiferenciaSA < -25 && opt.DiferenciaSA >= -50) {
-                            estilo2 = 'background-color:Tomato';
-                        }
-                        else if (opt.DiferenciaSA > 50 && opt.DiferenciaSA <= 100 || opt.DiferenciaSA < -50 && opt.DiferenciaSA >= -100 || opt.DiferenciaSA > 100) {
-                            estilo2 = 'background-color:black; color:red';
-                        }
+                            //Diferencias SA
+                            if (opt.DiferenciaSA >= 0 && opt.DiferenciaSA <= 5 || opt.DiferenciaSA <= 0 && opt.DiferenciaSA >= -5) {
+                                estilo2 = 'background-color:LightGreen';
+                            }
+                            else if (opt.DiferenciaSA > 5 && opt.DiferenciaSA <= 25 || opt.DiferenciaSA < -5 && opt.DiferenciaSA >= -25) {
+                                estilo2 = 'background-color:Yellow';
+                            }
+                            else if (opt.DiferenciaSA > 25 && opt.DiferenciaSA <= 50 || opt.DiferenciaSA < -25 && opt.DiferenciaSA >= -50) {
+                                estilo2 = 'background-color:Tomato';
+                            }
+                            else if (opt.DiferenciaSA > 50 && opt.DiferenciaSA <= 100 || opt.DiferenciaSA < -50 && opt.DiferenciaSA >= -100 || opt.DiferenciaSA > 100) {
+                                estilo2 = 'background-color:black; color:red';
+                            }
 
-                        $('#dataTableCurva').append('<tr>' +
-                            '<td>' +
-                            '<img alt = "" style = "cursor: pointer;" src = "' + siteURL + 'Image/icon_plus.png" />' +
-                            '<div style="display:none">' +
-                            '<table cellpadding="0" cellspacing="0" id="dataTableCurvaxCampos-' + opt.Cod_Prod + '">' +
-                            '<thead style="background-color:aliceblue;font-weight:bold">' +
-                            '<tr class="table-danger">' +
-                            '<th>Cod_Campo</th>' +
-                            '<th>Campo</th>' +
-                            '<th>Sector</th>' +
-                            '<th>Ha</th>' +
-                            '<th>Cultivo</th>' +
-                            '<th>Variedad</th>' +
-                            '<th>Pronostico</th>' +
-                            '<th>Pronostico Acumulado</th>' +
-                            '<th>Entregado</th>' +
-                            '<th>Pronostico semana actual</th>' +
-                            '<th>Entregado semana actual</th>' +
-                            '<th>Semanas</th>' +
-                            '<th></th>' +
-                            '</tr>' +
-                            '</thead>' +
-                            '<tbody>' +
+                            $('#dataTableCurva').append('<tr>' +
+                                '<td>' +
+                                '<img alt = "" style = "cursor: pointer;" src = "' + siteURL + 'Image/icon_plus.png" />' +
+                                '<div style="display:none">' +
+                                '<table cellpadding="0" cellspacing="0" id="dataTableCurvaxCampos-' + opt.Cod_Prod + '">' +
+                                '<thead style="background-color:aliceblue;font-weight:bold">' +
+                                '<tr class="table-danger">' +
+                                '<th>Cod_Campo</th>' +
+                                '<th>Campo</th>' +
+                                '<th>Sector</th>' +
+                                '<th>Ha</th>' +
+                                '<th>Cultivo</th>' +
+                                '<th>Variedad</th>' +
+                                '<th>Pronostico</th>' +
+                                '<th>Pronostico Acumulado</th>' +
+                                '<th>Entregado</th>' +
+                                '<th>Pronostico semana actual</th>' +
+                                '<th>Entregado semana actual</th>' +
+                                '<th>Semanas</th>' +
+                                '<th></th>' +
+                                '</tr>' +
+                                '</thead>' +
+                                '<tbody>' +
 
-                            '</tbody>' +
-                            '</table>' +
-                            '</div>' +
-                            '</td>' +
-                            '<td>' + opt.Cod_Prod + '</td>' +
-                            '<td>' + opt.Productor + '</td>' +
-                            '<td>' + opt.PronosticoT + '</td>' +
-                            '<td>' + '' + '</td>' +
-                            '<td>' + opt.PronosticoA + '</td>' +
-                            '<td>' + opt.EntregadoT + '</td>' +
-                            '<td style="' + estilo1 + '">' + opt.DiferenciaA + '%' + '</td>' +
-                            '<td>' + '' + '</td>' +
-                            '<td>' + opt.PronosticoSA + '</td>' +
-                            '<td>' + opt.EntregadoSA + '</td>' +
-                            '<td style="' + estilo2 + '">' + opt.DiferenciaSA + '%' + '</td>' +
-                            //'<td><a href="#" onclick="hideRow(this)"><i class="fas fa-times"></i></a></td>' +
-                            '</tr>');
+                                '</tbody>' +
+                                '</table>' +
+                                '</div>' +
+                                '</td>' +
+                                '<td>' + opt.Cod_Prod + '</td>' +
+                                '<td>' + opt.Productor + '</td>' +
+                                '<td>' + opt.PronosticoT + '</td>' +
+                                '<td>' + '' + '</td>' +
+                                '<td>' + opt.PronosticoA + '</td>' +
+                                '<td>' + opt.EntregadoT + '</td>' +
+                                '<td style="' + estilo1 + '">' + opt.DiferenciaA + '%' + '</td>' +
+                                '<td>' + '' + '</td>' +
+                                '<td>' + opt.PronosticoSA + '</td>' +
+                                '<td>' + opt.EntregadoSA + '</td>' +
+                                '<td style="' + estilo2 + '">' + opt.DiferenciaSA + '%' + '</td>' +
+                                //'<td><a href="#" onclick="hideRow(this)"><i class="fas fa-times"></i></a></td>' +
+                                '</tr>');
 
-                        curvaCampo(opt.Cod_Prod);
-                    });
+                            curvaCampo(opt.Cod_Prod);
+                        });
+                    }
                 }, 'json');
         }
 

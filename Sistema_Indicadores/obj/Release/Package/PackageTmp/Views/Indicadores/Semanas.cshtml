@@ -427,8 +427,8 @@
             }
             else {
                 $.each(data, function (idx, opt) {
-                    console.log(opt.EntregadoT);
-                    $("#cjs").text(opt.EntregadoT + " - empezó a entregar desde la semana " + opt.Semana);
+                    //console.log(opt.EntregadoT);
+                    $("#cjs").text(opt.EntregadoT + " - empezó apartir de la semana " + opt.Semana);
                 });
             }
         }, 'json');
@@ -473,8 +473,7 @@
                 console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
                 console.log("responseText: " + xhr.responseText);
             }
-        });
-        
+        });        
     }
 
     function add_visita() { 
