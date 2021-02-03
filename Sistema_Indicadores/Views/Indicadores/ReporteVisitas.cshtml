@@ -16,14 +16,14 @@
             <button class="d-none d-sm-inline-block btn btn-sm btn-light shadow-lg" type="submit" id="btnReport" name="btnReport"><i class="fas fa-search"></i></button>
         </div>
 
-        @*@using (Html.BeginForm("ReporteVisitasExcel", "Indicadores", FormMethod.Get))
+        @using (Html.BeginForm("ReporteVisitasExcel", "Indicadores", FormMethod.Get))
         {
-            <input type="hidden" name="fecha" id="fecha" value="" />*@
-            @*<input type="hidden" name="fecha_fin" id="fecha_fin" value="" />*@
-            @*<div style="float: right; margin:5px 0 5px 0;">
+            <input type="hidden" name="Fecha" id="Fecha" value="" />
+            
+            <div style="float: right; margin:5px 0 5px 0;">
                 <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" id="btnRprtVisit" name="btnRprtVisit"><i class="fas fa-download"></i> EXCEL</button>
             </div>
-        }*@
+         } 
 
     </div>
 </div>
@@ -109,10 +109,17 @@
 <script type="text/javascript">
     var fecha, fecha_fin, IdVisita;
 
+    $("#fecha").change(function () {
+        fecha = $("#fecha").val();
+        if (typeof fecha != 'undefined') {   
+            $('#Fecha').val(fecha);
+        }        
+    });
+
     $('#btnReport').click(function () {
         fecha = $("#fecha").val();
         //fecha_fin = $("#Fecha_fin").val();
-        if (typeof fecha != 'undefined') {
+        if (typeof fecha != 'undefined') {            
             tabla();
             limpiar();
             //window.location.reload();
@@ -123,8 +130,7 @@
     });
 
     $('#btnRprtVisit').click(function () {
-        $('#fecha').val(fecha);
-        //$('#fecha_fin').val(fecha_fin);
+        $('#Fecha').val(fecha);
     });
 
     function OpenImage(IdVisita) {

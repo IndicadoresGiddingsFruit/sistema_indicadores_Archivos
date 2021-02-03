@@ -159,19 +159,23 @@ namespace Sistema_Indicadores.Controllers
 
         public void RptView(string fecha)
         {
-            Document doc = new Document(PageSize.LETTER, 20, 20, 10,20);//left, rigth, top, bottom
+            Document doc = new Document(PageSize.LETTER, 20, 20, 10,20);//left, rigth, top, bottom           
             var output = new MemoryStream();
             PdfWriter pw = PdfWriter.GetInstance(doc, output);
-            doc.AddTitle(fecha); 
-            doc.AddCreator(Session["Nombre"].ToString());           
-
-            doc.Open();
-            doc.Add(new Paragraph("Asesor: " + Session["Nombre"].ToString()));
-            doc.Add(new Paragraph("Fecha: " + fecha));
-            doc.Add(Chunk.NEWLINE);
+            Image logo = Image.GetInstance("/Image/GIDDINGS_PRIMARY_STACKED_LOGO_DRIFT_RGB.png");
+            pw.PageEvent = new HeaderFooter();
 
             Font _standardFont = new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK);
 
+            doc.AddTitle(fecha); 
+            doc.AddCreator(Session["Nombre"].ToString());
+            doc.Open();
+            PdfPTable pdfTab = new PdfPTable(3);
+
+            doc.Add(new Paragraph("Asesor: " + Session["Nombre"].ToString()));
+            doc.Add(new Paragraph("Fecha: " + fecha));
+            doc.Add(Chunk.NEWLINE);
+            
             PdfPTable tbl = new PdfPTable(9);
             tbl.WidthPercentage = 100;
             tbl.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -286,6 +290,12 @@ namespace Sistema_Indicadores.Controllers
                 x++;
             }
 
+            //Logo            
+           
+            logo.SetAbsolutePosition(0f, 0f);
+            logo.ScaleAbsolute(50f, 50f);
+
+            doc.Add(logo);
             doc.Add(tbl);
             doc.Close();
             pw.Close();
@@ -297,6 +307,29 @@ namespace Sistema_Indicadores.Controllers
             Response.End();
         }
 
+        class HeaderFooter : PdfPageEventHelper {
+            public override void OnEndPage(PdfWriter writer, Document document)
+            {
+                //base.OnEndPage(writer, document);
+                PdfPTable tbHeader = new PdfPTable(3);
+                tbHeader.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
+                tbHeader.DefaultCell.Border = 0;
+                
+                PdfPCell _cell = new PdfPCell(new Paragraph("Visitas diarias"));
+                _cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                tbHeader.AddCell(_cell);
+                tbHeader.AddCell(new Paragraph());
+
+                PdfPTable tbFooter = new PdfPTable(3);
+                tbFooter.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
+                tbFooter.DefaultCell.Border = 0;
+
+                _cell = new PdfPCell(new Paragraph("Fruits - Giddings S.A.de C.V"));
+                _cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                tbFooter.AddCell(_cell);
+                tbFooter.AddCell(new Paragraph());
+            }
+        }
         public bool ImgExist(int IdVisita)
         {
             try
@@ -392,18 +425,19 @@ namespace Sistema_Indicadores.Controllers
 
             ExcelPackage excel = new ExcelPackage();
             ExcelWorksheet ws = excel.Workbook.Worksheets.Add(fecha);
-            ws.Cells["A1"].Value = "Codigo";
-            ws.Cells["B1"].Value = "Productor";
-            ws.Cells["C1"].Value = "Cod_Campo";
-            ws.Cells["D1"].Value = "Campo";
-            ws.Cells["E1"].Value = "Sector";
-            ws.Cells["F1"].Value = "Producto";
-            ws.Cells["G1"].Value = "Fecha";
-            ws.Cells["H1"].Value = "Comentarios";
-            ws.Cells["I1"].Value = "Atendió";
-            ws.Cells["J1"].Value = "Etapa";
-            ws.Cells["K1"].Value = "Incidencia";
-            ws.Cells["L1"].Value = "Folio";
+            ws.Cells["A1"].Value = "Asesor";
+            ws.Cells["B1"].Value = "Codigo";
+            ws.Cells["C1"].Value = "Productor";
+            ws.Cells["D1"].Value = "Cod_Campo";
+            ws.Cells["E1"].Value = "Campo";
+            ws.Cells["F1"].Value = "Sector";
+            ws.Cells["G1"].Value = "Producto";
+            ws.Cells["H1"].Value = "Fecha";
+            ws.Cells["I1"].Value = "Comentarios";
+            ws.Cells["J1"].Value = "Atendió";
+            ws.Cells["K1"].Value = "Etapa";
+            ws.Cells["L1"].Value = "Incidencia";
+            ws.Cells["M1"].Value = "Folio";
 
             //xlWorkSheet.Cells[1, 1] = "Codigo";
             //xlWorkSheet.Cells[1, 2] = "Productor";
@@ -423,18 +457,19 @@ namespace Sistema_Indicadores.Controllers
             int x = 2;
             foreach (var item in visitas)
             {
-                ws.Cells[string.Format("A{0}", x)].Value = item.Cod_Prod;
-                ws.Cells[string.Format("B{0}", x)].Value = item.Productor;
-                ws.Cells[string.Format("C{0}", x)].Value = item.Cod_Campo;
-                ws.Cells[string.Format("D{0}", x)].Value = item.Campo;
-                ws.Cells[string.Format("E{0}", x)].Value = item.IdSector;
-                ws.Cells[string.Format("F{0}", x)].Value = item.Tipo;
-                ws.Cells[string.Format("G{0}", x)].Value = item.Fecha;
-                ws.Cells[string.Format("H{0}", x)].Value = item.Comentarios;
-                ws.Cells[string.Format("I{0}", x)].Value = item.Atendio;
-                ws.Cells[string.Format("J{0}", x)].Value = item.Etapa;
-                ws.Cells[string.Format("K{0}", x)].Value = item.DescIncidencia;
-                ws.Cells[string.Format("L{0}", x)].Value = item.Folio;
+                ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
+                ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
+                ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
+                ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
+                ws.Cells[string.Format("E{0}", x)].Value = item.Campo;
+                ws.Cells[string.Format("F{0}", x)].Value = item.IdSector;
+                ws.Cells[string.Format("G{0}", x)].Value = item.Tipo;
+                ws.Cells[string.Format("H{0}", x)].Value = item.Fecha;
+                ws.Cells[string.Format("I{0}", x)].Value = item.Comentarios;
+                ws.Cells[string.Format("J{0}", x)].Value = item.Atendio;
+                ws.Cells[string.Format("K{0}", x)].Value = item.Etapa;
+                ws.Cells[string.Format("L{0}", x)].Value = item.DescIncidencia;
+                ws.Cells[string.Format("M{0}", x)].Value = item.Folio;
                 //xlWorkSheet.Cells[x,1] = item.Cod_Prod;
                 //xlWorkSheet.Cells[x,2] = item.Productor;
                 //xlWorkSheet.Cells[x,3] = item.Cod_Campo;
@@ -450,7 +485,7 @@ namespace Sistema_Indicadores.Controllers
                 //xlWorkSheet.Shapes.AddPicture("\\192.168.0.21\recursos season\\VisitasProd\\" + item.IdVisita + "\\1.jpg", MsoTriState.msoFalse,MsoTriState.msoCTrue, 200, 20, 100, 100);//rigth,top,bottom, left "C:\\Users\\marholym\\Pictures\\Captura.png"
                 x++;
             }
-            ws.Cells["A:L"].AutoFitColumns();
+            ws.Cells["A:M"].AutoFitColumns();
 
             //xlWorkBook.SaveAs("C:\\Users\\ReporteVisitasExcel.xls", Excel.XlFileFormat.xlWorkbookNormal, misValue,misValue,misValue,misValue,Excel.XlSaveAsAccessMode.xlExclusive,misValue, misValue, misValue, misValue);
             //xlWorkBook.Close(true,misValue,misValue);
@@ -459,9 +494,10 @@ namespace Sistema_Indicadores.Controllers
             //Marshal.ReleaseComObject(xlWorkBook);
             //Marshal.ReleaseComObject(xlApp);
 
+
             Response.Clear();
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment: filename=" + "ExcelReport.xlsx");
+            Response.AddHeader("Content-Disposition", string.Format("attachment;filename=" + fecha + ".xlsx"));
             Response.BinaryWrite(excel.GetAsByteArray());
             Response.End();
         }
