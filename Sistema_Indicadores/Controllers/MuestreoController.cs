@@ -16,6 +16,7 @@ namespace Sistema_Indicadores.Controllers
         ProdProductoresCat ProdProductoresCat = new ProdProductoresCat();
         ProdAnalisis_Residuo ProdAnalisis_Residuo = new ProdAnalisis_Residuo();
         ProdMuestreoSector ProdMuestreoSector = new ProdMuestreoSector();
+        Notificaciones notificaciones = new Notificaciones();
 
         string correo_p = "", correo_c = "", correo_i = "", compras_oportunidad = "", subject = "", body_email = "";
 
@@ -123,7 +124,7 @@ namespace Sistema_Indicadores.Controllers
                         {
                             correo.To.Add(Session["Correo"].ToString());
                             correo.CC.Add(correo_c);
-                            correo.CC.Add(correo_p);
+                            correo.CC.Add(correo_p);                            
                         }
                         else if (Session["Tipo"].ToString() == "C")
                         {
@@ -133,6 +134,11 @@ namespace Sistema_Indicadores.Controllers
                             correo.CC.Add("marco.velazquez@giddingsfruit.mx");
                         }
 
+                        if ((short)Session["IdAgen"] == 204)
+                        {
+                            correo.CC.Add("julio.morales@giddingsfruit.mx");
+                        }
+                        
                         correo.CC.Add("oscar.castillo@giddingsfruit.mx");
 
                         correo.Subject = "Nuevo Muestreo: " + campo.Cod_Prod;
@@ -803,26 +809,32 @@ namespace Sistema_Indicadores.Controllers
                 }
                 if (Sector != 0 && Fecha_ejecucion != "")
                 {
-                    item.Fecha_ejecucion = Convert.ToDateTime(Fecha_ejecucion);
-                    item.IdAgenI = (short)Session["IdAgen"];
+                    //item.Fecha_ejecucion = Convert.ToDateTime(Fecha_ejecucion);
+                    //item.IdAgenI = (short)Session["IdAgen"];
 
-                    var valida_sector = bd.ProdMuestreoSector.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod && x.Cod_Campo == item.Cod_Campo && x.Sector == Sector);
-                    if (valida_sector == null)
-                    {
-                        ProdMuestreoSector.Cod_Prod = item.Cod_Prod;
-                        ProdMuestreoSector.Cod_Campo = item.Cod_Campo;
-                        ProdMuestreoSector.Sector = Sector;
-                        bd.ProdMuestreoSector.Add(ProdMuestreoSector);
-                    }
-                    bd.SaveChanges();
+                    //var valida_sector = bd.ProdMuestreoSector.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod && x.Cod_Campo == item.Cod_Campo && x.Sector == Sector);
+                    //if (valida_sector == null)
+                    //{
+                    //    ProdMuestreoSector.Cod_Prod = item.Cod_Prod;
+                    //    ProdMuestreoSector.Cod_Campo = item.Cod_Campo;
+                    //    ProdMuestreoSector.Sector = Sector;
+                    //    bd.ProdMuestreoSector.Add(ProdMuestreoSector);
+                    //}
+                    //bd.SaveChanges();
 
-                    var IdMuestreoSector = ProdMuestreoSector.id;
-                    var prodMuestreoObj = bd.ProdMuestreo.SingleOrDefault(x => x.Id == IdMuestreo);
-                    if (prodMuestreoObj != null)
-                    {
-                        prodMuestreoObj.IdSector = IdMuestreoSector;
-                        bd.SaveChanges();
-                    }
+                    //var IdMuestreoSector = ProdMuestreoSector.id;
+                    //var prodMuestreoObj = bd.ProdMuestreo.SingleOrDefault(x => x.Id == IdMuestreo);
+                    //if (prodMuestreoObj != null)
+                    //{
+                    //    prodMuestreoObj.IdSector = IdMuestreoSector;
+                    //    bd.SaveChanges();
+                    //}
+
+                    string title, body;
+                    title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
+                    body = "Fecha de muestreo agregada: " + Fecha_ejecucion;
+
+                    notificaciones.SendNotificationJSON(title, body);
                 }
                 if (Sector != 0)
                 {

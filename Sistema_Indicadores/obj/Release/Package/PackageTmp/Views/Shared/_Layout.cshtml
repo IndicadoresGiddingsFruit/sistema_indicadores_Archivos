@@ -97,94 +97,97 @@
                 </li>
             </div>
         </nav>*@
-
+    
     <div id="wrapper">
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
-            <!-- Icon BlackBerry -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fab fa-raspberry-pi"></i>
-                </div>
-            </a>
-            @if (Session["Id"] != null)
-            {
-                if (Session["Id"].ToString() == "117")
+        @if (Session["Id"].ToString() != "391")
+        {
+            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+                <!-- Icon BlackBerry -->
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15">
+                        <i class="fab fa-raspberry-pi"></i>
+                    </div>
+                </a>
+                @if (Session["Id"] != null)
                 {
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#eberries" aria-expanded="true" aria-controls="eberries">
-                            <i class="fas fa-seedling"></i>
-                            <span>Cultivos</span>
-                        </a>
-                        <div id="eberries" class="collapse" aria-labelledby="headingeberries" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="@Url.Action("Zarzamora", "EstimacionBerries")">Zarzamora</a>
-                                <a class="collapse-item" href="@Url.Action("Frambuesa", "EstimacionBerries")">Frambuesa</a>
-                                <a class="collapse-item" href="@Url.Action("Arandano", "EstimacionBerries")">Arándano</a>
-                                <a class="collapse-item" href="@Url.Action("Fresa", "EstimacionBerries")">Fresa</a>
-                                @if (Session["IdAgen"].ToString() == "1")
-                                {
-                                    <hr />
-                                    <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
-                                }
-                            </div>
-                        </div>
-                    </li>
-                }
-                else
-                {
-                    if (Session["Id"].ToString() == "121")
+
+                    if (Session["Id"].ToString() == "117")
                     {
                         <li class="nav-item">
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                                <i class="fas fa-users-cog"></i>
-                                <span>Indicadores</span>
+                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#eberries" aria-expanded="true" aria-controls="eberries">
+                                <i class="fas fa-seedling"></i>
+                                <span>Cultivos</span>
                             </a>
-                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                            <div id="eberries" class="collapse" aria-labelledby="headingeberries" data-parent="#accordionSidebar">
                                 <div class="bg-white py-2 collapse-inner rounded">
-                                    <h6 class="collapse-header">Consultar:</h6>
-                                    <a class="collapse-item" href="@Url.Action("Activos_Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                    <a class="collapse-item" href="@Url.Action("Zarzamora", "EstimacionBerries")">Zarzamora</a>
+                                    <a class="collapse-item" href="@Url.Action("Frambuesa", "EstimacionBerries")">Frambuesa</a>
+                                    <a class="collapse-item" href="@Url.Action("Arandano", "EstimacionBerries")">Arándano</a>
+                                    <a class="collapse-item" href="@Url.Action("Fresa", "EstimacionBerries")">Fresa</a>
+                                    @if (Session["IdAgen"].ToString() == "1")
+                                    {
+                                        <hr />
+                                        <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                    }
                                 </div>
                             </div>
                         </li>
                     }
-
                     else
                     {
-                        if (Session["Tipo"].ToString() == "P")
+                        if (Session["Id"].ToString() == "121")
                         {
                             <li class="nav-item">
-                                @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
-                                {
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#indicadores" aria-expanded="true" aria-controls="indicadores">
-                                        <i class="fas fa-users-cog"></i>
-                                        <span>Indicadores</span>
-                                    </a>
-                                    <div id="indicadores" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                                        <div class="bg-white py-2 collapse-inner rounded">
-                                            <h6 class="collapse-header">Consultar:</h6>
-                                           <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
-                                            <a class="collapse-item" href="@Url.Action("Produccion", "Indicadores")"><i class="fas fa-truck-loading"></i> Produccion</a>
-                                        </div>
-                                    </div>
-                                }
-                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#visitas" aria-expanded="true" aria-controls="visitas">
-                                    <i class="fas fa-map-marked-alt"></i>
-                                    <span>Visitas</span>
+                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                    <i class="fas fa-users-cog"></i>
+                                    <span>Indicadores</span>
                                 </a>
-                                <div id="visitas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                                     <div class="bg-white py-2 collapse-inner rounded">
                                         <h6 class="collapse-header">Consultar:</h6>
-                                        <a class="collapse-item" href="@Url.Action("Visitas", "Indicadores")"><i class="fas fa-map-marker-alt"></i> Resultados</a>
-                                        @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
-                                        {
-                                            <a class="collapse-item" href="@Url.Action("ReporteVisitas", "Indicadores")"><i class="fas fa-file-image"></i> Reporte </a>
-                                        }
-                                        </div>
+                                        <a class="collapse-item" href="@Url.Action("Activos_Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                    </div>
                                 </div>
                             </li>
+                        }
 
-                            @*<li class="nav-item">
+                        else
+                        {
+                            if (Session["Tipo"] != null && Session["Tipo"].ToString() == "P")
+                            {
+                                <li class="nav-item">
+                                    @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
+                                    {
+                                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#indicadores" aria-expanded="true" aria-controls="indicadores">
+                                            <i class="fas fa-users-cog"></i>
+                                            <span>Indicadores</span>
+                                        </a>
+                                        <div id="indicadores" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                            <div class="bg-white py-2 collapse-inner rounded">
+                                                <h6 class="collapse-header">Consultar:</h6>
+                                                <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                                <a class="collapse-item" href="@Url.Action("Produccion", "Indicadores")"><i class="fas fa-truck-loading"></i> Produccion</a>
+                                                <a class="collapse-item" href="@Url.Action("Seguimiento", "Indicadores")"><i class="fas fa-search-dollar"></i> Status financiamiento</a>
+                                            </div>
+                                        </div>
+                                    }
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#visitas" aria-expanded="true" aria-controls="visitas">
+                                        <i class="fas fa-map-marked-alt"></i>
+                                        <span>Visitas</span>
+                                    </a>
+                                    <div id="visitas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                        <div class="bg-white py-2 collapse-inner rounded">
+                                            <h6 class="collapse-header">Consultar:</h6>
+                                            <a class="collapse-item" href="@Url.Action("Visitas", "Indicadores")"><i class="fas fa-map-marker-alt"></i> Resultados</a>
+                                            @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
+                                            {
+                                                <a class="collapse-item" href="@Url.Action("ReporteVisitas", "Indicadores")"><i class="fas fa-file-image"></i> Reporte </a>
+                                            }
+                                        </div>
+                                    </div>
+                                </li>
+
+                                @*<li class="nav-item">
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
                                         <i class="fas fa-hand-holding-usd"></i>
                                         <span>Solicitud</span>
@@ -195,153 +198,136 @@
                                         </div>
                                     </div>
                                 </li>*@
+                            }
+
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                    <i class="fas fa-spa"></i>
+                                    <span>Muestreos</span>
+                                </a>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                    <div class="bg-white py-2 collapse-inner rounded">
+                                        <h6 class="collapse-header">Consultar:</h6>
+                                        <a class="collapse-item" href="@Url.Action("Muestreo", "Muestreo")"><i class="fas fa-seedling"></i> Solicitar</a>
+                                        <a class="collapse-item" href="@Url.Action("SetSolicitud", "Muestreo")"><i class="fas fa-spa"></i> Ver todo</a>
+                                        <a class="collapse-item" href="@Url.Action("Evaluacion", "Muestreo")"><i class="fas fa-chart-line"></i> Evaluacion</a>
+                                        <a class="collapse-item" href="@Url.Action("Muestreos_Liberados", "Muestreo")"><i class="fas fa-check-circle"></i> Liberados</a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                    <i class="fas fa-spa"></i>
+                                    <span>Análisis</span>
+                                </a>
+                                <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                                    <div class="bg-white py-2 collapse-inner rounded">
+                                        <a class="collapse-item" href="@Url.Action("Resultados_Analisis", "Muestreo")"><i class="fas fa-seedling"></i> Resultados</a>
+                                        @if ((short)Session["IdAgen"] == 205)
+                                        {
+                                            <a class="collapse-item" href="@Url.Action("Nuevo_Analisis_Residuo", "Muestreo")"><i class="fas fa-file-signature"></i> Nuevo</a>
+                                        }
+                                    </div>
+                                </div>
+                            </li>
+
                         }
-                        <li class="nav-item">
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                                <i class="fas fa-spa"></i>
-                                <span>Muestreos</span>
-                            </a>
-                            <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                                <div class="bg-white py-2 collapse-inner rounded">
-                                    <h6 class="collapse-header">Consultar:</h6>
-                                    <a class="collapse-item" href="@Url.Action("Muestreo", "Muestreo")"><i class="fas fa-seedling"></i> Solicitar</a>
-                                    <a class="collapse-item" href="@Url.Action("SetSolicitud", "Muestreo")"><i class="fas fa-spa"></i> Ver todo</a>
-                                    <a class="collapse-item" href="@Url.Action("Evaluacion", "Muestreo")"><i class="fas fa-chart-line"></i> Evaluacion</a>
-                                    <a class="collapse-item" href="@Url.Action("Muestreos_Liberados", "Muestreo")"><i class="fas fa-check-circle"></i> Liberados</a>
-                                </div>
-                            </div>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                                <i class="fas fa-spa"></i>
-                                <span>Análisis</span>
-                            </a>
-                            <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                                <div class="bg-white py-2 collapse-inner rounded">
-                                    <a class="collapse-item" href="@Url.Action("Resultados_Analisis", "Muestreo")"><i class="fas fa-seedling"></i> Resultados</a>
-                                    @if ((short)Session["IdAgen"] == 205)
-                                    {
-                                        <a class="collapse-item" href="@Url.Action("Nuevo_Analisis_Residuo", "Muestreo")"><i class="fas fa-file-signature"></i> Nuevo</a>
-                                    }
-                                </div>
-                            </div>
-                        </li>
-
                     }
+
                 }
-            }
-            else
-            {
-                { Response.Redirect(url: "~/~/Index/Login"); }
-            }
-            <!-- Divider -->
-            @*@if (Session["Tipo"] != null)
+                else
                 {
-                    <hr class="sidebar-divider">
-
-                    <div class="sidebar-heading">
-                        Otro
-                    </div>
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseComments" aria-expanded="true" aria-controls="collapseComments">
-                            <i class="fas fa-comment-dots"></i>
-                            <span>Comentarios</span>
-                        </a>
-                        <div id="collapseComments" class="collapse" aria-labelledby="headingComments" data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item" href="@Url.Action("Comentarios", "Indicadores")"><i class="fas fa-comments"></i> Enviar un comentario</a>
-                            </div>
-                        </div>
-                    </li>
-                }*@
-        </ul>
-
-        <!-- End of Sidebar -->
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <div class="d-none d-sm-inline-block form-inline">
-                        <div class="input-group">
-                            @if (ViewData["Nombre"] != null)
-                            {
-                                <h7 style="float:left;padding:6px" class="m-0 font-weight-bold text-secondary">@ViewData["Nombre"]</h7>
-                            }
-                            <div class="input-group-append">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            @if ((short)Session["IdAgen"] == 205 || (short)Session["IdAgen"] == 182 || (short)Session["IdAgen"] == 167)
-                            {
-                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-bell fa-fw"></i>
-                                    <span style="display:none" id="counter_alert" class="badge badge-danger badge-counter"><div id="notif"></div></span>
-                                </a>
-                                <!-- Dropdown - Alerts -->
-                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                     aria-labelledby="alertsDropdown">
-                                    <h6 class="dropdown-header">
-                                        Notificaciones
-                                    </h6>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div id="y_icon" class="icon-circle bg-warning" style="font-size:20px">
-                                                <i class="fas fa-exclamation"></i>
-                                            </div>
-                                            <div id="n_icon" class="icon-circle bg-info" style="font-size:20px">
-                                                <i class="fas fa-check"></i>
-                                            </div>
-
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500" id="fecha_actual"></div>
-                                            <span id="y_notificacion" class="font-weight-bold">Existen análisis fuera de límite listos para ser liberados!</span>
-                                            <span id="n_notificacion" class="font-weight-bold">No hay notificaciones nuevas!</span>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item text-center small text-gray-500" href="@Url.Action("Liberar_Estatus", "Muestreo")" id="btn_notif">Ver todo</a>
+                    { Response.Redirect(url: "~/~/Index/Login"); }
+                }               
+            </ul>
+        }
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <div class="d-none d-sm-inline-block form-inline">
+                            <div class="input-group">
+                                @if (ViewData["Nombre"] != null)
+                                {
+                                    <h7 style="float:left;padding:6px" class="m-0 font-weight-bold text-secondary">@ViewData["Nombre"]</h7>
+                                }
+                                <div class="input-group-append">
                                 </div>
-                            }
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Opciones</span>
-                                <i class="fas fa-user-tie"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ChangePass">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cambiar contraseña
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Logout">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Salir
-                                </a>
                             </div>
-                        </li>
-                    </ul>
-                </nav>
-                <div class="container body-content">
-                    @RenderBody()
+                        </div>
+
+                        <!-- Topbar Navbar -->
+                        <ul class="navbar-nav ml-auto">
+
+                            @if (Session["Id"].ToString() != "391")
+                            {
+                                <!-- Nav Item - Alerts -->
+                                <li class="nav-item dropdown no-arrow mx-1">
+                                    @if ((short)Session["IdAgen"] == 205 || (short)Session["IdAgen"] == 182 || (short)Session["IdAgen"] == 167)
+                                    {
+                                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-bell fa-fw"></i>
+                                            <span style="display:none" id="counter_alert" class="badge badge-danger badge-counter"><div id="notif"></div></span>
+                                        </a>
+                                        <!-- Dropdown - Alerts -->
+                                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                             aria-labelledby="alertsDropdown">
+                                            <h6 class="dropdown-header">
+                                                Notificaciones
+                                            </h6>
+                                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                                <div class="mr-3">
+                                                    <div id="y_icon" class="icon-circle bg-warning" style="font-size:20px">
+                                                        <i class="fas fa-exclamation"></i>
+                                                    </div>
+                                                    <div id="n_icon" class="icon-circle bg-info" style="font-size:20px">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+
+                                                </div>
+                                                <div>
+                                                    <div class="small text-gray-500" id="fecha_actual"></div>
+                                                    <span id="y_notificacion" class="font-weight-bold">Existen análisis fuera de límite listos para ser liberados!</span>
+                                                    <span id="n_notificacion" class="font-weight-bold">No hay notificaciones nuevas!</span>
+                                                </div>
+                                            </a>
+                                            <a class="dropdown-item text-center small text-gray-500" href="@Url.Action("Liberar_Estatus", "Muestreo")" id="btn_notif">Ver todo</a>
+                                        </div>
+                                    }
+                                </li>
+                            }
+                                <div class="topbar-divider d-none d-sm-block"></div>
+                                <li class="nav-item dropdown no-arrow">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Opciones</span>
+                                        <i class="fas fa-user-tie"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ChangePass">
+                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Cambiar contraseña
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#Logout">
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Salir
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                    </nav>
+                    <div class="container body-content">
+                        @RenderBody()
+                    </div>
                 </div>
             </div>
+        
         </div>
-    </div>
-
+    
     <!-- Footer -->
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">

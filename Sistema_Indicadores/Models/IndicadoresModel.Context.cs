@@ -36,5 +36,7 @@ namespace Sistema_Indicadores.Models
         public virtual DbSet<SIPGComentarios> SIPGComentarios { get; set; }
         public virtual DbSet<ProdVisitasCab> ProdVisitasCab { get; set; }
         public virtual DbSet<SIPGProyeccion> SIPGProyeccion { get; set; }
+        public virtual DbSet<Seguimiento_financ> Seguimiento_financ { get; set; }
+        public virtual DbSet<SIPGUsuarios> SIPGUsuarios { get; set; }
     }
 }

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+
 using System.Web.Mvc;
 
 namespace Sistema_Indicadores.Controllers
@@ -25,6 +26,8 @@ namespace Sistema_Indicadores.Controllers
         SIPGComentarios SIPGComentarios = new SIPGComentarios();
         SIPGProyeccion SIPGProyeccion = new SIPGProyeccion();
         SIPGVisitas SIPGVisitas = new SIPGVisitas();
+        Email email = new Email();
+        string message = "";
         Image img = null;
 
         List<ClassVisitas> visitas = new List<ClassVisitas>();
@@ -159,7 +162,7 @@ namespace Sistema_Indicadores.Controllers
 
         public void RptView(string fecha)
         {
-            Document doc = new Document(PageSize.LETTER, 20, 20, 10,20);//left, rigth, top, bottom           
+            Document doc = new Document(PageSize.LETTER, 20, 20, 10, 20);//left, rigth, top, bottom           
             var output = new MemoryStream();
             PdfWriter pw = PdfWriter.GetInstance(doc, output);
             Image logo = Image.GetInstance("/Image/GIDDINGS_PRIMARY_STACKED_LOGO_DRIFT_RGB.png");
@@ -167,7 +170,7 @@ namespace Sistema_Indicadores.Controllers
 
             Font _standardFont = new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK);
 
-            doc.AddTitle(fecha); 
+            doc.AddTitle(fecha);
             doc.AddCreator(Session["Nombre"].ToString());
             doc.Open();
             PdfPTable pdfTab = new PdfPTable(3);
@@ -175,7 +178,7 @@ namespace Sistema_Indicadores.Controllers
             doc.Add(new Paragraph("Asesor: " + Session["Nombre"].ToString()));
             doc.Add(new Paragraph("Fecha: " + fecha));
             doc.Add(Chunk.NEWLINE);
-            
+
             PdfPTable tbl = new PdfPTable(9);
             tbl.WidthPercentage = 100;
             tbl.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -190,7 +193,7 @@ namespace Sistema_Indicadores.Controllers
             values[6] = 150;
             values[7] = 200;
             values[8] = 300;
-            tbl.SetWidths(values);           
+            tbl.SetWidths(values);
 
             // Configuramos el título de las columnas de la tabla  
             PdfPCell clCod_prod = new PdfPCell(new Phrase("Código", _standardFont));
@@ -211,7 +214,7 @@ namespace Sistema_Indicadores.Controllers
 
             PdfPCell clProducto = new PdfPCell(new Phrase("Producto", _standardFont));
             clProducto.BorderWidth = 0;
-            clProducto.BorderWidthBottom = 0.75f;    
+            clProducto.BorderWidthBottom = 0.75f;
 
             PdfPCell clAtendio = new PdfPCell(new Phrase("Atendió", _standardFont));
             clAtendio.BorderWidth = 0;
@@ -241,13 +244,13 @@ namespace Sistema_Indicadores.Controllers
             tbl.AddCell(X);
 
             ReporteVisitasList(fecha);
-            
+
             int x = 2;
             foreach (var item in visitas)
             {
                 clCod_prod = new PdfPCell(new Phrase(item.Cod_Prod, _standardFont));
                 clCod_prod.BorderWidth = 0;
-               
+
                 clProductor = new PdfPCell(new Phrase(item.Productor, _standardFont));
                 clProductor.BorderWidth = 0;
 
@@ -291,7 +294,7 @@ namespace Sistema_Indicadores.Controllers
             }
 
             //Logo            
-           
+
             logo.SetAbsolutePosition(0f, 0f);
             logo.ScaleAbsolute(50f, 50f);
 
@@ -302,19 +305,20 @@ namespace Sistema_Indicadores.Controllers
 
             Response.Clear();
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("Content-Disposition", string.Format("attachment;filename="+fecha+".pdf", "some string"));
+            Response.AddHeader("Content-Disposition", string.Format("attachment;filename=" + fecha + ".pdf", "some string"));
             Response.BinaryWrite(output.ToArray());
             Response.End();
         }
 
-        class HeaderFooter : PdfPageEventHelper {
+        class HeaderFooter : PdfPageEventHelper
+        {
             public override void OnEndPage(PdfWriter writer, Document document)
             {
                 //base.OnEndPage(writer, document);
                 PdfPTable tbHeader = new PdfPTable(3);
                 tbHeader.TotalWidth = document.PageSize.Width - document.LeftMargin - document.RightMargin;
                 tbHeader.DefaultCell.Border = 0;
-                
+
                 PdfPCell _cell = new PdfPCell(new Paragraph("Visitas diarias"));
                 _cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 tbHeader.AddCell(_cell);
@@ -337,10 +341,11 @@ namespace Sistema_Indicadores.Controllers
                 img = Image.GetInstance("//192.168.0.21/recursos season/VisitasProd/" + IdVisita + "/1.jpg");
                 return true;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 e.ToString();
                 return false;
-            }            
+            }
         }
 
         public void ReportVisitList(string fecha)
@@ -716,7 +721,7 @@ namespace Sistema_Indicadores.Controllers
                 {
                     curva = bd.Database.SqlQuery<ClassCurva>("select V.Cod_Prod, V.Nombre as Productor, V.PronosticoT, V.PronosticoA, V.EntregadoT, (CASE WHEN V.EntregadoT ='0' AND  V.PronosticoA ='0' THEN '' ELSE V.DiferenciaA END) AS DiferenciaA, V.Semana, V.PronosticoSA, V.EntregadoSA, (CASE WHEN V.EntregadoSA ='0' AND  V.PronosticoSA ='0' THEN '' ELSE V.DiferenciaSA END) AS DiferenciaSA  from(SELECT V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Fecha=(select max(Fecha) from SIPGProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod,sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo,sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Fecha=(select max(Fecha) from SIPGProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between (select Inicio from catsemanas where temporada =(select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana=27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha=(select max(Fecha) from SIPGProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] )V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod " +
                        "WHERE V.IdAgen = " + agente + " group by C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)V " +
-                       "ORDER BY DiferenciaA DESC").ToList(); 
+                       "ORDER BY DiferenciaA DESC").ToList();
                 }
             }
             return Json(curva, JsonRequestBehavior.AllowGet);
@@ -1229,7 +1234,7 @@ namespace Sistema_Indicadores.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
-           
+
             return View();
         }
 
@@ -1309,7 +1314,7 @@ namespace Sistema_Indicadores.Controllers
             if (Fecha_corte1 != "")
             {
                 DateTime corte1 = Convert.ToDateTime(Fecha_corte1);
-                var list_semanas1= from x in bd.CatSemanas                                    
+                var list_semanas1 = from x in bd.CatSemanas
                                     group x by new
                                     {
                                         Inicio = x.Inicio,
@@ -1340,20 +1345,20 @@ namespace Sistema_Indicadores.Controllers
                     list_semanas1.ToList();
                 }
                 else
-                {                  
+                {
                     //obtener 9 semanas libres a partir de la nueva fecha
                     list_semanas1 = (from x in bd.CatSemanas
-                                         where x.Inicio >= corte1 && x.Temporada == fecha_actual.Temporada
-                                         group x by new
-                                         {
-                                             Inicio = x.Inicio,
-                                             Semana = x.Semana
-                                         } into x
-                                         select new ClassCurva()
-                                         {
-                                             Inicio = x.Key.Inicio,
-                                             Semana = x.Key.Semana
-                                         }).OrderBy(x => x.Inicio).Take(9);
+                                     where x.Inicio >= corte1 && x.Temporada == fecha_actual.Temporada
+                                     group x by new
+                                     {
+                                         Inicio = x.Inicio,
+                                         Semana = x.Semana
+                                     } into x
+                                     select new ClassCurva()
+                                     {
+                                         Inicio = x.Key.Inicio,
+                                         Semana = x.Key.Semana
+                                     }).OrderBy(x => x.Inicio).Take(9);
 
                     list_semanas1.ToList();
                     count = 9;
@@ -1494,7 +1499,7 @@ namespace Sistema_Indicadores.Controllers
             con.Close();
         }
 
-        public JsonResult Update_Semanas(int Id_Proyeccion=0, int Semana = 0, int Sem = 0, int Cantidad = 0)
+        public JsonResult Update_Semanas(int Id_Proyeccion = 0, int Semana = 0, int Sem = 0, int Cantidad = 0)
         {
             string message = "";
             try
@@ -1551,15 +1556,15 @@ namespace Sistema_Indicadores.Controllers
                 bd.SaveChanges();
 
                 TempData["sms"] = "Cambios guardados correctamente";
-                ViewBag.sms = TempData["sms"].ToString();               
+                ViewBag.sms = TempData["sms"].ToString();
             }
             catch (Exception e)
-            {                
+            {
                 TempData["error"] = e.ToString();
                 ViewBag.sms = TempData["error"].ToString();
             }
-       }
-       public JsonResult Corte1List(int Id_Proyeccion = 0)
+        }
+        public JsonResult Corte1List(int Id_Proyeccion = 0)
         {
             //List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT distinct S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM SIPGProyeccion WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
             //    "cod_prod = '" + Cod_Prod + "' and cod_campo = " + Cod_Campo + " and sector = " + Sector + " and Fecha=(select max(Fecha) from SIPGProyeccion) group by[27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26]))X )V on S.Semana = V.Semana WHERE V.Pronostico <> 0 and S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and V.Semana between 27 and 52 order by S.Inicio").ToList();
@@ -2449,5 +2454,247 @@ namespace Sistema_Indicadores.Controllers
             }
         }
 
+        public ActionResult Seguimiento()
+        {
+            if (Session["Nombre"] != null)
+            {
+                ViewData["Nombre"] = Session["Nombre"].ToString();
+
+                //List<SelectListItem> lst_Status = new List<SelectListItem>();
+                //lst_Status.Add(new SelectListItem() { Text = "--Seleccione--", Value = null });
+                //lst_Status.Add(new SelectListItem() { Text = "ATENCION A PRODUCTORES", Value = "R" });
+                //lst_Status.Add(new SelectListItem() { Text = "CIERRE DE MATERIAL", Value = "P" });
+                //lst_Status.Add(new SelectListItem() { Text = "COBRANZA", Value = "F" });
+                //lst_Status.Add(new SelectListItem() { Text = "PENDIENTE REVISION", Value = "L" });
+                //lst_Status.Add(new SelectListItem() { Text = "REVISA GERENCIA", Value = "L" });
+                //lst_Status.Add(new SelectListItem() { Text = "TERMINO TEMPORADA", Value = "L" });
+                //lst_Status.Add(new SelectListItem() { Text = "VA A ENTREGAR", Value = "L" });
+                //lst_Status.Add(new SelectListItem() { Text = "VA A PAGAR", Value = "L" });
+
+                //ViewBag.List_Status = lst_Status;
+
+                IQueryable<ClassProductor> item = null;
+
+                if (Session["Id"].ToString() == "391")
+                {
+                    item = (from m in (from m in bd.Seguimiento_financ
+                                       group m by new
+                                       {
+                                           Id = m.Id,
+                                           Cod_Empresa = m.Cod_Empresa,
+                                           Cod_Prod = m.Cod_Prod,
+                                           Cod_Campo = m.Cod_Campo,
+                                           Estatus = m.Estatus,
+                                           Comentarios = m.Comentarios,
+                                           IdAgen=m.IdAgen
+                                       } into x
+                                       select new
+                                       {
+                                           Id = x.Key.Id,
+                                           Cod_Empresa = x.Key.Cod_Empresa,
+                                           Cod_Prod = x.Key.Cod_Prod,
+                                           Cod_Campo = x.Key.Cod_Campo,
+                                           Estatus = x.Key.Estatus,
+                                           Comentarios = x.Key.Comentarios,
+                                           Fecha = x.Max(m => m.Fecha),
+                                           IdAgen= x.Key.IdAgen
+                                       })
+
+                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into MuestreoCam
+                            from mcam in MuestreoCam.DefaultIfEmpty()
+
+                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into MuestreoProd
+                            from prod in MuestreoProd.DefaultIfEmpty()
+
+                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into MuestreoAgentes
+                            from ageP in MuestreoAgentes.DefaultIfEmpty()
+                            where m.IdAgen==null
+                            group m by new
+                            {
+                                Id = m.Id,
+                                Cod_Prod = m.Cod_Prod,
+                                Productor = prod.Nombre,
+                                Cod_Campo = m.Cod_Campo,
+                                Campo = mcam.Descripcion,
+                                IdAgen = mcam.IdAgen,
+                                Asesor = ageP.Nombre,
+                                Estatus = m.Estatus,
+                                Comentarios = m.Comentarios,
+                                Fecha = m.Fecha
+                            } into x
+                            select new ClassProductor()
+                            {
+                                Id = x.Key.Id,
+                                Cod_Prod = x.Key.Cod_Prod,
+                                Productor = x.Key.Productor,
+                                Cod_Campo = x.Key.Cod_Campo,
+                                Campo = x.Key.Campo,
+                                IdAgen = x.Key.IdAgen,
+                                Asesor = x.Key.Asesor,
+                                Estatus = x.Key.Estatus,
+                                Comentarios = x.Key.Comentarios,
+                                Fecha = x.Key.Fecha
+                            }).Distinct();
+                }
+                else
+                {
+                    short agenteSesion = (short)Session["IdAgen"];
+                    item = (from m in (from m in bd.Seguimiento_financ
+                                       group m by new
+                                       {
+                                           Id = m.Id,
+                                           Cod_Empresa = m.Cod_Empresa,
+                                           Cod_Prod = m.Cod_Prod,
+                                           Cod_Campo = m.Cod_Campo,
+                                           Estatus = m.Estatus,
+                                           Comentarios = m.Comentarios
+                                       } into x
+                                       select new
+                                       {
+                                           Id = x.Key.Id,
+                                           Cod_Empresa = x.Key.Cod_Empresa,
+                                           Cod_Prod = x.Key.Cod_Prod,
+                                           Cod_Campo = x.Key.Cod_Campo,
+                                           Estatus = x.Key.Estatus,
+                                           Comentarios = x.Key.Comentarios,
+                                           Fecha = x.Max(m => m.Fecha)
+                                       })
+
+                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into MuestreoCam
+                            from mcam in MuestreoCam.DefaultIfEmpty()
+
+                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into MuestreoProd
+                            from prod in MuestreoProd.DefaultIfEmpty()
+
+                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into MuestreoAgentes
+                            from ageP in MuestreoAgentes.DefaultIfEmpty()
+
+                            where mcam.IdAgen == agenteSesion 
+
+                            group m by new
+                            {
+                                Id = m.Id,
+                                Cod_Prod = m.Cod_Prod,
+                                Productor = prod.Nombre,
+                                Cod_Campo = m.Cod_Campo,
+                                Campo = mcam.Descripcion,
+                                Asesor = ageP.Nombre,
+                                Estatus = m.Estatus,
+                                Comentarios = m.Comentarios,
+                                Fecha = m.Fecha
+                            } into x
+                            select new ClassProductor()
+                            {
+                                Id = x.Key.Id,
+                                Cod_Prod = x.Key.Cod_Prod,
+                                Productor = x.Key.Productor,
+                                Cod_Campo = x.Key.Cod_Campo,
+                                Campo = x.Key.Campo,
+                                Asesor = x.Key.Asesor,
+                                Estatus = x.Key.Estatus,
+                                Comentarios = x.Key.Comentarios,
+                                Fecha = x.Key.Fecha
+                            }).Distinct();
+                }
+
+                return View(item.ToList());
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
+        }
+        public JsonResult SeguimientoList()
+        {
+            List<ClassProductor> list;
+            if (Session["Id"].ToString() == "391")
+            {
+                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, S.Estatus, S.Comentarios " +
+                    "from(select Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, max(fecha) as fecha from Seguimiento_financ group by Id, Cod_Prod, Cod_Campo, Estatus, Comentarios)S " +
+                    "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
+                    "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                    "left join ProdAgenteCat A on C.IdAgen = A.IdAgen").ToList();
+            }
+            else
+            {
+                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, S.Estatus, S.Comentarios " +
+                    "from(select Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, max(fecha) as fecha from Seguimiento_financ group by Id, Cod_Prod, Cod_Campo, Estatus, Comentarios)S " +
+                    "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
+                    "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                    "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
+                    "where A.IdAgen=" + (short)Session["IdAgen"] + " and S.Estatus!= null").ToList();
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult Seguimiento_sendMail(IEnumerable<Seguimiento_financ> ids)
+        {
+            try
+            {
+                foreach (var a in ids)
+                {
+                    var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == a.IdAgen);
+                    string c = email_p.correo;
+
+                    var s = bd.Seguimiento_financ.Where(x => x.Id == a.Id).First();
+                    s.IdAgen = a.IdAgen;
+                    bd.SaveChanges();
+
+                    email.sendmail(c);
+                }
+
+                TempData["sms"] = "Datos enviados correctamente";
+                ViewBag.sms = TempData["sms"].ToString();
+            }
+
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            return Json(new { ViewBag.sms, JsonRequestBehavior.AllowGet });
+        }
+
+        public JsonResult Add_Seguimiento(string Cod_Prod = "", short Cod_Campo = 0)
+        {
+            try
+            {
+                Seguimiento_financ s = new Seguimiento_financ();
+                s.Cod_Empresa = 2;
+                s.Cod_Prod = Cod_Prod;
+                s.Cod_Campo = Cod_Campo;
+                s.Fecha = DateTime.Now;
+                bd.Seguimiento_financ.Add(s);
+                bd.SaveChanges();
+                message = "SUCCESS";
+            }
+            catch (Exception e)
+            {
+                message = e.ToString();
+            }
+            return Json(new { Message = message, JsonRequestBehavior.AllowGet });
+        }
+        public JsonResult Updt_Seguimiento(int Id = 0, string status = "", string comentarios = "")
+        {
+            try
+            {
+                if (status == "" && comentarios == "")
+                {
+                    var summary_delete = bd.Seguimiento_financ.Find(Id);
+                    var delete = bd.Seguimiento_financ.Remove(summary_delete);
+                }
+                else
+                {
+                    var item = bd.Seguimiento_financ.Where(x => x.Id == Id).First();
+                    item.Estatus = status;
+                    item.Comentarios = comentarios;
+                }
+                bd.SaveChanges();
+                message = "SUCCESS";
+            }
+            catch (Exception e)
+            {
+                message = e.ToString();
+            }
+            return Json(new { Message = message, JsonRequestBehavior.AllowGet });
+        }
     }
 }

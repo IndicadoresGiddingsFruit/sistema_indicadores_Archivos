@@ -1,0 +1,408 @@
+﻿@model IEnumerable<Sistema_Indicadores.Clases.ClassProductor>
+
+@{
+    ViewBag.Title = "Seguimiento";
+}
+
+@if (ViewBag.sms != null)
+{
+    <div>
+        <div class="alert alert-primary alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-check-circle"></i> @ViewBag.sms</h4>
+        </div>
+    </div>
+}
+
+@if (ViewBag.error != null)
+{
+    <div>
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4><i class="fas fa-check-circle"></i> @ViewBag.error</h4>
+        </div>
+    </div>
+}
+
+@if (Session["Id"].ToString() == "391")
+{
+    <div>
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="table-responsive table-condensed table-sm table-borderless tabla">
+                        <table class="table table-hover" id="dataTableAddData" name="dataTableAddData">
+                            <thead class="thead-light" style="font-size:x-small; text-align:center">
+                                <tr>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Productor
+                                    </th>
+                                    <th>
+                                        Campo
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" id="Cod_Prod" name="Cod_Prod" required="" maxlength="5" minlength="5" autocomplete="off" pattern="[0-9]{5}" oninput="if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                                    </td>
+                                    <td>
+                                        <input type="text" style="width:100%" class="form-control form-control-sm" id="nombreProductor" name="nombreProductor" readonly="">
+                                    </td>
+                                    <td>
+                                        @Html.DropDownList("Cod_Campo", new SelectList(" "), "--Seleccione un campo--", new { @id = "Cod_Campo", @class = "form-control form-control-sm" })
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control form-control-sm" id="DescCampo" name="DescCampo" readonly="" />
+                                    </td>
+                                    <td>
+                                        <button type="submit" id="btnAdd" style=" border-radius: 15px;padding:2px 6px 2px 6px" class="btn-sm btn-primary shadow-lg"><i class="fas fa-plus"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="activo" style="background-color:yellow; color:red; font-size:20px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div>
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="table-responsive table-condensed table-sm table-bordered tabla">
+                    <table class="table table-hover" id="dataTableData" name="dataTableData">
+                        <thead class="thead-light" style="font-size:x-small; text-align:center">
+                            <tr>
+                                <th style="display:none">
+                                    Id
+                                </th>
+                                <th>
+                                    Codigo
+                                </th>
+                                <th>
+                                    Productor
+                                </th>
+                                <th colspan="2">
+                                    Campo
+                                </th>
+                                <th>
+                                    Asesor
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Comentarios
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td id="Id" style="display:none">
+                                        @Html.DisplayFor(modelItem => item.Id)
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Cod_Prod)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Productor)</td>
+                                    <td colspan="2">
+                                        @Html.DisplayFor(modelItem => item.Cod_Campo)
+                                        @Html.DisplayFor(modelItem => item.Campo)
+                                    </td>
+                                    <td id="IdAgen" style="display:none">
+                                        @Html.DisplayFor(modelItem => item.IdAgen)
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Asesor)</td>
+                                    <td>
+                                        @* @Html.DropDownListFor(model => item.Estatus, new SelectList(" "), "--Seleccione--", new { @id = "Estatus", @class = "form-control form-control-sm" })*@
+                                        @if (item.Estatus == null && Session["Id"].ToString() != "391")
+                                        {
+                                            @Html.DropDownListFor(model => item.Estatus, new SelectListItem[]{
+                                       new SelectListItem() {Text = "--Seleccione--", Value=null},
+                                       new SelectListItem() {Text = "ATENCIÓN A PRODUCTORES", Value="A"},
+                                       new SelectListItem() {Text = "CIERRE DE MATERIAL", Value="M"},
+                                       new SelectListItem() {Text = "COBRANZA", Value="C"},
+                                       new SelectListItem() {Text = "PENDIENTE REVISIÓN", Value="R"},
+                                       new SelectListItem() { Text = "REVISA GERENCIA", Value = "G" },
+                                       new SelectListItem() { Text = "TERMINÓ TEMPORADA", Value = "T" },
+                                       new SelectListItem() { Text = "VA A ENTREGAR", Value = "E" },
+                                       new SelectListItem() { Text = "VA A PAGAR", Value = "P" }}, new { @id = "status", @class = "form-control form-control-sm" })
+                                        }
+                                        else
+                                        {
+                                            if (item.Estatus == "A")
+                                            {
+                                                <h7>ATENCIÓN A PRODUCTORES</h7>
+                                            }
+                                            else if (item.Estatus == "M")
+                                            {
+                                                <h7>CIERRE DE MATERIAL</h7>
+                                            }
+                                            else if (item.Estatus == "C")
+                                            {
+                                                <h7>COBRANZA</h7>
+                                            }
+                                            else if (item.Estatus == "R")
+                                            {
+                                                <h7>PENDIENTE REVISIÓN</h7>
+                                            }
+                                            else if (item.Estatus == "G")
+                                            {
+                                                <h7>REVISA GERENCIA</h7>
+                                            }
+                                            else if (item.Estatus == "T")
+                                            {
+                                                <h7>TERMINÓ TEMPORADA</h7>
+                                            }
+                                            else if (item.Estatus == "E")
+                                            {
+                                                <h7>VA A ENTREGAR</h7>
+                                            }
+                                            else if (item.Estatus == "P")
+                                            {
+                                                <h7>VA A PAGAR</h7>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Comentarios == null && Session["Id"].ToString() != "391")
+                                        {
+                                            @Html.TextBoxFor(model => item.Comentarios, new { @class = "form-control form-control-sm", @autocomplete = "off", @id = "comentarios" })
+                                        }
+                                        else
+                                        { 
+                                            @Html.DisplayFor(modelItem => item.Comentarios)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (Session["Id"].ToString() != "391" && item.Estatus == null)
+                                        {
+                                            <a href="#" onclick="uptRow(this)" style="font-size: 10px; border-radius: 25px;" class="btn btn-primary btn-sm active"><i class="fas fa-check-circle"></i></a>
+                                        }
+                                        else if(Session["Id"].ToString() == "391")
+                                        {
+                                            <a href="#" onclick="delRow(this)" style="font-size:12px;padding:2px 6px 2px 6px" class="btn btn-danger btn-sm active"><i class="fas fa-trash-alt"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @if (Session["Id"].ToString() == "391")
+            {
+                <div class="modal-footer">
+                    <input id="btnMail" type="submit" value="Enviar" class="btn-sm btn-light shadow-lg" style="font-weight:bold" />
+                    @* <button type="submit" id="fhgfh" class="btn-sm btn-light shadow-lg"><i class="fas fa-envelope-square"></i> Enviar</button>*@
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    var codigo_C, txt, status;
+
+    $("#Cod_Prod").change(function () {
+        var cod_prod = $("#Cod_Prod").val();
+        if (cod_prod.length != 5) {
+            alert("El código del productor debe ser de 5 números, complete con 0 al principio");
+            document.getElementById("#Cod_Prod").focus();
+        }
+        else {
+            limpiar();
+            nombre_productor();
+            descripcion_campos();
+        }
+    });
+
+    $('#Cod_Campo').change(function () {
+        nom_campo();
+    });
+
+    function limpiar() {
+        $('#nombreProductor').val('');
+        $('#DescCampo').val('');
+        $('#activo').text('');
+        nom_campo();
+    }
+
+    function descripcion_campos() {
+        $.getJSON(siteURL + "Json/GetCamposList?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#Cod_Campo");
+            select.empty();
+            $.each(result, function (index, itemData) {
+                select.append($('<option/>', {
+                    value: itemData.Cod_Campo,
+                    text: itemData.Cod_Campo //Descripcion
+                }));
+            });
+        });
+    }
+
+    function nom_campo() {
+        codigo_C = $('#Cod_Campo').val();
+        if (codigo_C.length == 0) {
+            codigo_C = 1;
+        }
+        $.getJSON(siteURL + "Json/DescCampo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+            var select = $("#DescCampo");
+            select.val(result.Descripcion);
+
+            if (result.Activo == 'N') {
+                txt = "Campo inactivo!";
+                $('#activo').text(txt);
+                $('#activo').show();
+            }
+            else {
+                txt = "";
+                $('#activo').text(txt);
+                $('#activo').hide();
+            }
+        });
+    }
+
+    function nombre_productor() {
+        $.getJSON(siteURL + "Json/GetProductor?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#nombreProductor");
+            select.val(result.Nombre);
+        });
+    }
+
+    $('#btnAdd').click(function () {
+        var data = {
+            Cod_Prod: $("#Cod_Prod").val(),
+            Cod_Campo: $("#Cod_Campo").val()
+        };
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Indicadores/Add_Seguimiento",
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+    });
+
+    function delRow(currElement) {
+        $("#dataTableData tr").click(function () {
+            $(this).find("#Id").each(function () {
+                delete_data($(this).html(), 1);
+            });
+        });
+    }
+
+    function delete_data(id) {
+        var data = {
+            Id: id
+        };
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Indicadores/Updt_Seguimiento",
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+    }
+
+    $('#status').change(function () {
+        status = $("#status").val();
+    });
+
+    function uptRow(currElement) {
+        $("#dataTableData tr").click(function () {
+            $(this).find("#Id").each(function () {
+                update_data($(this).html(), 1);
+            });
+        });
+    }
+
+    function update_data(id) {
+        var data = {
+            Id: id,
+            status: status,
+            comentarios: $("#comentarios").val()
+        };
+        console.log(data);
+
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Indicadores/Updt_Seguimiento",
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+    }
+
+    $('#btnMail').click(function () {
+        var data = new Array();
+
+        $("#dataTableData tbody tr").each(function () {
+            var row = $(this);
+            var ids = {};
+            ids.Id = row.find("#Id").html();
+            ids.IdAgen = row.find("#IdAgen").html();
+            data.push(ids);
+        });
+        //console.log(data);
+        jQuery.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: siteURL + "Indicadores/Seguimiento_sendMail",
+            success: function (data) {
+                alert('Datos enviados correctamente');
+                window.location.reload();
+            },
+            error: function (xhr, err) {
+                console.log("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                console.log("responseText: " + xhr.responseText);
+            }
+        });
+    });
+</script>
+
+
+

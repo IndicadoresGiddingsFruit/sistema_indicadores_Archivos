@@ -238,6 +238,8 @@
     <EntitySet Name="SIPGComentarios" EntityType="SeasonSun1213Model2.SIPGComentarios" />
     <EntitySet Name="ProdVisitasCab" EntityType="SeasonSun1213Model2.ProdVisitasCab" />
     <EntitySet Name="SIPGProyeccion" EntityType="SeasonSun1213Model2.SIPGProyeccion" />
+    <EntitySet Name="Seguimiento_financ" EntityType="SeasonSun1213Model2.Seguimiento_financ" />
+    <EntitySet Name="SIPGUsuarios" EntityType="SeasonSun1213Model2.SIPGUsuarios" />
   </EntityContainer>
   <EntityType Name="SIPGComentarios">
     <Key>
@@ -365,5 +367,31 @@
     <Property Name="C24" Type="Double" />
     <Property Name="C25" Type="Double" />
     <Property Name="C26" Type="Double" />
+  </EntityType>
+  <EntityType Name="Seguimiento_financ">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
+    <Property Name="Comentarios" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Fecha" Type="DateTime" Precision="3" />
+    <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
+    <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="IdAgen" Type="Int16" />
+  </EntityType>
+  <EntityType Name="SIPGUsuarios">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Completo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IdAgen" Type="Int16" />
+    <Property Name="IdRegion" Type="Int16" />
+    <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
   </EntityType>
 </Schema>

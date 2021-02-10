@@ -214,6 +214,19 @@
     <Property Name="rowguid" Type="uniqueidentifier" />
     <Property Name="TipoVisita" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Seguimiento_financ">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cod_Empresa" Type="smallint" Nullable="false" />
+    <Property Name="Cod_Prod" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="Cod_Campo" Type="smallint" Nullable="false" />
+    <Property Name="Estatus" Type="nchar" MaxLength="1" />
+    <Property Name="Comentarios" Type="varchar" MaxLength="200" />
+    <Property Name="Fecha" Type="datetime" />
+    <Property Name="IdAgen" Type="smallint" />
+  </EntityType>
   <EntityType Name="SIPGComentarios">
     <Key>
       <PropertyRef Name="Id" />
@@ -324,6 +337,19 @@
     <Property Name="25" Type="float" />
     <Property Name="26" Type="float" />
   </EntityType>
+  <EntityType Name="SIPGUsuarios">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Nombre" Type="varchar" MaxLength="50" />
+    <Property Name="Clave" Type="varchar" MaxLength="50" />
+    <Property Name="Completo" Type="varchar" MaxLength="50" />
+    <Property Name="correo" Type="varchar" MaxLength="50" />
+    <Property Name="IdAgen" Type="smallint" />
+    <Property Name="IdRegion" Type="smallint" />
+    <Property Name="Tipo" Type="nchar" MaxLength="1" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
   <EntityType Name="SIPGVisitas">
     <Key>
       <PropertyRef Name="Id" />
@@ -356,8 +382,10 @@
     <EntitySet Name="ProdCamposCat" EntityType="Self.ProdCamposCat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProdProductoresCat" EntityType="Self.ProdProductoresCat" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProdVisitasCab" EntityType="Self.ProdVisitasCab" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Seguimiento_financ" EntityType="Self.Seguimiento_financ" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SIPGComentarios" EntityType="Self.SIPGComentarios" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SIPGProyeccion" EntityType="Self.SIPGProyeccion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SIPGUsuarios" EntityType="Self.SIPGUsuarios" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SIPGVisitas" EntityType="Self.SIPGVisitas" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_ProdProductoresCat_ProdAgenteCat" Association="Self.FK_ProdProductoresCat_ProdAgenteCat">
       <End Role="ProdAgenteCat" EntitySet="ProdAgenteCat" />

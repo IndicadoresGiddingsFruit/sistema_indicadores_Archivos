@@ -139,16 +139,20 @@ namespace Sistema_Indicadores.Controllers
                         Session["Correo"] = userDetails.correo;
                         Session["Id"] = userDetails.Id;
 
-                        //if (userDetails.Id == 117)
-                        //{
-                        //    return RedirectToAction("Zarzamora", "EstimacionBerries");
-                        //}
+                        if (userDetails.Id == 117)
+                        {
+                            return RedirectToAction("Zarzamora", "EstimacionBerries");
+                        }
+                        else if (userDetails.Id == 391)
+                        {
+                            return RedirectToAction("Seguimiento", "Indicadores");
+                        }
                         //activos curva
-                        if (userDetails.Id == 121)
+                        else if (userDetails.Id == 121)
                         {
                             return RedirectToAction("Activos_Curva", "Indicadores");
                         }
-                        if (userDetails.Tipo == null)
+                        else if (userDetails.Tipo == null)
                         {
                             ViewBag.error = "Usuario no válido";
                             return View("Index", userModel);
@@ -157,7 +161,7 @@ namespace Sistema_Indicadores.Controllers
                         {
                             if (userDetails.Tipo == "P" && userDetails.IdAgen != 1 && userDetails.IdAgen != 5)
                             {
-                                return RedirectToAction("Visitas", "Indicadores");
+                                return RedirectToAction("Seguimiento", "Indicadores");
                             }
                             else
                             {
