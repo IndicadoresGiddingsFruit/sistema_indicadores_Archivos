@@ -81,7 +81,14 @@
             </div>
         </div>
     </div>
+
+    <div>
+        <a href="@Url.Action("Seguimiento", "Indicadores", new { datos = "A" })" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="float:left;margin:10px">Abiertos</a>
+        <a href="@Url.Action("Seguimiento", "Indicadores", new { datos = "C" })" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:left;margin:10px">Cerrados</a>
+        <a href="@Url.Action("Seguimiento", "Indicadores", new { datos = "T" })" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm" style="float:left;margin:10px">Todos</a>
+    </div>
 }
+
 <div>
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -111,6 +118,9 @@
                                 </th>
                                 <th>
                                     Comentarios
+                                </th>
+                                <th>
+                                    Dias sin respuesta
                                 </th>
                                 <th>
 
@@ -191,8 +201,19 @@
                                             @Html.TextBoxFor(model => item.Comentarios, new { @class = "form-control form-control-sm", @autocomplete = "off", @id = "comentarios" })
                                         }
                                         else
-                                        { 
+                                        {
                                             @Html.DisplayFor(modelItem => item.Comentarios)
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Estatus == null && item.dias >0)
+                                        {
+                                            @Html.DisplayFor(modelItem => item.dias)
+                                            if (Session["Id"].ToString() == "391" && item.dias>0)
+                                            {
+                                                <br />
+                                                <a href="#" onclick="mailRow(this)">Reenviar</a>
+                                            }
                                         }
                                     </td>
                                     <td>
@@ -200,11 +221,12 @@
                                         {
                                             <a href="#" onclick="uptRow(this)" style="font-size: 10px; border-radius: 25px;" class="btn btn-primary btn-sm active"><i class="fas fa-check-circle"></i></a>
                                         }
-                                        else if(Session["Id"].ToString() == "391")
+                                        else if (Session["Id"].ToString() == "391")
                                         {
                                             <a href="#" onclick="delRow(this)" style="font-size:12px;padding:2px 6px 2px 6px" class="btn btn-danger btn-sm active"><i class="fas fa-trash-alt"></i></a>
                                         }
                                     </td>
+
                                 </tr>
                             }
                         </tbody>
@@ -224,7 +246,7 @@
 
 <script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
 <script type="text/javascript">
-    var codigo_C, txt, status;
+    var codigo_C, txt, status, id;    
 
     $("#Cod_Prod").change(function () {
         var cod_prod = $("#Cod_Prod").val();
@@ -376,16 +398,32 @@
         });
     }
 
-    $('#btnMail').click(function () {
-        var data = new Array();
-
-        $("#dataTableData tbody tr").each(function () {
-            var row = $(this);
-            var ids = {};
-            ids.Id = row.find("#Id").html();
-            ids.IdAgen = row.find("#IdAgen").html();
-            data.push(ids);
+    function mailRow(currElement) {
+        $("#dataTableData tr").click(function () {
+            $(this).find("#Id").each(function () {
+                send_mail($(this).html(), 1);
+            });
         });
+    }
+
+    function send_mail(id) {
+        var data = new Array();        
+
+        if (id == 0) {
+            $("#dataTableData tbody tr").each(function () {
+                var row = $(this);       
+                var ids = {};
+                ids.Id = row.find("#Id").html();
+                ids.IdAgen = row.find("#IdAgen").html();
+                data.push(ids);
+            });
+        }
+        else {
+            var ids = {};
+            ids.Id = id;
+            data.push(ids);
+        }     
+       
         //console.log(data);
         jQuery.ajax({
             type: "POST",
@@ -401,6 +439,10 @@
                 console.log("responseText: " + xhr.responseText);
             }
         });
+    }
+
+    $('#btnMail').click(function () {
+        send_mail(0);
     });
 </script>
 

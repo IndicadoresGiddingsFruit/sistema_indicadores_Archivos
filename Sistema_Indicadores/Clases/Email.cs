@@ -12,9 +12,10 @@ namespace Sistema_Indicadores.Clases
         {
             MailMessage correo = new MailMessage();
             correo.From = new MailAddress("indicadores.giddingsfruit@gmail.com", "Indicadores GiddingsFruit");
-            correo.To.Add(correo_p);// "marholy.martinez@giddingsfruit.mx");
-            correo.CC.Add("oscar.castillo@giddingsfruit.mx"); 
+            correo.To.Add(correo_p);// "marholy.martinez@giddingsfruit.mx" correo_p
+            correo.CC.Add("oscar.castillo@giddingsfruit.mx");
             correo.CC.Add("angel.lopez@giddingsfruit.mx");
+            correo.CC.Add("maria.orozco@giddingsfruit.mx");
 
             correo.Subject = "IMPORTANTE:: VALIDACION DE CARTERA VIGENTE";
             correo.Body += "Buen dia Ingeniero <br/>";

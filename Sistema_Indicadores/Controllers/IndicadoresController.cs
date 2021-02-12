@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -165,8 +166,8 @@ namespace Sistema_Indicadores.Controllers
             Document doc = new Document(PageSize.LETTER, 20, 20, 10, 20);//left, rigth, top, bottom           
             var output = new MemoryStream();
             PdfWriter pw = PdfWriter.GetInstance(doc, output);
-            Image logo = Image.GetInstance("/Image/GIDDINGS_PRIMARY_STACKED_LOGO_DRIFT_RGB.png");
-            pw.PageEvent = new HeaderFooter();
+            //Image logo = Image.GetInstance("/Image/GIDDINGS_PRIMARY_STACKED_LOGO_DRIFT_RGB.png");
+            //pw.PageEvent = new HeaderFooter();
 
             Font _standardFont = new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK);
 
@@ -295,10 +296,10 @@ namespace Sistema_Indicadores.Controllers
 
             //Logo            
 
-            logo.SetAbsolutePosition(0f, 0f);
-            logo.ScaleAbsolute(50f, 50f);
+            //logo.SetAbsolutePosition(0f, 0f);
+            //logo.ScaleAbsolute(50f, 50f);
 
-            doc.Add(logo);
+            //doc.Add(logo);
             doc.Add(tbl);
             doc.Close();
             pw.Close();
@@ -2454,73 +2455,292 @@ namespace Sistema_Indicadores.Controllers
             }
         }
 
-        public ActionResult Seguimiento()
+        public ActionResult Seguimiento(string datos = "")
         {
             if (Session["Nombre"] != null)
             {
                 ViewData["Nombre"] = Session["Nombre"].ToString();
 
-                //List<SelectListItem> lst_Status = new List<SelectListItem>();
-                //lst_Status.Add(new SelectListItem() { Text = "--Seleccione--", Value = null });
-                //lst_Status.Add(new SelectListItem() { Text = "ATENCION A PRODUCTORES", Value = "R" });
-                //lst_Status.Add(new SelectListItem() { Text = "CIERRE DE MATERIAL", Value = "P" });
-                //lst_Status.Add(new SelectListItem() { Text = "COBRANZA", Value = "F" });
-                //lst_Status.Add(new SelectListItem() { Text = "PENDIENTE REVISION", Value = "L" });
-                //lst_Status.Add(new SelectListItem() { Text = "REVISA GERENCIA", Value = "L" });
-                //lst_Status.Add(new SelectListItem() { Text = "TERMINO TEMPORADA", Value = "L" });
-                //lst_Status.Add(new SelectListItem() { Text = "VA A ENTREGAR", Value = "L" });
-                //lst_Status.Add(new SelectListItem() { Text = "VA A PAGAR", Value = "L" });
-
-                //ViewBag.List_Status = lst_Status;
-
                 IQueryable<ClassProductor> item = null;
 
                 if (Session["Id"].ToString() == "391")
                 {
+                    if (datos == "A")
+                    {
+                        item = (from m in (from m in bd.Seguimiento_financ
+                                           group m by new
+                                           {
+                                               Cod_Empresa = m.Cod_Empresa,
+                                               Cod_Prod = m.Cod_Prod,
+                                               Cod_Campo = m.Cod_Campo
+                                           } into x
+                                           select new
+                                           {
+                                               Cod_Empresa = x.Key.Cod_Empresa,
+                                               Cod_Prod = x.Key.Cod_Prod,
+                                               Cod_Campo = x.Key.Cod_Campo,
+                                               Fecha = x.Max(m => m.Fecha)
+                                           })
+
+                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                                from s in Sfinanc.DefaultIfEmpty()
+
+                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                                from mcam in Campos.DefaultIfEmpty()
+
+                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                                from prod in Prod.DefaultIfEmpty()
+
+                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                                from ageP in Agen.DefaultIfEmpty()
+                                where s.IdAgen!=null && s.Estatus == null
+                                group m by new
+                                {
+                                    Id = s.Id,
+                                    Cod_Prod = m.Cod_Prod,
+                                    Productor = prod.Nombre,
+                                    Cod_Campo = m.Cod_Campo,
+                                    Campo = mcam.Descripcion,
+                                    IdAgen = mcam.IdAgen,
+                                    Asesor = ageP.Nombre,
+                                    Estatus = s.Estatus,
+                                    Comentarios = s.Comentarios,
+                                    Fecha = m.Fecha,
+                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
+                                } into x
+                                select new ClassProductor()
+                                {
+                                    Id = x.Key.Id,
+                                    Cod_Prod = x.Key.Cod_Prod,
+                                    Productor = x.Key.Productor,
+                                    Cod_Campo = x.Key.Cod_Campo,
+                                    Campo = x.Key.Campo,
+                                    IdAgen = x.Key.IdAgen,
+                                    Asesor = x.Key.Asesor,
+                                    Estatus = x.Key.Estatus,
+                                    Comentarios = x.Key.Comentarios,
+                                    Fecha = x.Key.Fecha,
+                                    dias = x.Key.dias
+                                }).Distinct();
+                    }
+                    else if (datos == "C")
+                    {
+                        item = (from m in (from m in bd.Seguimiento_financ
+                                           group m by new
+                                           {
+                                               Cod_Empresa = m.Cod_Empresa,
+                                               Cod_Prod = m.Cod_Prod,
+                                               Cod_Campo = m.Cod_Campo
+                                           } into x
+                                           select new
+                                           {
+                                               Cod_Empresa = x.Key.Cod_Empresa,
+                                               Cod_Prod = x.Key.Cod_Prod,
+                                               Cod_Campo = x.Key.Cod_Campo,
+                                               Fecha = x.Max(m => m.Fecha)
+                                           })
+
+                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                                from s in Sfinanc.DefaultIfEmpty()
+
+                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                                from mcam in Campos.DefaultIfEmpty()
+
+                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                                from prod in Prod.DefaultIfEmpty()
+
+                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                                from ageP in Agen.DefaultIfEmpty()
+                                where s.IdAgen != null && s.Estatus != null
+                                group m by new
+                                {
+                                    Id = s.Id,
+                                    Cod_Prod = m.Cod_Prod,
+                                    Productor = prod.Nombre,
+                                    Cod_Campo = m.Cod_Campo,
+                                    Campo = mcam.Descripcion,
+                                    IdAgen = mcam.IdAgen,
+                                    Asesor = ageP.Nombre,
+                                    Estatus = s.Estatus,
+                                    Comentarios = s.Comentarios,
+                                    Fecha = m.Fecha,
+                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
+                                } into x
+                                select new ClassProductor()
+                                {
+                                    Id = x.Key.Id,
+                                    Cod_Prod = x.Key.Cod_Prod,
+                                    Productor = x.Key.Productor,
+                                    Cod_Campo = x.Key.Cod_Campo,
+                                    Campo = x.Key.Campo,
+                                    IdAgen = x.Key.IdAgen,
+                                    Asesor = x.Key.Asesor,
+                                    Estatus = x.Key.Estatus,
+                                    Comentarios = x.Key.Comentarios,
+                                    Fecha = x.Key.Fecha,
+                                    dias = x.Key.dias
+                                }).Distinct();
+                    }
+                    else if (datos == "T")
+                    {
+                        item = (from m in (from m in bd.Seguimiento_financ
+                                           group m by new
+                                           {
+                                               Cod_Empresa = m.Cod_Empresa,
+                                               Cod_Prod = m.Cod_Prod,
+                                               Cod_Campo = m.Cod_Campo
+                                           } into x
+                                           select new
+                                           {
+                                               Cod_Empresa = x.Key.Cod_Empresa,
+                                               Cod_Prod = x.Key.Cod_Prod,
+                                               Cod_Campo = x.Key.Cod_Campo,
+                                               Fecha = x.Max(m => m.Fecha)
+                                           })
+
+                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                                from s in Sfinanc.DefaultIfEmpty()
+
+                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                                from mcam in Campos.DefaultIfEmpty()
+
+                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                                from prod in Prod.DefaultIfEmpty()
+
+                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                                from ageP in Agen.DefaultIfEmpty()
+                                //where s.IdAgen != null
+                                group m by new
+                                {
+                                    Id = s.Id,
+                                    Cod_Prod = m.Cod_Prod,
+                                    Productor = prod.Nombre,
+                                    Cod_Campo = m.Cod_Campo,
+                                    Campo = mcam.Descripcion,
+                                    IdAgen = mcam.IdAgen,
+                                    Asesor = ageP.Nombre,
+                                    Estatus = s.Estatus,
+                                    Comentarios = s.Comentarios,
+                                    Fecha = m.Fecha,
+                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
+                                } into x
+                                select new ClassProductor()
+                                {
+                                    Id = x.Key.Id,
+                                    Cod_Prod = x.Key.Cod_Prod,
+                                    Productor = x.Key.Productor,
+                                    Cod_Campo = x.Key.Cod_Campo,
+                                    Campo = x.Key.Campo,
+                                    IdAgen = x.Key.IdAgen,
+                                    Asesor = x.Key.Asesor,
+                                    Estatus = x.Key.Estatus,
+                                    Comentarios = x.Key.Comentarios,
+                                    Fecha = x.Key.Fecha,
+                                    dias = x.Key.dias
+                                }).Distinct();
+                    }
+                    else
+                    {
+                        item = (from m in (from m in bd.Seguimiento_financ
+                                           group m by new
+                                           {
+                                               Cod_Empresa = m.Cod_Empresa,
+                                               Cod_Prod = m.Cod_Prod,
+                                               Cod_Campo = m.Cod_Campo
+                                           } into x
+                                           select new
+                                           {
+                                               Cod_Empresa = x.Key.Cod_Empresa,
+                                               Cod_Prod = x.Key.Cod_Prod,
+                                               Cod_Campo = x.Key.Cod_Campo,
+                                               Fecha = x.Max(m => m.Fecha)
+                                           })
+
+                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                                from s in Sfinanc.DefaultIfEmpty()
+
+                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                                from mcam in Campos.DefaultIfEmpty()
+
+                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                                from prod in Prod.DefaultIfEmpty()
+
+                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                                from ageP in Agen.DefaultIfEmpty()
+                                where s.IdAgen == null
+                                group m by new
+                                {
+                                    Id = s.Id,
+                                    Cod_Prod = m.Cod_Prod,
+                                    Productor = prod.Nombre,
+                                    Cod_Campo = m.Cod_Campo,
+                                    Campo = mcam.Descripcion,
+                                    IdAgen = mcam.IdAgen,
+                                    Asesor = ageP.Nombre,
+                                    Estatus = s.Estatus,
+                                    Comentarios = s.Comentarios,
+                                    Fecha = m.Fecha,
+                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
+                                } into x
+                                select new ClassProductor()
+                                {
+                                    Id = x.Key.Id,
+                                    Cod_Prod = x.Key.Cod_Prod,
+                                    Productor = x.Key.Productor,
+                                    Cod_Campo = x.Key.Cod_Campo,
+                                    Campo = x.Key.Campo,
+                                    IdAgen = x.Key.IdAgen,
+                                    Asesor = x.Key.Asesor,
+                                    Estatus = x.Key.Estatus,
+                                    Comentarios = x.Key.Comentarios,
+                                    Fecha = x.Key.Fecha,
+                                    dias = x.Key.dias
+                                }).Distinct();
+                    }
+                }
+                else
+                {
+                    short agenteSesion = (short)Session["IdAgen"];
                     item = (from m in (from m in bd.Seguimiento_financ
                                        group m by new
                                        {
-                                           Id = m.Id,
                                            Cod_Empresa = m.Cod_Empresa,
                                            Cod_Prod = m.Cod_Prod,
-                                           Cod_Campo = m.Cod_Campo,
-                                           Estatus = m.Estatus,
-                                           Comentarios = m.Comentarios,
-                                           IdAgen=m.IdAgen
+                                           Cod_Campo = m.Cod_Campo
                                        } into x
                                        select new
                                        {
-                                           Id = x.Key.Id,
                                            Cod_Empresa = x.Key.Cod_Empresa,
                                            Cod_Prod = x.Key.Cod_Prod,
                                            Cod_Campo = x.Key.Cod_Campo,
-                                           Estatus = x.Key.Estatus,
-                                           Comentarios = x.Key.Comentarios,
-                                           Fecha = x.Max(m => m.Fecha),
-                                           IdAgen= x.Key.IdAgen
+                                           Fecha = x.Max(m => m.Fecha)
                                        })
 
-                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into MuestreoCam
-                            from mcam in MuestreoCam.DefaultIfEmpty()
+                            join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                            from s in Sfinanc.DefaultIfEmpty()
 
-                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into MuestreoProd
-                            from prod in MuestreoProd.DefaultIfEmpty()
+                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                            from mcam in Campos.DefaultIfEmpty()
 
-                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into MuestreoAgentes
-                            from ageP in MuestreoAgentes.DefaultIfEmpty()
-                            where m.IdAgen==null
+                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                            from prod in Prod.DefaultIfEmpty()
+
+                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                            from ageP in Agen.DefaultIfEmpty()
+                            where s.IdAgen != null && mcam.IdAgen == agenteSesion
                             group m by new
                             {
-                                Id = m.Id,
+                                Id = s.Id,
                                 Cod_Prod = m.Cod_Prod,
                                 Productor = prod.Nombre,
                                 Cod_Campo = m.Cod_Campo,
                                 Campo = mcam.Descripcion,
                                 IdAgen = mcam.IdAgen,
                                 Asesor = ageP.Nombre,
-                                Estatus = m.Estatus,
-                                Comentarios = m.Comentarios,
-                                Fecha = m.Fecha
+                                Estatus = s.Estatus,
+                                Comentarios = s.Comentarios,
+                                Fecha = m.Fecha,
+                                dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
                             } into x
                             select new ClassProductor()
                             {
@@ -2533,96 +2753,81 @@ namespace Sistema_Indicadores.Controllers
                                 Asesor = x.Key.Asesor,
                                 Estatus = x.Key.Estatus,
                                 Comentarios = x.Key.Comentarios,
-                                Fecha = x.Key.Fecha
+                                Fecha = x.Key.Fecha,
+                                dias = x.Key.dias
                             }).Distinct();
+                }
+
+                if (Session["Id"].ToString() != "391")
+                {
+                    if (item.Count() != 0)
+                    {
+                        return View(item.ToList());
+                    }
+                    else
+                    {
+                        return RedirectToAction("Visitas", "Indicadores");
+                    }
                 }
                 else
                 {
-                    short agenteSesion = (short)Session["IdAgen"];
-                    item = (from m in (from m in bd.Seguimiento_financ
-                                       group m by new
-                                       {
-                                           Id = m.Id,
-                                           Cod_Empresa = m.Cod_Empresa,
-                                           Cod_Prod = m.Cod_Prod,
-                                           Cod_Campo = m.Cod_Campo,
-                                           Estatus = m.Estatus,
-                                           Comentarios = m.Comentarios
-                                       } into x
-                                       select new
-                                       {
-                                           Id = x.Key.Id,
-                                           Cod_Empresa = x.Key.Cod_Empresa,
-                                           Cod_Prod = x.Key.Cod_Prod,
-                                           Cod_Campo = x.Key.Cod_Campo,
-                                           Estatus = x.Key.Estatus,
-                                           Comentarios = x.Key.Comentarios,
-                                           Fecha = x.Max(m => m.Fecha)
-                                       })
-
-                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into MuestreoCam
-                            from mcam in MuestreoCam.DefaultIfEmpty()
-
-                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into MuestreoProd
-                            from prod in MuestreoProd.DefaultIfEmpty()
-
-                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into MuestreoAgentes
-                            from ageP in MuestreoAgentes.DefaultIfEmpty()
-
-                            where mcam.IdAgen == agenteSesion 
-
-                            group m by new
-                            {
-                                Id = m.Id,
-                                Cod_Prod = m.Cod_Prod,
-                                Productor = prod.Nombre,
-                                Cod_Campo = m.Cod_Campo,
-                                Campo = mcam.Descripcion,
-                                Asesor = ageP.Nombre,
-                                Estatus = m.Estatus,
-                                Comentarios = m.Comentarios,
-                                Fecha = m.Fecha
-                            } into x
-                            select new ClassProductor()
-                            {
-                                Id = x.Key.Id,
-                                Cod_Prod = x.Key.Cod_Prod,
-                                Productor = x.Key.Productor,
-                                Cod_Campo = x.Key.Cod_Campo,
-                                Campo = x.Key.Campo,
-                                Asesor = x.Key.Asesor,
-                                Estatus = x.Key.Estatus,
-                                Comentarios = x.Key.Comentarios,
-                                Fecha = x.Key.Fecha
-                            }).Distinct();
+                    return View(item.ToList());
                 }
-
-                return View(item.ToList());
             }
             else
             {
                 return RedirectToAction("Index", "Login");
             }
         }
-        public JsonResult SeguimientoList()
+        public JsonResult SeguimientoList(string datos = "")
         {
             List<ClassProductor> list;
             if (Session["Id"].ToString() == "391")
             {
-                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, S.Estatus, S.Comentarios " +
-                    "from(select Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, max(fecha) as fecha from Seguimiento_financ group by Id, Cod_Prod, Cod_Campo, Estatus, Comentarios)S " +
-                    "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
-                    "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
-                    "left join ProdAgenteCat A on C.IdAgen = A.IdAgen").ToList();
+                if (datos == "A")
+                {
+                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
+                        "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
+                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
+                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
+                        "where S.Estatus==null").ToList();
+                }
+                else if (datos == "C")
+                {
+                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
+                         "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
+                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
+                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
+                        "where S.Estatus!=null").ToList();
+                }
+                if (datos == "T")
+                {
+                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
+                         "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
+                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
+                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
+                        "where A.IdAgen!=null").ToList();
+                }
+                else
+                {
+                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
+                         "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
+                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
+                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen").ToList();
+                }
             }
             else
             {
-                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, S.Estatus, S.Comentarios " +
-                    "from(select Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, max(fecha) as fecha from Seguimiento_financ group by Id, Cod_Prod, Cod_Campo, Estatus, Comentarios)S " +
+                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
+                 "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
                     "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
                     "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
                     "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
-                    "where A.IdAgen=" + (short)Session["IdAgen"] + " and S.Estatus!= null").ToList();
+                    "where C.IdAgen=" + (short)Session["IdAgen"] + "").ToList();
             }
             return Json(list, JsonRequestBehavior.AllowGet);
         }
@@ -2632,14 +2837,42 @@ namespace Sistema_Indicadores.Controllers
             {
                 foreach (var a in ids)
                 {
-                    var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == a.IdAgen);
-                    string c = email_p.correo;
+                    if (a.IdAgen == null)
+                    {
+                        var s = bd.Seguimiento_financ.Where(x => x.Id == a.Id).First();
+                        var c = bd.ProdCamposCat.Where(x => x.Cod_Prod == s.Cod_Prod && x.Cod_Campo == s.Cod_Campo).First();
+                        var i = bd.ProdAgenteCat.Where(x => x.IdAgen == c.IdAgen).First();
+                        s.IdAgen = i.IdAgen;
 
-                    var s = bd.Seguimiento_financ.Where(x => x.Id == a.Id).First();
-                    s.IdAgen = a.IdAgen;
+                        var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == i.IdAgen);
+                        string correo = email_p.correo;
+                        email.sendmail(correo);
+                    }
+                    else
+                    {
+                        var s = bd.Seguimiento_financ.Where(x => x.Id == a.Id).First();
+                        s.IdAgen = a.IdAgen;
+                    }
                     bd.SaveChanges();
+                }
 
-                    email.sendmail(c);
+                var result = (from item in ids
+                              group item by new { item.IdAgen } into g
+                              select new ClassProductor()
+                              {
+                                  IdAgen = g.Key.IdAgen
+                              }).ToList();
+
+                var q = result.AsQueryable();
+
+                foreach (var item in q)
+                {
+                    if (item.IdAgen != null)
+                    {
+                        var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == item.IdAgen);
+                        string correo = email_p.correo;
+                        email.sendmail(correo);
+                    }
                 }
 
                 TempData["sms"] = "Datos enviados correctamente";

@@ -17,5 +17,6 @@ namespace Sistema_Indicadores.Clases
         public Int16? Cod_Campo { get; set; }
         public string Campo { get; set; }
         public DateTime? Fecha { get; set; }
+        public int? dias { get; set; }
     }
 }
