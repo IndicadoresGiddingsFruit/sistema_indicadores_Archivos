@@ -43,7 +43,8 @@ namespace Sistema_Indicadores
         //}
 
         //public IServiceProvider ConfigureServices(IServiceCollection services)
-        //{            
+        //{
+           
         //    var googleCredential = _hostingEnvironment.ContentRootPath;
         //    var filePath = Configuration.GetSection("GoogleFirebase")["fileName"];
         //    googleCredential = Path.Combine(googleCredential, filePath);

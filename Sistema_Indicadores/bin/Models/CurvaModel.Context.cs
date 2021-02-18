@@ -30,7 +30,7 @@ namespace Sistema_Indicadores.Models
         public virtual DbSet<ProdAgenteCat> ProdAgenteCat { get; set; }
         public virtual DbSet<ProdCamposCat> ProdCamposCat { get; set; }
         public virtual DbSet<ProdProductoresCat> ProdProductoresCat { get; set; }
-        public virtual DbSet<SIPGProyeccion> SIPGProyeccion { get; set; }
+        public virtual DbSet<ProdProyeccion> SIPGProyeccion { get; set; }
         public virtual DbSet<UV_ProdRecepcion> UV_ProdRecepcion { get; set; }
         public virtual DbSet<SIPGVisitas> SIPGVisitas { get; set; }
     }

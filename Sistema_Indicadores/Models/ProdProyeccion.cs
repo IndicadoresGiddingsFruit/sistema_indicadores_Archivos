@@ -12,21 +12,16 @@ namespace Sistema_Indicadores.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SIPGProyeccion
+    public partial class ProdProyeccion
     {
         public int Id { get; set; }
-        public string Estado { get; set; }
-        public string Estado_M { get; set; }
         public Nullable<short> IdAgen { get; set; }
         public string Cod_Prod { get; set; }
         public Nullable<short> Cod_Campo { get; set; }
-        public string Ubicacion { get; set; }
         public Nullable<int> Num_corte { get; set; }
         public Nullable<int> Sector { get; set; }
         public Nullable<double> Ha { get; set; }
-        public Nullable<int> Tipo { get; set; }
-        public string Producto { get; set; }
-        public string Numplantas_xha { get; set; }
+        public Nullable<int> Numplantas_xha { get; set; }
         public string Manejo { get; set; }
         public string Tipo_plantacion { get; set; }
         public Nullable<System.DateTime> Fecha_plantacion { get; set; }
@@ -43,19 +38,14 @@ namespace Sistema_Indicadores.Models
         public string Estructura { get; set; }
         public string Tipo_certificacion { get; set; }
         public string Tesco { get; set; }
-        public string Edad_planta { get; set; }
+        public Nullable<int> Edad_planta { get; set; }
         public string Tipo_plantacion2 { get; set; }
-        public Nullable<System.DateTime> Fecha_podamediacaña { get; set; }
-        public string RendxKg { get; set; }
-        public string RendxHa { get; set; }
+        public Nullable<System.DateTime> Fecha_podamediacana { get; set; }
+        public Nullable<double> RendxKg { get; set; }
+        public Nullable<double> RendxHa { get; set; }
         public Nullable<double> TotalCajas { get; set; }
         public string Temporada { get; set; }
         public Nullable<System.DateTime> Fecha { get; set; }
-        public Nullable<short> Zona { get; set; }
-        public Nullable<short> Acopio { get; set; }
-        public string Just_Estado { get; set; }
-        public Nullable<int> Semana { get; set; }
-        public Nullable<int> Mes { get; set; }
         public Nullable<double> C27 { get; set; }
         public Nullable<double> C28 { get; set; }
         public Nullable<double> C29 { get; set; }

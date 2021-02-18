@@ -25,14 +25,13 @@ namespace Sistema_Indicadores.Controllers
         SqlConnection con = new SqlConnection(constr);
         SeasonSun1213Entities16 bd = new SeasonSun1213Entities16();
         SIPGComentarios SIPGComentarios = new SIPGComentarios();
-        SIPGProyeccion SIPGProyeccion = new SIPGProyeccion();
+        ProdProyeccion ProdProyeccion = new ProdProyeccion();
         SIPGVisitas SIPGVisitas = new SIPGVisitas();
         Email email = new Email();
         string message = "";
         Image img = null;
 
         List<ClassVisitas> visitas = new List<ClassVisitas>();
-        string idregion = "";
         public ActionResult Index()
         {
             return View();
@@ -524,8 +523,8 @@ namespace Sistema_Indicadores.Controllers
 
         public JsonResult ProduccionList()
         {
-            //List<ClassCurva> datos = bd.Database.SqlQuery<ClassCurva>("select V.Cod_Prod, V.Nombre, cast('$'+V.SaldoFinal as varchar) as SaldoFinal, V.Pronostico, V.Entregado, V.Diferencia, V.PronosticoAA, V.DiferenciaAA, isnull(V.Semana,0) as Semana, V.PronosticoSA, V.EntregadoSA, V.DiferenciaSA from(select * from (select V.Cod_Prod, V.Nombre, round(isnull(V.SaldoFinal,0),0) as SaldoFinal, round(isnull(V.Pronostico,0),0) as Pronostico, round(isnull(V.Entregado,0),0) as Entregado, round(isnull(((V.Diferencia*100)-100),0),0) as Diferencia, round(isnull(V.PronosticoAA,0),0) as PronosticoAA, round(isnull(((V.DiferenciaAA*100)-100),0),0) as DiferenciaAA, V.Semana, round(isnull(V.PronosticoSA,0),0) as PronosticoSA, round(isnull(V.EntregadoSA,0),0) as EntregadoSA, round(isnull(((V.DiferenciaSA*100)-100),0),0) as DiferenciaSA from(select * from(select *, (V.Entregado/ V.Pronostico) AS Diferencia, (V.Entregado/ V.PronosticoAA) AS DiferenciaAA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA from(select F.Cod_Prod, F.Nombre, F.SaldoFinal, V.Pronostico as Pronostico, V.Entregado, SA.PronosticoSA, SA.EntregadoSA, SA.Semana, AA.PronosticoAA from(select Cod_Prod, Nombre, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(),GetDate(),GetDate(),50) group by Cod_Prod, Nombre)F left join(select V.IdAgen, V.Cod_prod, V.Cod_Campo, E.Entregado, sum(V.Pronostico) as Pronostico from(select * from(select * from(select IdAgen, Cod_Prod,Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado='A' group by IdAgen, Cod_Prod,Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas from SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo Union All select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas from SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo)E on V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod and V.Cod_Campo = E.Cod_Campo group by V.IdAgen, V.Cod_prod, V.Cod_Campo, E.Entregado)V ON F.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, sum(V.Pronostico) as PronosticoAA FROM CatSemanas S left join (select * from(select * from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as [29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado='A' group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V on S.Semana=V.Semana " +
-            //    "where S.Inicio between '20190701' and getdate() group by  V.IdAgen, V.Cod_Prod, V.Cod_Campo)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod AND V.Cod_Campo = AA.Cod_Campo LEFT JOIN(select PA.IdAgen, PA.Cod_Prod, PA.Cod_Campo, round(PA.Pronostico,0) AS PronosticoSA, EA.Entregado AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select* from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] FROM SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo, Semana Union All SELECT IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and PA.Cod_Campo = EA.Cod_Campo and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin)SA on V.IdAgen = SA.IdAgen and V.Cod_Prod = SA.Cod_Prod AND V.Cod_Campo = SA.Cod_Campo " +
+            //List<ClassCurva> datos = bd.Database.SqlQuery<ClassCurva>("select V.Cod_Prod, V.Nombre, cast('$'+V.SaldoFinal as varchar) as SaldoFinal, V.Pronostico, V.Entregado, V.Diferencia, V.PronosticoAA, V.DiferenciaAA, isnull(V.Semana,0) as Semana, V.PronosticoSA, V.EntregadoSA, V.DiferenciaSA from(select * from (select V.Cod_Prod, V.Nombre, round(isnull(V.SaldoFinal,0),0) as SaldoFinal, round(isnull(V.Pronostico,0),0) as Pronostico, round(isnull(V.Entregado,0),0) as Entregado, round(isnull(((V.Diferencia*100)-100),0),0) as Diferencia, round(isnull(V.PronosticoAA,0),0) as PronosticoAA, round(isnull(((V.DiferenciaAA*100)-100),0),0) as DiferenciaAA, V.Semana, round(isnull(V.PronosticoSA,0),0) as PronosticoSA, round(isnull(V.EntregadoSA,0),0) as EntregadoSA, round(isnull(((V.DiferenciaSA*100)-100),0),0) as DiferenciaSA from(select * from(select *, (V.Entregado/ V.Pronostico) AS Diferencia, (V.Entregado/ V.PronosticoAA) AS DiferenciaAA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA from(select F.Cod_Prod, F.Nombre, F.SaldoFinal, V.Pronostico as Pronostico, V.Entregado, SA.PronosticoSA, SA.EntregadoSA, SA.Semana, AA.PronosticoAA from(select Cod_Prod, Nombre, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(),GetDate(),GetDate(),50) group by Cod_Prod, Nombre)F left join(select V.IdAgen, V.Cod_prod, V.Cod_Campo, E.Entregado, sum(V.Pronostico) as Pronostico from(select * from(select * from(select IdAgen, Cod_Prod,Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado='A' group by IdAgen, Cod_Prod,Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas from SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo Union All select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas from SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo)E on V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod and V.Cod_Campo = E.Cod_Campo group by V.IdAgen, V.Cod_prod, V.Cod_Campo, E.Entregado)V ON F.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, sum(V.Pronostico) as PronosticoAA FROM CatSemanas S left join (select * from(select * from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as [29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado='A' group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V on S.Semana=V.Semana " +
+            //    "where S.Inicio between '20190701' and getdate() group by  V.IdAgen, V.Cod_Prod, V.Cod_Campo)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod AND V.Cod_Campo = AA.Cod_Campo LEFT JOIN(select PA.IdAgen, PA.Cod_Prod, PA.Cod_Campo, round(PA.Pronostico,0) AS PronosticoSA, EA.Entregado AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select* from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] FROM ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo, Semana Union All SELECT IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and PA.Cod_Campo = EA.Cod_Campo and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin)SA on V.IdAgen = SA.IdAgen and V.Cod_Prod = SA.Cod_Prod AND V.Cod_Campo = SA.Cod_Campo " +
             //    "WHERE V.IdAgen = " + (short)Session["IdAgen"] + " GROUP BY F.SaldoFinal, F.Cod_Prod, F.Nombre, V.Pronostico, V.Entregado, SA.PronosticoSA, SA.EntregadoSA, SA.Semana, AA.PronosticoAA)V)V GROUP BY V.Cod_Prod, V.Nombre, V.SaldoFinal, V.Pronostico, V.Entregado, V.Diferencia, V.PronosticoAA, V.DiferenciaAA, V.PronosticoSA, V.EntregadoSA, DiferenciaSA, V.Semana)V)V)V ORDER BY V.Diferencia").ToList();
             //return Json(datos, JsonRequestBehavior.AllowGet);
 
@@ -556,8 +555,8 @@ namespace Sistema_Indicadores.Controllers
 
         public JsonResult GraficaProduccion()
         {
-            //List<ClassCurva> data = bd.Database.SqlQuery<ClassCurva>("SELECT *, ROUND((V.Entregado/V.Pronostico)*100,0) AS Diferencia, ROUND((V.Entregado/V.PronosticoAA)*100,0) AS DiferenciaAA, ROUND((V.EntregadoSA/V.PronosticoSA)*100,0) AS DiferenciaSA FROM(Select V.IdAgen, round(sum(V.Entregado),0) as Entregado, round(sum(V.Pronostico),0) as Pronostico, round(ISNULL(AA.PronosticoAA,0),0) AS PronosticoAA, round(SA.PronosticoSA,0) as PronosticoSA, round(SA.EntregadoSA,0) as EntregadoSA, SA.Semana from(select V.IdAgen, ROUND(isnull(E.Entregado,0),0) AS Entregado, ROUND(isnull(V.Pronostico,0),0) as Pronostico FROM ProdCamposCat C LEFT JOIN (select V.IdAgen, V.Cod_Prod, V.Cod_Campo, sum(V.Pronostico) as Pronostico from(select * from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0 group by V.IdAgen, V.Cod_Prod, V.Cod_Campo)V ON C.IdAgen=V.IdAgen and C.Cod_Prod = V.Cod_Prod and C.Cod_Campo=V.Cod_Campo left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, SUM(C.Convertidas) as Entregado FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(ISNULL(Convertidas,0)) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo Union All SELECT IdAgen, Cod_Prod, Cod_Campo, sum(ISNULL(Convertidas,0)) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod,Cod_Campo)E on V.IdAgen=E.IdAgen and V.Cod_Prod = E.Cod_Prod and V.Cod_Campo=E.Cod_Campo WHERE C.Activo='S' group by V.IdAgen, E.Entregado, V.Pronostico)V left join(SELECT V.IdAgen, SUM(isnull(V.Pronostico,0)) as PronosticoAA FROM ProdCamposCat C left join (select * from(select * from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as [29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V on C.IdAgen=V.IdAgen and C.Cod_Prod = V.Cod_Prod and C.Cod_Campo=V.Cod_Campo left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana,SUM(C.Convertidas) as Entregado FROM(select IdAgen, Cod_Prod, Cod_Campo, Semana,sum(ISNULL(Convertidas,0)) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo,Semana Union All SELECT IdAgen, Cod_Prod, Cod_Campo, Semana,sum(ISNULL(Convertidas,0)) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo,Semana)C GROUP BY C.IdAgen, C.Cod_Prod,Cod_Campo, C.Semana)E on V.IdAgen=E.IdAgen and V.Cod_Prod = E.Cod_Prod and V.Cod_Campo=E.Cod_Campo AND V.Semana=E.Semana left join CatSemanas S on S.Semana=V.Semana " +
-            //    "where S.Inicio between '20190701' and getdate() group by V.IdAgen)AA ON V.IdAgen = AA.IdAgen LEFT JOIN(SELECT PA.IdAgen, sum(round(PA.Pronostico,0)) AS PronosticoSA, sum(ISNULL(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select* from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] FROM SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen,Cod_Prod,Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana Union All SELECT IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and PA.Cod_Campo = EA.Cod_Campo and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin group by PA.IdAgen, S.Semana)SA on V.IdAgen = SA.IdAgen " +
+            //List<ClassCurva> data = bd.Database.SqlQuery<ClassCurva>("SELECT *, ROUND((V.Entregado/V.Pronostico)*100,0) AS Diferencia, ROUND((V.Entregado/V.PronosticoAA)*100,0) AS DiferenciaAA, ROUND((V.EntregadoSA/V.PronosticoSA)*100,0) AS DiferenciaSA FROM(Select V.IdAgen, round(sum(V.Entregado),0) as Entregado, round(sum(V.Pronostico),0) as Pronostico, round(ISNULL(AA.PronosticoAA,0),0) AS PronosticoAA, round(SA.PronosticoSA,0) as PronosticoSA, round(SA.EntregadoSA,0) as EntregadoSA, SA.Semana from(select V.IdAgen, ROUND(isnull(E.Entregado,0),0) AS Entregado, ROUND(isnull(V.Pronostico,0),0) as Pronostico FROM ProdCamposCat C LEFT JOIN (select V.IdAgen, V.Cod_Prod, V.Cod_Campo, sum(V.Pronostico) as Pronostico from(select * from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0 group by V.IdAgen, V.Cod_Prod, V.Cod_Campo)V ON C.IdAgen=V.IdAgen and C.Cod_Prod = V.Cod_Prod and C.Cod_Campo=V.Cod_Campo left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, SUM(C.Convertidas) as Entregado FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(ISNULL(Convertidas,0)) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo Union All SELECT IdAgen, Cod_Prod, Cod_Campo, sum(ISNULL(Convertidas,0)) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod,Cod_Campo)E on V.IdAgen=E.IdAgen and V.Cod_Prod = E.Cod_Prod and V.Cod_Campo=E.Cod_Campo WHERE C.Activo='S' group by V.IdAgen, E.Entregado, V.Pronostico)V left join(SELECT V.IdAgen, SUM(isnull(V.Pronostico,0)) as PronosticoAA FROM ProdCamposCat C left join (select * from(select * from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as [29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_Prod, Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V on C.IdAgen=V.IdAgen and C.Cod_Prod = V.Cod_Prod and C.Cod_Campo=V.Cod_Campo left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana,SUM(C.Convertidas) as Entregado FROM(select IdAgen, Cod_Prod, Cod_Campo, Semana,sum(ISNULL(Convertidas,0)) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo,Semana Union All SELECT IdAgen, Cod_Prod, Cod_Campo, Semana,sum(ISNULL(Convertidas,0)) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo,Semana)C GROUP BY C.IdAgen, C.Cod_Prod,Cod_Campo, C.Semana)E on V.IdAgen=E.IdAgen and V.Cod_Prod = E.Cod_Prod and V.Cod_Campo=E.Cod_Campo AND V.Semana=E.Semana left join CatSemanas S on S.Semana=V.Semana " +
+            //    "where S.Inicio between '20190701' and getdate() group by V.IdAgen)AA ON V.IdAgen = AA.IdAgen LEFT JOIN(SELECT PA.IdAgen, sum(round(PA.Pronostico,0)) AS PronosticoSA, sum(ISNULL(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select* from(select IdAgen, Cod_Prod, Cod_Campo, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] FROM ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen,Cod_Prod,Cod_Campo)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana Union All SELECT IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and PA.Cod_Campo = EA.Cod_Campo and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin group by PA.IdAgen, S.Semana)SA on V.IdAgen = SA.IdAgen " +
             //    "where V.IdAgen = " + (short)Session["IdAgen"] + " group by V.IdAgen, AA.PronosticoAA, SA.PronosticoSA, SA.EntregadoSA, SA.Semana)V").ToList();
             //return Json(data, JsonRequestBehavior.AllowGet);
 
@@ -671,46 +670,46 @@ namespace Sistema_Indicadores.Controllers
             {
                 if (filtro == "cinco")
                 {
-                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
-                           "Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                           "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                           "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
+                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
+                           "Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                           "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                           "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
                            "WHERE C.IdAgen = " + (short)Session["IdAgen"] + "  and C.Cod_Prod not in(Select distinct V.Cod_Prod FROM(select* from CatSemanas where Getdate() between Inicio and Fin)S left join SIPGVisitas V on V.Fecha between S.Inicio and S.Fin " +
                            "where V.IdAgen = " + (short)Session["IdAgen"] + ") and C.DiferenciaA > 0 and C.DiferenciaA <= 5 or C.DiferenciaA < 0 and C.DiferenciaA > -5 ORDER BY C.DiferenciaA DESC").ToList();
                 }
                 else if (filtro == "vcinco")
                 {
-                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
-                       "Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                       "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                       "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
+                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
+                       "Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                       "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                       "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
                        "WHERE C.IdAgen = " + (short)Session["IdAgen"] + "  and C.Cod_Prod not in(Select distinct V.Cod_Prod FROM(select* from CatSemanas where Getdate() between Inicio and Fin)S left join SIPGVisitas V on V.Fecha between S.Inicio and S.Fin " +
                        "where V.IdAgen = " + (short)Session["IdAgen"] + ") and C.DiferenciaA > 5 and C.DiferenciaA <=25 or C.DiferenciaA < -5 and C.DiferenciaA >= -25 ORDER BY C.DiferenciaA DESC").ToList();
                 }
                 else if (filtro == "cincuenta")
                 {
-                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
-                        "Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                        "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                        "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
+                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
+                        "Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                        "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                        "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
                         "WHERE C.IdAgen = " + (short)Session["IdAgen"] + "  and C.Cod_Prod not in(Select distinct V.Cod_Prod FROM(select* from CatSemanas where Getdate() between Inicio and Fin)S left join SIPGVisitas V on V.Fecha between S.Inicio and S.Fin " +
                         "where V.IdAgen = " + (short)Session["IdAgen"] + ") and C.DiferenciaA > 25 and C.DiferenciaA <=50 or C.DiferenciaA < -25 and C.DiferenciaA >= -50 ORDER BY C.DiferenciaA DESC").ToList();
                 }
                 else if (filtro == "todo")
                 {
-                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
-                        "Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                        "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                        "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
+                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
+                        "Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                        "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                        "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
                         "WHERE C.IdAgen = " + (short)Session["IdAgen"] + "  and C.Cod_Prod not in(Select distinct V.Cod_Prod FROM(select* from CatSemanas where Getdate() between Inicio and Fin)S left join SIPGVisitas V on V.Fecha between S.Inicio and S.Fin " +
                         "where V.IdAgen = " + (short)Session["IdAgen"] + ") ORDER BY C.DiferenciaA DESC").ToList();
                 }
                 else if (filtro == "urgentes")
                 {
-                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
-                        "Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                        "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                        "and Fecha = (select max(Fecha) from SIPGProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
+                    curva = bd.Database.SqlQuery<ClassCurva>("select C.Cod_Prod, C.Nombre as Productor, C.PronosticoT, C.PronosticoA, C.EntregadoT, (CASE WHEN C.EntregadoT ='0' AND C.PronosticoA ='0' THEN '' ELSE C.DiferenciaA END) AS DiferenciaA, C.Semana, C.PronosticoSA, C.EntregadoSA, (CASE WHEN C.EntregadoSA ='0' AND  C.PronosticoSA ='0' THEN '' ELSE C.DiferenciaSA END) AS DiferenciaSA from(SELECT distinct V.IdAgen, V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and  " +
+                        "Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod, max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                        "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.IdAgen, V.Cod_Prod, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                        "and Fecha = (select max(Fecha) from ProdProyeccion where IdAgen = " + (short)Session["IdAgen"] + ") group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod group by C.IdAgen, C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)C " +
                         "WHERE C.IdAgen = " + (short)Session["IdAgen"] + "  and C.Cod_Prod not in(Select distinct V.Cod_Prod FROM(select* from CatSemanas where Getdate() between Inicio and Fin)S left join SIPGVisitas V on V.Fecha between S.Inicio and S.Fin " +
                         "where V.IdAgen = " + (short)Session["IdAgen"] + ") and C.Semana is not NULL ORDER BY C.DiferenciaA DESC").ToList();
                 }
@@ -720,7 +719,7 @@ namespace Sistema_Indicadores.Controllers
             {
                 if (agente != 0)
                 {
-                    curva = bd.Database.SqlQuery<ClassCurva>("select V.Cod_Prod, V.Nombre as Productor, V.PronosticoT, V.PronosticoA, V.EntregadoT, (CASE WHEN V.EntregadoT ='0' AND  V.PronosticoA ='0' THEN '' ELSE V.DiferenciaA END) AS DiferenciaA, V.Semana, V.PronosticoSA, V.EntregadoSA, (CASE WHEN V.EntregadoSA ='0' AND  V.PronosticoSA ='0' THEN '' ELSE V.DiferenciaSA END) AS DiferenciaSA  from(SELECT V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Fecha=(select max(Fecha) from SIPGProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod,sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo,sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Fecha=(select max(Fecha) from SIPGProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between (select Inicio from catsemanas where temporada =(select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana=27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha=(select max(Fecha) from SIPGProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] )V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod " +
+                    curva = bd.Database.SqlQuery<ClassCurva>("select V.Cod_Prod, V.Nombre as Productor, V.PronosticoT, V.PronosticoA, V.EntregadoT, (CASE WHEN V.EntregadoT ='0' AND  V.PronosticoA ='0' THEN '' ELSE V.DiferenciaA END) AS DiferenciaA, V.Semana, V.PronosticoSA, V.EntregadoSA, (CASE WHEN V.EntregadoSA ='0' AND  V.PronosticoSA ='0' THEN '' ELSE V.DiferenciaSA END) AS DiferenciaSA  from(SELECT V.Cod_Prod, V.Nombre, (case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.IdAgen, V.Cod_prod, sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Fecha=(select max(Fecha) from ProdProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod,sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo,sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod,Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod group by V.IdAgen, V.Cod_prod, E.EntregadoT)V GROUP BY V.IdAgen, V.Cod_prod)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod left join(select V.IdAgen, V.Cod_prod, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Fecha=(select max(Fecha) from ProdProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between (select Inicio from catsemanas where temporada =(select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana=27) and getdate() group by V.IdAgen,V.Cod_prod)AA ON V.IdAgen = AA.IdAgen and V.Cod_Prod = AA.Cod_Prod LEFT JOIN(SELECT PA.IdAgen, PA.Cod_Prod, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select * from(select V.IdAgen, V.Cod_Prod,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select distinct IdAgen, Cod_Prod, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha=(select max(Fecha) from ProdProyeccion) group by IdAgen, Cod_Prod,Fecha)V GROUP BY V.IdAgen, V.Cod_Prod,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] )V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.IdAgen, PA.Cod_Prod, S.Semana)SA on V.IdAgen = SA.IdAgen AND V.Cod_Prod = SA.Cod_Prod " +
                        "WHERE V.IdAgen = " + agente + " group by C.Cod_Prod, P.Nombre, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)V " +
                        "ORDER BY DiferenciaA DESC").ToList();
                 }
@@ -820,7 +819,7 @@ namespace Sistema_Indicadores.Controllers
         }
 
         [HttpPost]
-        public ActionResult CurvaNueva(SIPGProyeccion model, string cultivo)
+        public ActionResult CurvaNueva(ProdProyeccion model, string cultivo)
         {
             try
             {
@@ -907,7 +906,7 @@ namespace Sistema_Indicadores.Controllers
                     //     ViewData["List_Plantacion"] = List_Plantacion;
                     //     ViewData["List_Tesco"] = List_Tesco;
 
-                    var modeloExistente = bd.SIPGProyeccion.FirstOrDefault(m => m.Cod_Prod == model.Cod_Prod && m.Cod_Campo == model.Cod_Campo && m.Sector == model.Sector);
+                    var modeloExistente = bd.ProdProyeccion.FirstOrDefault(m => m.Cod_Prod == model.Cod_Prod && m.Cod_Campo == model.Cod_Campo && m.Sector == model.Sector);
 
                     if (modeloExistente == null)
                     {
@@ -922,43 +921,37 @@ namespace Sistema_Indicadores.Controllers
                         var semanas2 = bd.CatSemanas.FirstOrDefault(m => model.Fecha_corte2 >= m.Inicio && model.Fecha_corte2 <= m.Fin);
                         int sem2 = semanas2.Semana;
 
-                        SIPGProyeccion.Estado = "A";
-                        SIPGProyeccion.IdAgen = (short)Session["IdAgen"];
-                        SIPGProyeccion.Cod_Prod = model.Cod_Prod;
-                        SIPGProyeccion.Cod_Campo = model.Cod_Campo;
-                        SIPGProyeccion.Ubicacion = model.Ubicacion;
-                        SIPGProyeccion.Num_corte = model.Num_corte;
-                        SIPGProyeccion.Sector = model.Sector;
-                        SIPGProyeccion.Ha = model.Ha;
-                        SIPGProyeccion.Numplantas_xha = model.Numplantas_xha;
-                        SIPGProyeccion.Manejo = model.Manejo;
-                        SIPGProyeccion.Tipo_plantacion = model.Tipo_plantacion;
-                        SIPGProyeccion.Fecha_plantacion = model.Fecha_plantacion;
-                        SIPGProyeccion.Fecha_poda = model.Fecha_poda;
-                        SIPGProyeccion.Fecha_defoliacion = model.Fecha_defoliacion;
-                        SIPGProyeccion.Fecha_corte1 = model.Fecha_corte1;
-                        SIPGProyeccion.Fecha_redefoliacion = model.Fecha_redefoliacion;
-                        SIPGProyeccion.Fecha_corte2 = model.Fecha_corte2;
-                        SIPGProyeccion.Sem1 = sem1;
-                        SIPGProyeccion.Plantacion = model.Plantacion;
-                        SIPGProyeccion.Sem2 = sem2;
-                        SIPGProyeccion.Caja1 = model.Caja1;
-                        SIPGProyeccion.Caja2 = model.Caja2;
-                        SIPGProyeccion.Estructura = model.Estructura;
-                        SIPGProyeccion.Tipo_certificacion = model.Tipo_certificacion;
-                        SIPGProyeccion.Tesco = model.Tesco;
-                        SIPGProyeccion.Edad_planta = model.Edad_planta;
-                        SIPGProyeccion.Tipo_plantacion2 = model.Tipo_plantacion2;
-                        SIPGProyeccion.Fecha_podamediacaña = model.Fecha_podamediacaña;
-                        SIPGProyeccion.RendxKg = model.RendxKg;
-                        SIPGProyeccion.RendxHa = model.RendxHa;
-                        SIPGProyeccion.Temporada = "1920";
-                        SIPGProyeccion.Zona = IdZona;
-                        SIPGProyeccion.Acopio = model.Acopio;
-                        SIPGProyeccion.Tipo = model.Tipo;
-                        SIPGProyeccion.Producto = model.Producto;
+                        ProdProyeccion.IdAgen = (short)Session["IdAgen"];
+                        ProdProyeccion.Cod_Prod = model.Cod_Prod;
+                        ProdProyeccion.Cod_Campo = model.Cod_Campo;
+                        ProdProyeccion.Num_corte = model.Num_corte;
+                        ProdProyeccion.Sector = model.Sector;
+                        ProdProyeccion.Ha = model.Ha;
+                        ProdProyeccion.Numplantas_xha = model.Numplantas_xha;
+                        ProdProyeccion.Manejo = model.Manejo;
+                        ProdProyeccion.Tipo_plantacion = model.Tipo_plantacion;
+                        ProdProyeccion.Fecha_plantacion = model.Fecha_plantacion;
+                        ProdProyeccion.Fecha_poda = model.Fecha_poda;
+                        ProdProyeccion.Fecha_defoliacion = model.Fecha_defoliacion;
+                        ProdProyeccion.Fecha_corte1 = model.Fecha_corte1;
+                        ProdProyeccion.Fecha_redefoliacion = model.Fecha_redefoliacion;
+                        ProdProyeccion.Fecha_corte2 = model.Fecha_corte2;
+                        ProdProyeccion.Sem1 = sem1;
+                        ProdProyeccion.Plantacion = model.Plantacion;
+                        ProdProyeccion.Sem2 = sem2;
+                        ProdProyeccion.Caja1 = model.Caja1;
+                        ProdProyeccion.Caja2 = model.Caja2;
+                        ProdProyeccion.Estructura = model.Estructura;
+                        ProdProyeccion.Tipo_certificacion = model.Tipo_certificacion;
+                        ProdProyeccion.Tesco = model.Tesco;
+                        ProdProyeccion.Edad_planta = model.Edad_planta;
+                        ProdProyeccion.Tipo_plantacion2 = model.Tipo_plantacion2;
+                        ProdProyeccion.Fecha_podamediacana = model.Fecha_podamediacana;
+                        ProdProyeccion.RendxKg = model.RendxKg;
+                        ProdProyeccion.RendxHa = model.RendxHa;
+                        ProdProyeccion.Temporada = "2021";
 
-                        bd.SIPGProyeccion.Add(model);
+                        bd.ProdProyeccion.Add(model);
 
                         SIPGVisitas.IdAgen = (short)Session["IdAgen"];
                         SIPGVisitas.Fecha = DateTime.Now;
@@ -1046,10 +1039,10 @@ namespace Sistema_Indicadores.Controllers
                 x = "2";
             }
             List<ClassCurva> curvazona = bd.Database.SqlQuery<ClassCurva>("SELECT V.IdRegion,V.Zona,round(V.Pronostico,0)as Pronostico,round(V.PronosticoAA,0)as PronosticoAA,round(V.Entregado,0)as Entregado, round((((V.Entregado/V.PronosticoAA)*100)-100),0) AS DiferenciaAA,round(V.PronosticoSA,0)as PronosticoSA,round(V.EntregadoSA,0)as EntregadoSA, round((((V.EntregadoSA/V.PronosticoSA)*100)-100),0) AS DiferenciaSA FROM(select P.Zona as IdRegion, Z.Descripcion AS Zona, SUM(isnull(P.Pronostico,0)) AS Pronostico, SUM(isnull(MA.Pronostico,0)) AS PronosticoAA, SUM(isnull(E.Entregadas,0)) as Entregado, sum(isnull(SA.Pronostico,0)) as PronosticoSA, sum(isnull(SA.Entregadas,0)) as EntregadoSA from tbZonasAgricolas Z LEFT JOIN(select V.IdAgen, V.Pronostico, V.Zona FROM(select V.Zona, V.IdAgen, sum(V.Pronostico) as Pronostico from(select * from(select Zona, IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] " +
-                "from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen, Zona)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0 group by V.Zona, V.IdAgen)V)P ON P.Zona = Z.CodZona left join(select C.IdAgen, sum(C.Convertidas) as Entregadas FROM(select IdAgen, sum(Convertidas) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen Union All SELECT IdAgen, sum(Convertidas) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen)C GROUP BY C.IdAgen)E on P.IdAgen = E.IdAgen LEFT JOIN(select P.IdAgen, sum(P.Pronostico) as Pronostico FROM CatSemanas S LEFT JOIN(select * from(select * from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] " +
-                "from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)P on S.Semana = P.Semana " +
+                "from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen, Zona)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0 group by V.Zona, V.IdAgen)V)P ON P.Zona = Z.CodZona left join(select C.IdAgen, sum(C.Convertidas) as Entregadas FROM(select IdAgen, sum(Convertidas) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen Union All SELECT IdAgen, sum(Convertidas) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen)C GROUP BY C.IdAgen)E on P.IdAgen = E.IdAgen LEFT JOIN(select P.IdAgen, sum(P.Pronostico) as Pronostico FROM CatSemanas S LEFT JOIN(select * from(select * from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] " +
+                "from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)P on S.Semana = P.Semana " +
                 "WHERE S.Inicio between '20190701' and getdate() AND S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by P.IdAgen)MA ON P.IdAgen = MA.IdAgen LEFT JOIN(SELECT PA.IdAgen, round(PA.Pronostico,0) AS Pronostico, EA.Entregadas FROM CatSemanas S left join(select* from(select* from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] " +
-                "from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)PA ON S.Semana = PA.Semana LEFT JOIN(select C.IdAgen, sum(C.Convertidas) as Entregadas, C.Semana FROM(select IdAgen, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana Union All select IdAgen, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana)C GROUP BY C.IdAgen, C.Semana)EA ON PA.IdAgen = EA.IdAgen and S.Semana = EA.Semana " +
+                "from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)PA ON S.Semana = PA.Semana LEFT JOIN(select C.IdAgen, sum(C.Convertidas) as Entregadas, C.Semana FROM(select IdAgen, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana Union All select IdAgen, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana)C GROUP BY C.IdAgen, C.Semana)EA ON PA.IdAgen = EA.IdAgen and S.Semana = EA.Semana " +
                 "WHERE getdate() between S.Inicio and S.Fin)SA ON P.IdAgen = SA.IdAgen " +
                 "WHERE P.Zona in (" + x + ") group by P.Zona, Z.Descripcion)V order by V.IdRegion").ToList();
             return Json(curvazona, JsonRequestBehavior.AllowGet);
@@ -1057,8 +1050,8 @@ namespace Sistema_Indicadores.Controllers
 
         public JsonResult CurvaListIng(int idregion = 0)
         {
-            List<ClassCurva> curvaing = bd.Database.SqlQuery<ClassCurva>("select V.IdRegion,V.IdAgen, V.Ingeniero, V.Pronostico, V.PronosticoAA, V.Entregado, (CASE WHEN V.Entregado ='0' AND  V.PronosticoAA ='0' THEN '' ELSE V.DiferenciaAA END) AS DiferenciaAA, V.PronosticoSA, V.EntregadoSA, (CASE WHEN V.EntregadoSA ='0' AND  V.PronosticoSA ='0' THEN '' ELSE V.DiferenciaSA END) AS DiferenciaSA from(SELECT V.IdRegion,V.IdAgen, V.Ingeniero, (case when round(V.Pronostico,0) is null then '0' else round(V.Pronostico,0) end) as Pronostico, (case when round(V.PronosticoAA,0) is null then '0' else round(V.PronosticoAA,0) end) as PronosticoAA, (case when round(V.Entregado,0) is null then '0' else round(V.Entregado,0) end)as Entregado, (case when round(((V.DiferenciaAA*100)-100),0) is null then '100' else round(((V.DiferenciaAA*100)-100),0) end)as DiferenciaAA, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select * FROM(select *, (V.Entregado/ V.PronosticoAA) AS DiferenciaAA, (V.EntregadoSA/V.PronosticoSA) AS DiferenciaSA FROM(select A.IdAgen, A.Nombre AS Ingeniero, A.IdRegion, V.Pronostico, V.Entregado, AA.PronosticoAA, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join ProdAgenteCat A on C.IdAgen=A.IdAgen left join(select V.IdAgen, E.Entregado, sum(V.Pronostico) as Pronostico FROM(select * from(select * from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X )V where Pronostico <> 0)V left join(select C.IdAgen, sum(C.Convertidas) as Entregado FROM(select IdAgen, sum(Convertidas) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen Union All SELECT IdAgen, sum(Convertidas) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen)C GROUP BY C.IdAgen)E on V.IdAgen = E.IdAgen group by V.IdAgen, E.Entregado)V ON C.IdAgen = V.IdAgen left join(select V.IdAgen, sum(V.Pronostico) as PronosticoAA FROM CatSemanas S left join(select * from(select * from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as [29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from  SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V on S.Semana = V.Semana " +
-                "where S.Inicio between '20190701' and getdate() group by V.IdAgen)AA ON V.IdAgen = AA.IdAgen LEFT JOIN(SELECT PA.IdAgen, round(PA.Pronostico,0) AS PronosticoSA, EA.Entregado AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select* from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0 )PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana Union All SELECT IdAgen, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana)C GROUP BY C.IdAgen, C.Semana)EA ON PA.IdAgen = EA.IdAgen and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin)SA on V.IdAgen = SA.IdAgen " +
+            List<ClassCurva> curvaing = bd.Database.SqlQuery<ClassCurva>("select V.IdRegion,V.IdAgen, V.Ingeniero, V.Pronostico, V.PronosticoAA, V.Entregado, (CASE WHEN V.Entregado ='0' AND  V.PronosticoAA ='0' THEN '' ELSE V.DiferenciaAA END) AS DiferenciaAA, V.PronosticoSA, V.EntregadoSA, (CASE WHEN V.EntregadoSA ='0' AND  V.PronosticoSA ='0' THEN '' ELSE V.DiferenciaSA END) AS DiferenciaSA from(SELECT V.IdRegion,V.IdAgen, V.Ingeniero, (case when round(V.Pronostico,0) is null then '0' else round(V.Pronostico,0) end) as Pronostico, (case when round(V.PronosticoAA,0) is null then '0' else round(V.PronosticoAA,0) end) as PronosticoAA, (case when round(V.Entregado,0) is null then '0' else round(V.Entregado,0) end)as Entregado, (case when round(((V.DiferenciaAA*100)-100),0) is null then '100' else round(((V.DiferenciaAA*100)-100),0) end)as DiferenciaAA, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select * FROM(select *, (V.Entregado/ V.PronosticoAA) AS DiferenciaAA, (V.EntregadoSA/V.PronosticoSA) AS DiferenciaSA FROM(select A.IdAgen, A.Nombre AS Ingeniero, A.IdRegion, V.Pronostico, V.Entregado, AA.PronosticoAA, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join ProdProductoresCat P on C.Cod_Prod=P.Cod_Prod left join ProdAgenteCat A on C.IdAgen=A.IdAgen left join(select V.IdAgen, E.Entregado, sum(V.Pronostico) as Pronostico FROM(select * from(select * from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X )V where Pronostico <> 0)V left join(select C.IdAgen, sum(C.Convertidas) as Entregado FROM(select IdAgen, sum(Convertidas) as Convertidas FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen Union All SELECT IdAgen, sum(Convertidas) as Convertidas FROM SeasonPlan..UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen)C GROUP BY C.IdAgen)E on V.IdAgen = E.IdAgen group by V.IdAgen, E.Entregado)V ON C.IdAgen = V.IdAgen left join(select V.IdAgen, sum(V.Pronostico) as PronosticoAA FROM CatSemanas S left join(select * from(select * from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as [29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0)V on S.Semana = V.Semana " +
+                "where S.Inicio between '20190701' and getdate() group by V.IdAgen)AA ON V.IdAgen = AA.IdAgen LEFT JOIN(SELECT PA.IdAgen, round(PA.Pronostico,0) AS PronosticoSA, EA.Entregado AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select* from(select IdAgen, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and Estado = 'A' group by IdAgen)V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X)V where Pronostico <> 0 )PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, sum(Convertidas) as Convertidas, Semana FROM SEasonsun1213..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana Union All SELECT IdAgen, sum(Convertidas) as Convertidas, Semana FROM SeasonPlan..UV_ProdRecepcion where CodEstatus<> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Semana)C GROUP BY C.IdAgen, C.Semana)EA ON PA.IdAgen = EA.IdAgen and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin)SA on V.IdAgen = SA.IdAgen " +
                 "where V.Pronostico <> 0 GROUP BY A.IdAgen, A.Nombre, A.IdRegion, V.Pronostico, V.Entregado, SA.PronosticoSA, SA.EntregadoSA, AA.PronosticoAA)V)V GROUP BY V.IdAgen, V.Ingeniero, V.IdRegion, V.Pronostico, V.Entregado, V.PronosticoAA, V.DiferenciaAA, V.PronosticoSA, V.EntregadoSA, DiferenciaSA)V)V " +
                 "where V.IdRegion in (" + idregion + ") ORDER BY V.Ingeniero").ToList();
             return Json(curvaing, JsonRequestBehavior.AllowGet);
@@ -1066,20 +1059,20 @@ namespace Sistema_Indicadores.Controllers
 
         public JsonResult CurvaListCampos(string Cod_Prod = "")
         {
-            List<ClassCurva> curvaxcod = bd.Database.SqlQuery<ClassCurva>("select V.Id as Id_Proyeccion,V.Cod_Prod, V.Cod_Campo, V.Campo, V.Sector,V.Ha,V.Tipo,V.Producto,V.PronosticoT, V.PronosticoA,(case when (LAG(V.EntregadoT) OVER (ORDER BY V.EntregadoT))=V.EntregadoT then 0 else V.EntregadoT end) AS  EntregadoT, (CASE WHEN V.EntregadoT ='0' AND  V.PronosticoA ='0' THEN '' ELSE V.DiferenciaA END) AS DiferenciaA, V.Semana, V.PronosticoSA, (case when (LAG(V.EntregadoSA) OVER (ORDER BY V.EntregadoSA))=V.EntregadoSA then 0 else V.EntregadoSA end) AS EntregadoSA, (CASE WHEN V.EntregadoSA ='0' AND  V.PronosticoSA ='0' THEN '' ELSE V.DiferenciaSA END) AS DiferenciaSA from(SELECT V.Id, V.Cod_Prod, V.Cod_Campo, V.Campo, V.Sector,V.Ha,V.Tipo,V.Producto,(case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select V.Id, C.Cod_Prod, C.Cod_Campo, C.Descripcion as Campo, V.Sector, V.Ha, T.Descripcion as Tipo, Pr.Descripcion as Producto, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join CatTiposProd T on C.Tipo=T.Tipo left join CatProductos Pr on C.Tipo=Pr.Tipo and C.Producto=Pr.Producto left join(select V.Id,V.IdAgen, V.Cod_prod, V.Cod_Campo,V.Sector,V.Ha,sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.Id,V.IdAgen, V.Cod_prod, V.Cod_Campo,V.Sector,V.Ha,sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.Id, V.IdAgen, V.Cod_Prod,V.Cod_Campo,V.Sector,V.Ha,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select Id, IdAgen, Cod_Prod, Cod_Campo, Sector, Ha, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                "and Fecha = (select max(Fecha) from SIPGProyeccion WHERE IdAgen = " + (short)Session["IdAgen"] + " ) group by Id, IdAgen, Cod_Prod,Cod_Campo,Sector, Ha,Fecha)V GROUP BY V.Id, V.IdAgen, V.Cod_Prod,V.Cod_Campo,V.Sector,V.Ha,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod AND V.Cod_Campo = E.Cod_Campo group by V.Id, V.IdAgen, V.Cod_prod, V.Cod_Campo, V.Sector,V.Ha,E.EntregadoT)V GROUP BY V.Id, V.IdAgen, V.Cod_prod, V.Cod_Campo,V.Sector,V.Ha)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod and C.Cod_Campo = V.Cod_Campo left join(select V.Id, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.Id, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select Id, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53],sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                "and Fecha = (select max(Fecha) from SIPGProyeccion WHERE IdAgen = " + (short)Session["IdAgen"] + " ) group by Id)V GROUP BY V.Id, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.Id)AA ON V.Id = AA.Id LEFT JOIN(SELECT PA.Id, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.Id, V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Sector, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select Id, IdAgen, Cod_Prod, Cod_Campo, Sector, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
-                "and Fecha = (select max(Fecha) from SIPGProyeccion WHERE IdAgen = " + (short)Session["IdAgen"] + " ) group by Id,IdAgen, Cod_Prod,Cod_Campo,Sector,Fecha)V GROUP BY V.Id,V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Sector,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and PA.Cod_Campo = EA.Cod_Campo and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.Id,PA.IdAgen, PA.Cod_Prod, PA.Cod_Campo, PA.Sector,S.Semana)SA on V.Id = SA.Id " +
+            List<ClassCurva> curvaxcod = bd.Database.SqlQuery<ClassCurva>("select V.Id as Id_Proyeccion,V.Cod_Prod, V.Cod_Campo, V.Campo, V.Sector,V.Ha,V.Tipo,V.Producto,V.PronosticoT, V.PronosticoA,(case when (LAG(V.EntregadoT) OVER (ORDER BY V.EntregadoT))=V.EntregadoT then 0 else V.EntregadoT end) AS  EntregadoT, (CASE WHEN V.EntregadoT ='0' AND  V.PronosticoA ='0' THEN '' ELSE V.DiferenciaA END) AS DiferenciaA, V.Semana, V.PronosticoSA, (case when (LAG(V.EntregadoSA) OVER (ORDER BY V.EntregadoSA))=V.EntregadoSA then 0 else V.EntregadoSA end) AS EntregadoSA, (CASE WHEN V.EntregadoSA ='0' AND  V.PronosticoSA ='0' THEN '' ELSE V.DiferenciaSA END) AS DiferenciaSA from(SELECT V.Id, V.Cod_Prod, V.Cod_Campo, V.Campo, V.Sector,V.Ha,V.Tipo,V.Producto,(case when round(V.PronosticoT,0) is null then '0' else round(V.PronosticoT,0) end) as PronosticoT, (case when round(V.PronosticoA,0) is null then '0' else round(V.PronosticoA,0) end) as PronosticoA, (case when round(V.EntregadoT,0) is null then '0' else round(V.EntregadoT,0) end)as EntregadoT, (case when round(((V.DiferenciaA*100)-100),0) is null then '100' else round(((V.DiferenciaA*100)-100),0) end)as DiferenciaA, V.Semana, (case when round(V.PronosticoSA,0) is null then '0' else round(V.PronosticoSA,0) end) as PronosticoSA, (case when round(V.EntregadoSA,0) is null then '0' else round(V.EntregadoSA,0) end) as EntregadoSA, (case when round(((V.DiferenciaSA*100)-100),0) is null then '100' else round(((V.DiferenciaSA*100)-100),0) end) as DiferenciaSA FROM(select *,(V.EntregadoT/V.PronosticoA) AS DiferenciaA, (V.EntregadoSA / V.PronosticoSA) AS DiferenciaSA FROM(select V.Id, C.Cod_Prod, C.Cod_Campo, C.Descripcion as Campo, V.Sector, V.Ha, T.Descripcion as Tipo, Pr.Descripcion as Producto, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA FROM ProdCamposCat C left join CatTiposProd T on C.Tipo=T.Tipo left join CatProductos Pr on C.Tipo=Pr.Tipo and C.Producto=Pr.Producto left join(select V.Id,V.IdAgen, V.Cod_prod, V.Cod_Campo,V.Sector,V.Ha,sum(ISNULL(V.Pronostico,0)) as PronosticoT , sum(ISNULL(V.EntregadoT,0)) AS EntregadoT from(select V.Id,V.IdAgen, V.Cod_prod, V.Cod_Campo,V.Sector,V.Ha,sum(V.Pronostico) as Pronostico, E.EntregadoT from(select * from(select V.Id, V.IdAgen, V.Cod_Prod,V.Cod_Campo,V.Sector,V.Ha,max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select Id, IdAgen, Cod_Prod, Cod_Campo, Sector, Ha, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                "and Fecha = (select max(Fecha) from ProdProyeccion WHERE IdAgen = " + (short)Session["IdAgen"] + " ) group by Id, IdAgen, Cod_Prod,Cod_Campo,Sector, Ha,Fecha)V GROUP BY V.Id, V.IdAgen, V.Cod_Prod,V.Cod_Campo,V.Sector,V.Ha,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X Where Pronostico <> 0)V left join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as EntregadoT FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo)E ON V.IdAgen = E.IdAgen AND V.Cod_Prod = E.Cod_Prod AND V.Cod_Campo = E.Cod_Campo group by V.Id, V.IdAgen, V.Cod_prod, V.Cod_Campo, V.Sector,V.Ha,E.EntregadoT)V GROUP BY V.Id, V.IdAgen, V.Cod_prod, V.Cod_Campo,V.Sector,V.Ha)V ON C.IdAgen = V.IdAgen and C.Cod_Prod = V.Cod_Prod and C.Cod_Campo = V.Cod_Campo left join(select V.Id, sum(isnull(V.Pronostico,0)) as PronosticoA FROM CatSemanas S left join(select * from(select V.Id, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[53], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] From(select Id, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52],sum(isnull([53], 0)) as [53],sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                "and Fecha = (select max(Fecha) from ProdProyeccion WHERE IdAgen = " + (short)Session["IdAgen"] + " ) group by Id)V GROUP BY V.Id, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)V on S.Semana = V.Semana where S.Inicio between(select Inicio from catsemanas where temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and semana = 27) and getdate() group by V.Id)AA ON V.Id = AA.Id LEFT JOIN(SELECT PA.Id, SUM(isnull(PA.Pronostico,0)) AS PronosticoSA, sum(isnull(EA.Entregado, 0)) AS EntregadoSA, S.Semana FROM CatSemanas S left join(select* from(select V.Id, V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Sector, max(V.Fecha)as fecha, V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26] From(select Id, IdAgen, Cod_Prod, Cod_Campo, Sector, Fecha, SUM(isnull([27], 0)) as [27], sum(isnull([28], 0)) as [28], sum(isnull([29], 0)) as[29], sum(isnull([30], 0)) as [30], sum(isnull([31], 0)) as [31], sum(isnull([32], 0)) as [32], sum(isnull([33], 0)) as [33], sum(isnull([34], 0)) as [34], sum(isnull([35], 0)) as [35], sum(isnull([36], 0)) as [36], sum(isnull([37], 0)) as [37], sum(isnull([38], 0)) as [38], sum(isnull([39], 0)) as [39], sum(isnull([40], 0)) as [40], sum(isnull([41], 0)) as [41], sum(isnull([42], 0)) as [42], sum(isnull([43], 0)) as [43], sum(isnull([44], 0)) as [44], sum(isnull([45], 0)) as [45], sum(isnull([46], 0)) as [46], sum(isnull([47], 0)) as [47], sum(isnull([48], 0)) as [48], sum(isnull([49], 0)) as [49], sum(isnull([50], 0)) as [50], sum(isnull([51], 0)) as [51], sum(isnull([52], 0)) as [52], sum(isnull([53], 0)) as [53], sum(isnull([1], 0)) as [1], sum(isnull([2], 0)) as [2], sum(isnull([3], 0)) as [3], sum(isnull([4], 0)) as [4], sum(isnull([5], 0)) as [5], sum(isnull([6], 0)) as [6], sum(isnull([7], 0)) as [7], sum(isnull([8], 0)) as [8], sum(isnull([9], 0)) as [9], sum(isnull([10], 0)) as [10], sum(isnull([11], 0)) as [11], sum(isnull([12], 0)) as [12], sum(isnull([13], 0)) as [13], sum(isnull([14], 0)) as [14], sum(isnull([15], 0)) as [15],sum(isnull([16], 0)) as [16], sum(isnull([17], 0)) as [17], sum(isnull([18], 0)) as [18], sum(isnull([19], 0)) as [19], sum(isnull([20], 0)) as [20], sum(isnull([21], 0)) as [21], sum(isnull([22], 0)) as [22], sum(isnull([23], 0)) as [23], sum(isnull([24], 0)) as [24], sum(isnull([25], 0)) as [25], sum(isnull([26], 0)) as [26] from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) " +
+                "and Fecha = (select max(Fecha) from ProdProyeccion WHERE IdAgen = " + (short)Session["IdAgen"] + " ) group by Id,IdAgen, Cod_Prod,Cod_Campo,Sector,Fecha)V GROUP BY V.Id,V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Sector,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[53],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26]))X where Pronostico <> 0)PA ON S.Semana = PA.Semana Left Join(select C.IdAgen, C.Cod_Prod, C.Cod_Campo, sum(C.Convertidas) as Entregado, C.Semana FROM(select IdAgen, Cod_Prod, Cod_Campo, sum(Convertidas) as Convertidas, Semana FROM UV_ProdRecepcion where CodEstatus <> 'C' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by IdAgen, Cod_prod, Cod_Campo, Semana)C GROUP BY C.IdAgen, C.Cod_Prod, C.Cod_Campo, C.Semana)EA ON PA.IdAgen = EA.IdAgen and PA.Cod_Prod = EA.Cod_Prod and PA.Cod_Campo = EA.Cod_Campo and S.Semana = EA.Semana WHERE getdate() between S.Inicio and S.Fin GROUP BY PA.Id,PA.IdAgen, PA.Cod_Prod, PA.Cod_Campo, PA.Sector,S.Semana)SA on V.Id = SA.Id " +
                 "WHERE V.IdAgen = " + (short)Session["IdAgen"] + " and V.Cod_Prod = '" + Cod_Prod + "' group by V.Id, C.Cod_Prod, C.Cod_Campo, C.Descripcion, V.Sector, V.Ha, T.Descripcion, Pr.Descripcion, V.PronosticoT, V.EntregadoT, AA.PronosticoA, SA.Semana, SA.PronosticoSA, SA.EntregadoSA)V)V)V ORDER BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Sector").ToList();
             return Json(curvaxcod, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Semanas(SIPGProyeccion model, int Id_Proyeccion = 0)
+        public ActionResult Semanas(ProdProyeccion model, int Id_Proyeccion = 0)
         {
             if (Session["Nombre"] != null)
             {
                 ViewData["Nombre"] = Session["Nombre"].ToString();
-                var item = bd.SIPGProyeccion.Where(x => x.Id == Id_Proyeccion).First();
+                var item = bd.ProdProyeccion.Where(x => x.Id == Id_Proyeccion).First();
                 return View(item);
             }
             else
@@ -1089,7 +1082,7 @@ namespace Sistema_Indicadores.Controllers
         }
 
         [HttpPost]
-        public ActionResult Semanas(SIPGProyeccion model, int Id_Proyeccion = 0, int cantidad = 0, string op = "", string Fecha_corte1 = "", string Fecha_defoliacion = "", string Fecha_corte2 = "", string Fecha_redefoliacion = "")
+        public ActionResult Semanas(ProdProyeccion model, int Id_Proyeccion = 0, int cantidad = 0, string op = "", string Fecha_corte1 = "", string Fecha_defoliacion = "", string Fecha_corte2 = "", string Fecha_redefoliacion = "")
         {
             if (Session["Nombre"] != null)
             {
@@ -1105,7 +1098,7 @@ namespace Sistema_Indicadores.Controllers
                         var semana_actual = bd.CatSemanas.Where(x => DateTime.Now >= x.Inicio && DateTime.Now <= x.Fin).Max(x => x.Semana);
                         var fecha_actual = bd.CatSemanas.Where(x => DateTime.Now >= x.Inicio && DateTime.Now <= x.Fin).First();
 
-                        var query_p = bd.SIPGProyeccion.Where(x => x.Id == Id_Proyeccion).SelectMany(e => new[]
+                        var query_p = bd.ProdProyeccion.Where(x => x.Id == Id_Proyeccion).SelectMany(e => new[]
                        {
                         new { Semana = 26, Cantidad = e.C26 },
                         new { Semana = 27, Cantidad = e.C27 },
@@ -1163,7 +1156,7 @@ namespace Sistema_Indicadores.Controllers
                     }).Where(x => x.Cantidad != null && x.Cantidad != 0);
                         var q = query_p.AsQueryable();
 
-                        var query = bd.SIPGProyeccion.Where(x => x.Id == Id_Proyeccion).First();
+                        var query = bd.ProdProyeccion.Where(x => x.Id == Id_Proyeccion).First();
 
                         if (q != null)
                         {
@@ -1205,7 +1198,7 @@ namespace Sistema_Indicadores.Controllers
                                             }
 
                                             con.Open();
-                                            query_up = "Update SIPGProyeccion SET [" + sem.Semana + "] = " + cant + " where Id= " + Id_Proyeccion + "";
+                                            query_up = "Update ProdProyeccion SET [" + sem.Semana + "] = " + cant + " where Id= " + Id_Proyeccion + "";
                                             SqlCommand cmd = new SqlCommand(query_up, con);
                                             cmd.ExecuteNonQuery();
                                             con.Close();
@@ -1248,7 +1241,7 @@ namespace Sistema_Indicadores.Controllers
 
             var fecha_actual = bd.CatSemanas.Where(x => DateTime.Now >= x.Inicio && DateTime.Now <= x.Fin).First();
 
-            var query_p = bd.SIPGProyeccion.Where(x => x.Id == Id_Proyeccion).SelectMany(e => new[]
+            var query_p = bd.ProdProyeccion.Where(x => x.Id == Id_Proyeccion).SelectMany(e => new[]
              {
                         new { Semana = 26, Cantidad = e.C26 },
                         new { Semana = 27, Cantidad = e.C27 },
@@ -1310,7 +1303,7 @@ namespace Sistema_Indicadores.Controllers
                 lst_cant.Add((double)item.Cantidad);
             }
 
-            var query = bd.SIPGProyeccion.Where(x => x.Id == Id_Proyeccion).First();
+            var query = bd.ProdProyeccion.Where(x => x.Id == Id_Proyeccion).First();
 
             if (Fecha_corte1 != "")
             {
@@ -1480,7 +1473,7 @@ namespace Sistema_Indicadores.Controllers
             {
                 for (int y = 0; y <= count - 1; y++)
                 {
-                    string query_up = "Update SIPGProyeccion SET [" + lst_sem[y] + "]  = " + lst_cant[y] + " where Id = " + Id_Proyeccion + " ";
+                    string query_up = "Update ProdProyeccion SET [" + lst_sem[y] + "]  = " + lst_cant[y] + " where Id = " + Id_Proyeccion + " ";
                     SqlCommand cmd = new SqlCommand(query_up, con);
                     cmd.ExecuteNonQuery();
                 }
@@ -1491,7 +1484,7 @@ namespace Sistema_Indicadores.Controllers
             {
                 for (int y = 9; y <= lst_cant.Count - 1; y++)
                 {
-                    string query_up = "Update SIPGProyeccion SET [" + lst_sem2[z] + "]  = " + lst_cant[y] + " where Id = " + Id_Proyeccion + "";
+                    string query_up = "Update ProdProyeccion SET [" + lst_sem2[z] + "]  = " + lst_cant[y] + " where Id = " + Id_Proyeccion + "";
                     SqlCommand cmd = new SqlCommand(query_up, con);
                     cmd.ExecuteNonQuery();
                     z++;
@@ -1508,7 +1501,7 @@ namespace Sistema_Indicadores.Controllers
                 if (Sem != 0)
                 {
                     con.Open();
-                    string query_up = "Update SIPGProyeccion SET [" + Semana + "]  = null where Id = " + Id_Proyeccion + "";
+                    string query_up = "Update ProdProyeccion SET [" + Semana + "]  = null where Id = " + Id_Proyeccion + "";
                     SqlCommand cmd = new SqlCommand(query_up, con);
                     cmd.ExecuteNonQuery();
 
@@ -1520,7 +1513,7 @@ namespace Sistema_Indicadores.Controllers
                     var fecha_actual = bd.CatSemanas.Where(x => DateTime.Now >= x.Inicio && DateTime.Now <= x.Fin).First();
                     var res = bd.CatSemanas.Where(x => x.Semana == Semana + 1 && x.Temporada == fecha_actual.Temporada).FirstOrDefault();
 
-                    string update_fecha = "Update SIPGProyeccion SET Fecha_corte" + Sem + " = '" + res.Inicio.ToString("yyyy-MM-dd") + "', Sem" + Sem + " = " + res.Semana + " where Id = " + Id_Proyeccion + "";
+                    string update_fecha = "Update ProdProyeccion SET Fecha_corte" + Sem + " = '" + res.Inicio.ToString("yyyy-MM-dd") + "', Sem" + Sem + " = " + res.Semana + " where Id = " + Id_Proyeccion + "";
                     SqlCommand cm = new SqlCommand(update_fecha, con);
                     cm.ExecuteNonQuery();
 
@@ -1530,7 +1523,7 @@ namespace Sistema_Indicadores.Controllers
                 else
                 {
                     con.Open();
-                    string query = "Update SIPGProyeccion SET [" + Semana + "]  = " + Cantidad + " where Id = " + Id_Proyeccion + "";
+                    string query = "Update ProdProyeccion SET [" + Semana + "]  = " + Cantidad + " where Id = " + Id_Proyeccion + "";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.ExecuteNonQuery();
                     con.Close();
@@ -1567,13 +1560,13 @@ namespace Sistema_Indicadores.Controllers
         }
         public JsonResult Corte1List(int Id_Proyeccion = 0)
         {
-            //List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT distinct S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM SIPGProyeccion WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
-            //    "cod_prod = '" + Cod_Prod + "' and cod_campo = " + Cod_Campo + " and sector = " + Sector + " and Fecha=(select max(Fecha) from SIPGProyeccion) group by[27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26]))X )V on S.Semana = V.Semana WHERE V.Pronostico <> 0 and S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and V.Semana between 27 and 52 order by S.Inicio").ToList();
+            //List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT distinct S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM ProdProyeccion WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
+            //    "cod_prod = '" + Cod_Prod + "' and cod_campo = " + Cod_Campo + " and sector = " + Sector + " and Fecha=(select max(Fecha) from ProdProyeccion) group by[27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26]))X )V on S.Semana = V.Semana WHERE V.Pronostico <> 0 and S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and V.Semana between 27 and 52 order by S.Inicio").ToList();
 
-            List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT distinct S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM SIPGProyeccion " +
+            List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT distinct S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM ProdProyeccion " +
                 "WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
                "Id = " + Id_Proyeccion + " group by[27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26]))X )V on S.Semana = V.Semana WHERE V.Pronostico <> 0 and S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and V.Semana between 27 and 52 order by S.Inicio").ToList();
-            //List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT top 9 S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([53]) as [53],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM SIPGProyeccion " +
+            //List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT top 9 S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([53]) as [53],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM ProdProyeccion " +
             //     "WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
             //    "Id = " + Id_Proyeccion + " group by[27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26]))X )V on S.Semana = V.Semana WHERE V.Pronostico <> 0 and S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) order by S.Inicio").ToList();
 
@@ -1581,11 +1574,11 @@ namespace Sistema_Indicadores.Controllers
         }
         public JsonResult Corte2List(int Id_Proyeccion = 0)
         {
-            List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT distinct S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM SIPGProyeccion " +
+            List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("SELECT distinct S.Semana, round(V.Pronostico,0) as Cantidad, S.Inicio from CatSemanas S left join (select * from (select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29],sum([30]) as [30],sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM ProdProyeccion " +
                 "WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
                "Id = " + Id_Proyeccion + " group by[27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26]))X )V on S.Semana = V.Semana WHERE V.Pronostico <> 0 and S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and V.Semana between 1 and 26 order by S.Inicio").ToList();
 
-            //List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("WITH t AS(select top 8 round(V.Pronostico,0) as Cantidad, S.Semana, S.Inicio from(select * from(select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29], sum([30]) as [30], sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([53]) as [53],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM SIPGProyeccion WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
+            //List<ClassCurva> CorteList = bd.Database.SqlQuery<ClassCurva>("WITH t AS(select top 8 round(V.Pronostico,0) as Cantidad, S.Semana, S.Inicio from(select * from(select sum([27]) as [27], sum([28]) as [28], sum([29]) as [29], sum([30]) as [30], sum([31]) as [31],sum([32]) as [32],sum([33]) as [33],sum([34]) as [34], sum([35]) as [35],sum([36]) as [36],sum([37]) as [37],sum([38]) as [38], sum([39]) as [39],sum([40]) as [40],sum([41]) as [41],sum([42]) as [42],sum([43]) as [43],sum([44]) as [44],sum([45]) as [45],sum([46]) as [46],sum([47]) as [47],sum([48]) as [48], sum([49]) as [49],sum([50]) as [50],sum([51]) as [51],sum([52]) as [52],sum([53]) as [53],sum([1]) as [1], sum([2]) as [2], sum([3]) as [3], sum([4]) as [4], sum([5]) as [5], sum([6]) as [6], sum([7]) as [7], sum([8]) as [8], sum([9]) as [9], sum([10]) as [10], sum([11]) as [11], sum([12]) as [12], sum([13]) as [13], sum([14]) as [14], sum([15]) as [15], sum([16]) as [16], sum([17]) as [17], sum([18]) as [18], sum([19]) as [19], sum([20]) as [20], sum([21]) as [21], sum([22]) as [22], sum([23]) as [23], sum([24]) as [24], sum([25]) as [25], sum([26]) as [26] FROM ProdProyeccion WHERE Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) and " +
             //"Id = "+ Id_Proyeccion + " group by[27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[53],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26])V UNPIVOT(Pronostico FOR Semana in ([27],[28],[29],[30],[31],[32],[33],[34],[35],[36],[37],[38],[39],[40],[41],[42],[43],[44],[45],[46],[47],[48],[49],[50],[51],[52],[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19], [20], [21], [22], [23], [24], [25], [26]))X WHERE Pronostico <> 0)V Left join CatSemanas S on V.Semana = S.Semana WHERE S.Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) order by S.Inicio desc) SELECT * FROM t " +
             //"where Cantidad is not null order by Inicio").ToList();
             return Json(CorteList, JsonRequestBehavior.AllowGet);
@@ -1594,783 +1587,790 @@ namespace Sistema_Indicadores.Controllers
         {
             ViewData["Nombre"] = Session["Nombre"].ToString();
 
-            ExcelPackage excel = new ExcelPackage();
-            var fecha_actual = bd.CatSemanas.Where(a => DateTime.Now >= a.Inicio && DateTime.Now <= a.Fin).First();
-
-            //ZARZAMORA
-            var zarz = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
-               "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacaña, 23), '') as Fecha_podamediacaña,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
-               "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
-               "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacaña, V.Temporada," +
-               "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
-               "From(select * from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from SIPGProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacaña,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
-               "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
-               "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 1 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
-
-            if (zarz.Count > 0)
+            try
             {
-                ExcelWorksheet ws = excel.Workbook.Worksheets.Add("ZARZAMORA");
-                ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
-                ws.Cells["A2"].Value = "Ingeniero";
-                ws.Cells["B2"].Value = "Codigo";
-                ws.Cells["C2"].Value = "Productor";
-                ws.Cells["D2"].Value = "Campo";
-                ws.Cells["E2"].Value = "Ubicacion";
-                ws.Cells["F2"].Value = "Num_corte";
-                ws.Cells["G2"].Value = "Sector";
-                ws.Cells["H2"].Value = "Superficie";
-                ws.Cells["I2"].Value = "Cultivo";
-                ws.Cells["J2"].Value = "Variedad";
-                ws.Cells["K2"].Value = "Num plantas xha";
-                ws.Cells["L2"].Value = "Manejo";
-                ws.Cells["M2"].Value = "Tipo_plantacion";
-                ws.Cells["N2"].Value = "Fecha_plantacion";
-                ws.Cells["O2"].Value = "Fecha_poda";
-                ws.Cells["P2"].Value = "Fecha_defoliacion";
-                ws.Cells["Q2"].Value = "FechaIniciocorte1";
-                ws.Cells["R2"].Value = "Fecha_redefoliacion";
-                ws.Cells["S2"].Value = "FechaIniciocorte2";
-                ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
-                ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
-                ws.Cells["V2"].Value = "Plantacion";
-                ws.Cells["W2"].Value = "Caja1";
-                ws.Cells["X2"].Value = "Caja2";
-                ws.Cells["Y2"].Value = "Estructura";
-                ws.Cells["Z2"].Value = "Tipo_certificacion";
-                ws.Cells["AA2"].Value = "Programa_Tesco";
-                ws.Cells["AB2"].Value = "Edad_planta";
-                ws.Cells["AC2"].Value = "Tipo_plantacion2";
-                ws.Cells["AD2"].Value = "Fecha_podamediacaña";
-                ws.Cells["AE2"].Value = "Temporada";
-                ws.Cells["AF2"].Value = "Zona";
-                ws.Cells["AG2"].Value = "Acopio";
-                ws.Cells["AH2"].Value = "27";
-                ws.Cells["AI2"].Value = "28";
-                ws.Cells["AJ2"].Value = "29";
-                ws.Cells["AK2"].Value = "30";
-                ws.Cells["AL2"].Value = "31";
-                ws.Cells["AM2"].Value = "32";
-                ws.Cells["AN2"].Value = "33";
-                ws.Cells["AO2"].Value = "34";
-                ws.Cells["AP2"].Value = "35";
-                ws.Cells["AQ2"].Value = "36";
-                ws.Cells["AR2"].Value = "37";
-                ws.Cells["AS2"].Value = "38";
-                ws.Cells["AT2"].Value = "39";
-                ws.Cells["AU2"].Value = "40";
-                ws.Cells["AV2"].Value = "41";
-                ws.Cells["AW2"].Value = "42";
-                ws.Cells["AX2"].Value = "43";
-                ws.Cells["AY2"].Value = "44";
-                ws.Cells["AZ2"].Value = "45";
-                ws.Cells["BA2"].Value = "46";
-                ws.Cells["BB2"].Value = "47";
-                ws.Cells["BC2"].Value = "48";
-                ws.Cells["BD2"].Value = "49";
-                ws.Cells["BE2"].Value = "50";
-                ws.Cells["BF2"].Value = "51";
-                ws.Cells["BG2"].Value = "52";
-                ws.Cells["BH2"].Value = "1";
-                ws.Cells["BI2"].Value = "2";
-                ws.Cells["BJ2"].Value = "3";
-                ws.Cells["BK2"].Value = "4";
-                ws.Cells["BL2"].Value = "5";
-                ws.Cells["BM2"].Value = "6";
-                ws.Cells["BN2"].Value = "7";
-                ws.Cells["BO2"].Value = "8";
-                ws.Cells["BP2"].Value = "9";
-                ws.Cells["BQ2"].Value = "10";
-                ws.Cells["BR2"].Value = "11";
-                ws.Cells["BS2"].Value = "12";
-                ws.Cells["BT2"].Value = "13";
-                ws.Cells["BU2"].Value = "14";
-                ws.Cells["BV2"].Value = "15";
-                ws.Cells["BW2"].Value = "16";
-                ws.Cells["BX2"].Value = "17";
-                ws.Cells["BY2"].Value = "18";
-                ws.Cells["BZ2"].Value = "19";
-                ws.Cells["CA2"].Value = "20";
-                ws.Cells["CB2"].Value = "21";
-                ws.Cells["CC2"].Value = "22";
-                ws.Cells["CD2"].Value = "23";
-                ws.Cells["CE2"].Value = "24";
-                ws.Cells["CF2"].Value = "25";
-                ws.Cells["CG2"].Value = "26";
-                int x = 3;
-                foreach (var item in zarz)
-                {
-                    ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
-                    ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
-                    ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
-                    ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
-                    ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
-                    ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
-                    ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
-                    ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
-                    ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
-                    ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
-                    ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
-                    ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
-                    ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
-                    ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
-                    ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
-                    ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
-                    ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
-                    ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
-                    ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
-                    ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
-                    ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
-                    ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
-                    ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
-                    ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
-                    ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
-                    ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
-                    ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
-                    ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
-                    ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
-                    ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacaña;
-                    ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
-                    ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
-                    ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
-                    ws.Cells[string.Format("AH{0}", x)].Value = item._27;
-                    ws.Cells[string.Format("AI{0}", x)].Value = item._28;
-                    ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
-                    ws.Cells[string.Format("AK{0}", x)].Value = item._30;
-                    ws.Cells[string.Format("AL{0}", x)].Value = item._31;
-                    ws.Cells[string.Format("AM{0}", x)].Value = item._32;
-                    ws.Cells[string.Format("AN{0}", x)].Value = item._33;
-                    ws.Cells[string.Format("AO{0}", x)].Value = item._34;
-                    ws.Cells[string.Format("AP{0}", x)].Value = item._35;
-                    ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
-                    ws.Cells[string.Format("AR{0}", x)].Value = item._37;
-                    ws.Cells[string.Format("AS{0}", x)].Value = item._38;
-                    ws.Cells[string.Format("AT{0}", x)].Value = item._39;
-                    ws.Cells[string.Format("AU{0}", x)].Value = item._40;
-                    ws.Cells[string.Format("AV{0}", x)].Value = item._41;
-                    ws.Cells[string.Format("AW{0}", x)].Value = item._42;
-                    ws.Cells[string.Format("AX{0}", x)].Value = item._43;
-                    ws.Cells[string.Format("AY{0}", x)].Value = item._44;
-                    ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
-                    ws.Cells[string.Format("BA{0}", x)].Value = item._46;
-                    ws.Cells[string.Format("BB{0}", x)].Value = item._47;
-                    ws.Cells[string.Format("BC{0}", x)].Value = item._48;
-                    ws.Cells[string.Format("BD{0}", x)].Value = item._49;
-                    ws.Cells[string.Format("BE{0}", x)].Value = item._50;
-                    ws.Cells[string.Format("BF{0}", x)].Value = item._51;
-                    ws.Cells[string.Format("BG{0}", x)].Value = item._52;
-                    ws.Cells[string.Format("BH{0}", x)].Value = item._1;
-                    ws.Cells[string.Format("BI{0}", x)].Value = item._2;
-                    ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
-                    ws.Cells[string.Format("BK{0}", x)].Value = item._4;
-                    ws.Cells[string.Format("BL{0}", x)].Value = item._5;
-                    ws.Cells[string.Format("BM{0}", x)].Value = item._6;
-                    ws.Cells[string.Format("BN{0}", x)].Value = item._7;
-                    ws.Cells[string.Format("BO{0}", x)].Value = item._8;
-                    ws.Cells[string.Format("BP{0}", x)].Value = item._9;
-                    ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
-                    ws.Cells[string.Format("BR{0}", x)].Value = item._11;
-                    ws.Cells[string.Format("BS{0}", x)].Value = item._12;
-                    ws.Cells[string.Format("BT{0}", x)].Value = item._13;
-                    ws.Cells[string.Format("BU{0}", x)].Value = item._14;
-                    ws.Cells[string.Format("BV{0}", x)].Value = item._15;
-                    ws.Cells[string.Format("BW{0}", x)].Value = item._16;
-                    ws.Cells[string.Format("BX{0}", x)].Value = item._17;
-                    ws.Cells[string.Format("BY{0}", x)].Value = item._18;
-                    ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
-                    ws.Cells[string.Format("CA{0}", x)].Value = item._20;
-                    ws.Cells[string.Format("CB{0}", x)].Value = item._21;
-                    ws.Cells[string.Format("CC{0}", x)].Value = item._22;
-                    ws.Cells[string.Format("CD{0}", x)].Value = item._23;
-                    ws.Cells[string.Format("CE{0}", x)].Value = item._24;
-                    ws.Cells[string.Format("CF{0}", x)].Value = item._25;
-                    ws.Cells[string.Format("CG{0}", x)].Value = item._26;
-                    x++;
-                }
-                ws.Cells["A:CG"].AutoFitColumns();
-            }
-            //FRAMBUESA
-            var fram = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
-              "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacaña, 23), '') as Fecha_podamediacaña,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
-              "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
-              "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacaña, V.Temporada," +
-              "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
-              "From(select * from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from SIPGProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacaña,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
-              "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
-              "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 2 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
+                ExcelPackage excel = new ExcelPackage();
+                var fecha_actual = bd.CatSemanas.Where(a => DateTime.Now >= a.Inicio && DateTime.Now <= a.Fin).First();
 
-            if (fram.Count > 0)
+                //ZARZAMORA
+                var zarz = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
+                   "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacana, 23), '') as Fecha_podamediacana,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
+                   "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
+                   "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacana, V.Temporada," +
+                   "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
+                   "From(select * from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from ProdProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacana,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
+                   "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
+                   "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 1 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
+
+                if (zarz.Count > 0)
+                {
+                    ExcelWorksheet ws = excel.Workbook.Worksheets.Add("ZARZAMORA");
+                    ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
+                    ws.Cells["A2"].Value = "Ingeniero";
+                    ws.Cells["B2"].Value = "Codigo";
+                    ws.Cells["C2"].Value = "Productor";
+                    ws.Cells["D2"].Value = "Campo";
+                    ws.Cells["E2"].Value = "Ubicacion";
+                    ws.Cells["F2"].Value = "Num_corte";
+                    ws.Cells["G2"].Value = "Sector";
+                    ws.Cells["H2"].Value = "Superficie";
+                    ws.Cells["I2"].Value = "Cultivo";
+                    ws.Cells["J2"].Value = "Variedad";
+                    ws.Cells["K2"].Value = "Num plantas xha";
+                    ws.Cells["L2"].Value = "Manejo";
+                    ws.Cells["M2"].Value = "Tipo_plantacion";
+                    ws.Cells["N2"].Value = "Fecha_plantacion";
+                    ws.Cells["O2"].Value = "Fecha_poda";
+                    ws.Cells["P2"].Value = "Fecha_defoliacion";
+                    ws.Cells["Q2"].Value = "FechaIniciocorte1";
+                    ws.Cells["R2"].Value = "Fecha_redefoliacion";
+                    ws.Cells["S2"].Value = "FechaIniciocorte2";
+                    ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
+                    ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
+                    ws.Cells["V2"].Value = "Plantacion";
+                    ws.Cells["W2"].Value = "Caja1";
+                    ws.Cells["X2"].Value = "Caja2";
+                    ws.Cells["Y2"].Value = "Estructura";
+                    ws.Cells["Z2"].Value = "Tipo_certificacion";
+                    ws.Cells["AA2"].Value = "Programa_Tesco";
+                    ws.Cells["AB2"].Value = "Edad_planta";
+                    ws.Cells["AC2"].Value = "Tipo_plantacion2";
+                    ws.Cells["AD2"].Value = "Fecha_podamediacaña";
+                    ws.Cells["AE2"].Value = "Temporada";
+                    ws.Cells["AF2"].Value = "Zona";
+                    ws.Cells["AG2"].Value = "Acopio";
+                    ws.Cells["AH2"].Value = "27";
+                    ws.Cells["AI2"].Value = "28";
+                    ws.Cells["AJ2"].Value = "29";
+                    ws.Cells["AK2"].Value = "30";
+                    ws.Cells["AL2"].Value = "31";
+                    ws.Cells["AM2"].Value = "32";
+                    ws.Cells["AN2"].Value = "33";
+                    ws.Cells["AO2"].Value = "34";
+                    ws.Cells["AP2"].Value = "35";
+                    ws.Cells["AQ2"].Value = "36";
+                    ws.Cells["AR2"].Value = "37";
+                    ws.Cells["AS2"].Value = "38";
+                    ws.Cells["AT2"].Value = "39";
+                    ws.Cells["AU2"].Value = "40";
+                    ws.Cells["AV2"].Value = "41";
+                    ws.Cells["AW2"].Value = "42";
+                    ws.Cells["AX2"].Value = "43";
+                    ws.Cells["AY2"].Value = "44";
+                    ws.Cells["AZ2"].Value = "45";
+                    ws.Cells["BA2"].Value = "46";
+                    ws.Cells["BB2"].Value = "47";
+                    ws.Cells["BC2"].Value = "48";
+                    ws.Cells["BD2"].Value = "49";
+                    ws.Cells["BE2"].Value = "50";
+                    ws.Cells["BF2"].Value = "51";
+                    ws.Cells["BG2"].Value = "52";
+                    ws.Cells["BH2"].Value = "1";
+                    ws.Cells["BI2"].Value = "2";
+                    ws.Cells["BJ2"].Value = "3";
+                    ws.Cells["BK2"].Value = "4";
+                    ws.Cells["BL2"].Value = "5";
+                    ws.Cells["BM2"].Value = "6";
+                    ws.Cells["BN2"].Value = "7";
+                    ws.Cells["BO2"].Value = "8";
+                    ws.Cells["BP2"].Value = "9";
+                    ws.Cells["BQ2"].Value = "10";
+                    ws.Cells["BR2"].Value = "11";
+                    ws.Cells["BS2"].Value = "12";
+                    ws.Cells["BT2"].Value = "13";
+                    ws.Cells["BU2"].Value = "14";
+                    ws.Cells["BV2"].Value = "15";
+                    ws.Cells["BW2"].Value = "16";
+                    ws.Cells["BX2"].Value = "17";
+                    ws.Cells["BY2"].Value = "18";
+                    ws.Cells["BZ2"].Value = "19";
+                    ws.Cells["CA2"].Value = "20";
+                    ws.Cells["CB2"].Value = "21";
+                    ws.Cells["CC2"].Value = "22";
+                    ws.Cells["CD2"].Value = "23";
+                    ws.Cells["CE2"].Value = "24";
+                    ws.Cells["CF2"].Value = "25";
+                    ws.Cells["CG2"].Value = "26";
+                    int x = 3;
+                    foreach (var item in zarz)
+                    {
+                        ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
+                        ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
+                        ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
+                        ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
+                        ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
+                        ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
+                        ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
+                        ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
+                        ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
+                        ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
+                        ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
+                        ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
+                        ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
+                        ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
+                        ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
+                        ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
+                        ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
+                        ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
+                        ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
+                        ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
+                        ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
+                        ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
+                        ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
+                        ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
+                        ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
+                        ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
+                        ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
+                        ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
+                        ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
+                        ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacana;
+                        ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
+                        ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
+                        ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
+                        ws.Cells[string.Format("AH{0}", x)].Value = item._27;
+                        ws.Cells[string.Format("AI{0}", x)].Value = item._28;
+                        ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
+                        ws.Cells[string.Format("AK{0}", x)].Value = item._30;
+                        ws.Cells[string.Format("AL{0}", x)].Value = item._31;
+                        ws.Cells[string.Format("AM{0}", x)].Value = item._32;
+                        ws.Cells[string.Format("AN{0}", x)].Value = item._33;
+                        ws.Cells[string.Format("AO{0}", x)].Value = item._34;
+                        ws.Cells[string.Format("AP{0}", x)].Value = item._35;
+                        ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
+                        ws.Cells[string.Format("AR{0}", x)].Value = item._37;
+                        ws.Cells[string.Format("AS{0}", x)].Value = item._38;
+                        ws.Cells[string.Format("AT{0}", x)].Value = item._39;
+                        ws.Cells[string.Format("AU{0}", x)].Value = item._40;
+                        ws.Cells[string.Format("AV{0}", x)].Value = item._41;
+                        ws.Cells[string.Format("AW{0}", x)].Value = item._42;
+                        ws.Cells[string.Format("AX{0}", x)].Value = item._43;
+                        ws.Cells[string.Format("AY{0}", x)].Value = item._44;
+                        ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
+                        ws.Cells[string.Format("BA{0}", x)].Value = item._46;
+                        ws.Cells[string.Format("BB{0}", x)].Value = item._47;
+                        ws.Cells[string.Format("BC{0}", x)].Value = item._48;
+                        ws.Cells[string.Format("BD{0}", x)].Value = item._49;
+                        ws.Cells[string.Format("BE{0}", x)].Value = item._50;
+                        ws.Cells[string.Format("BF{0}", x)].Value = item._51;
+                        ws.Cells[string.Format("BG{0}", x)].Value = item._52;
+                        ws.Cells[string.Format("BH{0}", x)].Value = item._1;
+                        ws.Cells[string.Format("BI{0}", x)].Value = item._2;
+                        ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
+                        ws.Cells[string.Format("BK{0}", x)].Value = item._4;
+                        ws.Cells[string.Format("BL{0}", x)].Value = item._5;
+                        ws.Cells[string.Format("BM{0}", x)].Value = item._6;
+                        ws.Cells[string.Format("BN{0}", x)].Value = item._7;
+                        ws.Cells[string.Format("BO{0}", x)].Value = item._8;
+                        ws.Cells[string.Format("BP{0}", x)].Value = item._9;
+                        ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
+                        ws.Cells[string.Format("BR{0}", x)].Value = item._11;
+                        ws.Cells[string.Format("BS{0}", x)].Value = item._12;
+                        ws.Cells[string.Format("BT{0}", x)].Value = item._13;
+                        ws.Cells[string.Format("BU{0}", x)].Value = item._14;
+                        ws.Cells[string.Format("BV{0}", x)].Value = item._15;
+                        ws.Cells[string.Format("BW{0}", x)].Value = item._16;
+                        ws.Cells[string.Format("BX{0}", x)].Value = item._17;
+                        ws.Cells[string.Format("BY{0}", x)].Value = item._18;
+                        ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
+                        ws.Cells[string.Format("CA{0}", x)].Value = item._20;
+                        ws.Cells[string.Format("CB{0}", x)].Value = item._21;
+                        ws.Cells[string.Format("CC{0}", x)].Value = item._22;
+                        ws.Cells[string.Format("CD{0}", x)].Value = item._23;
+                        ws.Cells[string.Format("CE{0}", x)].Value = item._24;
+                        ws.Cells[string.Format("CF{0}", x)].Value = item._25;
+                        ws.Cells[string.Format("CG{0}", x)].Value = item._26;
+                        x++;
+                    }
+                    ws.Cells["A:CG"].AutoFitColumns();
+                }
+                //FRAMBUESA
+                var fram = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
+                  "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacana, 23), '') as Fecha_podamediacana,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
+                  "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
+                  "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacana, V.Temporada," +
+                  "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
+                  "From(select * from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from ProdProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacana,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
+                  "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
+                  "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 2 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
+
+                if (fram.Count > 0)
+                {
+                    ExcelWorksheet ws = excel.Workbook.Worksheets.Add("FRAMBUESA");
+                    ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
+                    ws.Cells["A2"].Value = "Ingeniero";
+                    ws.Cells["B2"].Value = "Codigo";
+                    ws.Cells["C2"].Value = "Productor";
+                    ws.Cells["D2"].Value = "Campo";
+                    ws.Cells["E2"].Value = "Ubicacion";
+                    ws.Cells["F2"].Value = "Num_corte";
+                    ws.Cells["G2"].Value = "Sector";
+                    ws.Cells["H2"].Value = "Superficie";
+                    ws.Cells["I2"].Value = "Cultivo";
+                    ws.Cells["J2"].Value = "Variedad";
+                    ws.Cells["K2"].Value = "Num plantas xha";
+                    ws.Cells["L2"].Value = "Manejo";
+                    ws.Cells["M2"].Value = "Tipo_plantacion";
+                    ws.Cells["N2"].Value = "Fecha_plantacion";
+                    ws.Cells["O2"].Value = "Fecha_poda";
+                    ws.Cells["P2"].Value = "Fecha_defoliacion";
+                    ws.Cells["Q2"].Value = "FechaIniciocorte1";
+                    ws.Cells["R2"].Value = "Fecha_redefoliacion";
+                    ws.Cells["S2"].Value = "FechaIniciocorte2";
+                    ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
+                    ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
+                    ws.Cells["V2"].Value = "Plantacion";
+                    ws.Cells["W2"].Value = "Caja1";
+                    ws.Cells["X2"].Value = "Caja2";
+                    ws.Cells["Y2"].Value = "Estructura";
+                    ws.Cells["Z2"].Value = "Tipo_certificacion";
+                    ws.Cells["AA2"].Value = "Programa_Tesco";
+                    ws.Cells["AB2"].Value = "Edad_planta";
+                    ws.Cells["AC2"].Value = "Tipo_plantacion2";
+                    ws.Cells["AD2"].Value = "Fecha_podamediacaña";
+                    ws.Cells["AE2"].Value = "Temporada";
+                    ws.Cells["AF2"].Value = "Zona";
+                    ws.Cells["AG2"].Value = "Acopio";
+                    ws.Cells["AH2"].Value = "27";
+                    ws.Cells["AI2"].Value = "28";
+                    ws.Cells["AJ2"].Value = "29";
+                    ws.Cells["AK2"].Value = "30";
+                    ws.Cells["AL2"].Value = "31";
+                    ws.Cells["AM2"].Value = "32";
+                    ws.Cells["AN2"].Value = "33";
+                    ws.Cells["AO2"].Value = "34";
+                    ws.Cells["AP2"].Value = "35";
+                    ws.Cells["AQ2"].Value = "36";
+                    ws.Cells["AR2"].Value = "37";
+                    ws.Cells["AS2"].Value = "38";
+                    ws.Cells["AT2"].Value = "39";
+                    ws.Cells["AU2"].Value = "40";
+                    ws.Cells["AV2"].Value = "41";
+                    ws.Cells["AW2"].Value = "42";
+                    ws.Cells["AX2"].Value = "43";
+                    ws.Cells["AY2"].Value = "44";
+                    ws.Cells["AZ2"].Value = "45";
+                    ws.Cells["BA2"].Value = "46";
+                    ws.Cells["BB2"].Value = "47";
+                    ws.Cells["BC2"].Value = "48";
+                    ws.Cells["BD2"].Value = "49";
+                    ws.Cells["BE2"].Value = "50";
+                    ws.Cells["BF2"].Value = "51";
+                    ws.Cells["BG2"].Value = "52";
+                    ws.Cells["BH2"].Value = "1";
+                    ws.Cells["BI2"].Value = "2";
+                    ws.Cells["BJ2"].Value = "3";
+                    ws.Cells["BK2"].Value = "4";
+                    ws.Cells["BL2"].Value = "5";
+                    ws.Cells["BM2"].Value = "6";
+                    ws.Cells["BN2"].Value = "7";
+                    ws.Cells["BO2"].Value = "8";
+                    ws.Cells["BP2"].Value = "9";
+                    ws.Cells["BQ2"].Value = "10";
+                    ws.Cells["BR2"].Value = "11";
+                    ws.Cells["BS2"].Value = "12";
+                    ws.Cells["BT2"].Value = "13";
+                    ws.Cells["BU2"].Value = "14";
+                    ws.Cells["BV2"].Value = "15";
+                    ws.Cells["BW2"].Value = "16";
+                    ws.Cells["BX2"].Value = "17";
+                    ws.Cells["BY2"].Value = "18";
+                    ws.Cells["BZ2"].Value = "19";
+                    ws.Cells["CA2"].Value = "20";
+                    ws.Cells["CB2"].Value = "21";
+                    ws.Cells["CC2"].Value = "22";
+                    ws.Cells["CD2"].Value = "23";
+                    ws.Cells["CE2"].Value = "24";
+                    ws.Cells["CF2"].Value = "25";
+                    ws.Cells["CG2"].Value = "26";
+                    int x = 3;
+                    foreach (var item in fram)
+                    {
+                        ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
+                        ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
+                        ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
+                        ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
+                        ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
+                        ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
+                        ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
+                        ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
+                        ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
+                        ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
+                        ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
+                        ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
+                        ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
+                        ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
+                        ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
+                        ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
+                        ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
+                        ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
+                        ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
+                        ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
+                        ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
+                        ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
+                        ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
+                        ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
+                        ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
+                        ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
+                        ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
+                        ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
+                        ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
+                        ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacana;
+                        ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
+                        ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
+                        ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
+                        ws.Cells[string.Format("AH{0}", x)].Value = item._27;
+                        ws.Cells[string.Format("AI{0}", x)].Value = item._28;
+                        ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
+                        ws.Cells[string.Format("AK{0}", x)].Value = item._30;
+                        ws.Cells[string.Format("AL{0}", x)].Value = item._31;
+                        ws.Cells[string.Format("AM{0}", x)].Value = item._32;
+                        ws.Cells[string.Format("AN{0}", x)].Value = item._33;
+                        ws.Cells[string.Format("AO{0}", x)].Value = item._34;
+                        ws.Cells[string.Format("AP{0}", x)].Value = item._35;
+                        ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
+                        ws.Cells[string.Format("AR{0}", x)].Value = item._37;
+                        ws.Cells[string.Format("AS{0}", x)].Value = item._38;
+                        ws.Cells[string.Format("AT{0}", x)].Value = item._39;
+                        ws.Cells[string.Format("AU{0}", x)].Value = item._40;
+                        ws.Cells[string.Format("AV{0}", x)].Value = item._41;
+                        ws.Cells[string.Format("AW{0}", x)].Value = item._42;
+                        ws.Cells[string.Format("AX{0}", x)].Value = item._43;
+                        ws.Cells[string.Format("AY{0}", x)].Value = item._44;
+                        ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
+                        ws.Cells[string.Format("BA{0}", x)].Value = item._46;
+                        ws.Cells[string.Format("BB{0}", x)].Value = item._47;
+                        ws.Cells[string.Format("BC{0}", x)].Value = item._48;
+                        ws.Cells[string.Format("BD{0}", x)].Value = item._49;
+                        ws.Cells[string.Format("BE{0}", x)].Value = item._50;
+                        ws.Cells[string.Format("BF{0}", x)].Value = item._51;
+                        ws.Cells[string.Format("BG{0}", x)].Value = item._52;
+                        ws.Cells[string.Format("BH{0}", x)].Value = item._1;
+                        ws.Cells[string.Format("BI{0}", x)].Value = item._2;
+                        ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
+                        ws.Cells[string.Format("BK{0}", x)].Value = item._4;
+                        ws.Cells[string.Format("BL{0}", x)].Value = item._5;
+                        ws.Cells[string.Format("BM{0}", x)].Value = item._6;
+                        ws.Cells[string.Format("BN{0}", x)].Value = item._7;
+                        ws.Cells[string.Format("BO{0}", x)].Value = item._8;
+                        ws.Cells[string.Format("BP{0}", x)].Value = item._9;
+                        ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
+                        ws.Cells[string.Format("BR{0}", x)].Value = item._11;
+                        ws.Cells[string.Format("BS{0}", x)].Value = item._12;
+                        ws.Cells[string.Format("BT{0}", x)].Value = item._13;
+                        ws.Cells[string.Format("BU{0}", x)].Value = item._14;
+                        ws.Cells[string.Format("BV{0}", x)].Value = item._15;
+                        ws.Cells[string.Format("BW{0}", x)].Value = item._16;
+                        ws.Cells[string.Format("BX{0}", x)].Value = item._17;
+                        ws.Cells[string.Format("BY{0}", x)].Value = item._18;
+                        ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
+                        ws.Cells[string.Format("CA{0}", x)].Value = item._20;
+                        ws.Cells[string.Format("CB{0}", x)].Value = item._21;
+                        ws.Cells[string.Format("CC{0}", x)].Value = item._22;
+                        ws.Cells[string.Format("CD{0}", x)].Value = item._23;
+                        ws.Cells[string.Format("CE{0}", x)].Value = item._24;
+                        ws.Cells[string.Format("CF{0}", x)].Value = item._25;
+                        ws.Cells[string.Format("CG{0}", x)].Value = item._26;
+                        x++;
+                    }
+                    ws.Cells["A:CG"].AutoFitColumns();
+                }
+
+                //ARANDANO
+                var aran = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
+                  "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacana, 23), '') as Fecha_podamediacana,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
+                  "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
+                  "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacana, V.Temporada," +
+                  "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
+                  "From(select * from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from ProdProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacana,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
+                  "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
+                  "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 3 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
+
+                if (aran.Count > 0)
+                {
+                    ExcelWorksheet ws = excel.Workbook.Worksheets.Add("ARANDANO");
+                    ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
+                    ws.Cells["A2"].Value = "Ingeniero";
+                    ws.Cells["B2"].Value = "Codigo";
+                    ws.Cells["C2"].Value = "Productor";
+                    ws.Cells["D2"].Value = "Campo";
+                    ws.Cells["E2"].Value = "Ubicacion";
+                    ws.Cells["F2"].Value = "Num_corte";
+                    ws.Cells["G2"].Value = "Sector";
+                    ws.Cells["H2"].Value = "Superficie";
+                    ws.Cells["I2"].Value = "Cultivo";
+                    ws.Cells["J2"].Value = "Variedad";
+                    ws.Cells["K2"].Value = "Num plantas xha";
+                    ws.Cells["L2"].Value = "Manejo";
+                    ws.Cells["M2"].Value = "Tipo_plantacion";
+                    ws.Cells["N2"].Value = "Fecha_plantacion";
+                    ws.Cells["O2"].Value = "Fecha_poda";
+                    ws.Cells["P2"].Value = "Fecha_defoliacion";
+                    ws.Cells["Q2"].Value = "FechaIniciocorte1";
+                    ws.Cells["R2"].Value = "Fecha_redefoliacion";
+                    ws.Cells["S2"].Value = "FechaIniciocorte2";
+                    ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
+                    ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
+                    ws.Cells["V2"].Value = "Plantacion";
+                    ws.Cells["W2"].Value = "Caja1";
+                    ws.Cells["X2"].Value = "Caja2";
+                    ws.Cells["Y2"].Value = "Estructura";
+                    ws.Cells["Z2"].Value = "Tipo_certificacion";
+                    ws.Cells["AA2"].Value = "Programa_Tesco";
+                    ws.Cells["AB2"].Value = "Edad_planta";
+                    ws.Cells["AC2"].Value = "Tipo_plantacion2";
+                    ws.Cells["AD2"].Value = "Fecha_podamediacaña";
+                    ws.Cells["AE2"].Value = "Temporada";
+                    ws.Cells["AF2"].Value = "Zona";
+                    ws.Cells["AG2"].Value = "Acopio";
+                    ws.Cells["AH2"].Value = "27";
+                    ws.Cells["AI2"].Value = "28";
+                    ws.Cells["AJ2"].Value = "29";
+                    ws.Cells["AK2"].Value = "30";
+                    ws.Cells["AL2"].Value = "31";
+                    ws.Cells["AM2"].Value = "32";
+                    ws.Cells["AN2"].Value = "33";
+                    ws.Cells["AO2"].Value = "34";
+                    ws.Cells["AP2"].Value = "35";
+                    ws.Cells["AQ2"].Value = "36";
+                    ws.Cells["AR2"].Value = "37";
+                    ws.Cells["AS2"].Value = "38";
+                    ws.Cells["AT2"].Value = "39";
+                    ws.Cells["AU2"].Value = "40";
+                    ws.Cells["AV2"].Value = "41";
+                    ws.Cells["AW2"].Value = "42";
+                    ws.Cells["AX2"].Value = "43";
+                    ws.Cells["AY2"].Value = "44";
+                    ws.Cells["AZ2"].Value = "45";
+                    ws.Cells["BA2"].Value = "46";
+                    ws.Cells["BB2"].Value = "47";
+                    ws.Cells["BC2"].Value = "48";
+                    ws.Cells["BD2"].Value = "49";
+                    ws.Cells["BE2"].Value = "50";
+                    ws.Cells["BF2"].Value = "51";
+                    ws.Cells["BG2"].Value = "52";
+                    ws.Cells["BH2"].Value = "1";
+                    ws.Cells["BI2"].Value = "2";
+                    ws.Cells["BJ2"].Value = "3";
+                    ws.Cells["BK2"].Value = "4";
+                    ws.Cells["BL2"].Value = "5";
+                    ws.Cells["BM2"].Value = "6";
+                    ws.Cells["BN2"].Value = "7";
+                    ws.Cells["BO2"].Value = "8";
+                    ws.Cells["BP2"].Value = "9";
+                    ws.Cells["BQ2"].Value = "10";
+                    ws.Cells["BR2"].Value = "11";
+                    ws.Cells["BS2"].Value = "12";
+                    ws.Cells["BT2"].Value = "13";
+                    ws.Cells["BU2"].Value = "14";
+                    ws.Cells["BV2"].Value = "15";
+                    ws.Cells["BW2"].Value = "16";
+                    ws.Cells["BX2"].Value = "17";
+                    ws.Cells["BY2"].Value = "18";
+                    ws.Cells["BZ2"].Value = "19";
+                    ws.Cells["CA2"].Value = "20";
+                    ws.Cells["CB2"].Value = "21";
+                    ws.Cells["CC2"].Value = "22";
+                    ws.Cells["CD2"].Value = "23";
+                    ws.Cells["CE2"].Value = "24";
+                    ws.Cells["CF2"].Value = "25";
+                    ws.Cells["CG2"].Value = "26";
+                    int x = 3;
+                    foreach (var item in aran)
+                    {
+                        ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
+                        ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
+                        ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
+                        ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
+                        ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
+                        ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
+                        ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
+                        ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
+                        ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
+                        ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
+                        ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
+                        ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
+                        ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
+                        ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
+                        ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
+                        ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
+                        ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
+                        ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
+                        ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
+                        ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
+                        ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
+                        ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
+                        ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
+                        ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
+                        ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
+                        ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
+                        ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
+                        ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
+                        ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
+                        ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacana;
+                        ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
+                        ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
+                        ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
+                        ws.Cells[string.Format("AH{0}", x)].Value = item._27;
+                        ws.Cells[string.Format("AI{0}", x)].Value = item._28;
+                        ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
+                        ws.Cells[string.Format("AK{0}", x)].Value = item._30;
+                        ws.Cells[string.Format("AL{0}", x)].Value = item._31;
+                        ws.Cells[string.Format("AM{0}", x)].Value = item._32;
+                        ws.Cells[string.Format("AN{0}", x)].Value = item._33;
+                        ws.Cells[string.Format("AO{0}", x)].Value = item._34;
+                        ws.Cells[string.Format("AP{0}", x)].Value = item._35;
+                        ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
+                        ws.Cells[string.Format("AR{0}", x)].Value = item._37;
+                        ws.Cells[string.Format("AS{0}", x)].Value = item._38;
+                        ws.Cells[string.Format("AT{0}", x)].Value = item._39;
+                        ws.Cells[string.Format("AU{0}", x)].Value = item._40;
+                        ws.Cells[string.Format("AV{0}", x)].Value = item._41;
+                        ws.Cells[string.Format("AW{0}", x)].Value = item._42;
+                        ws.Cells[string.Format("AX{0}", x)].Value = item._43;
+                        ws.Cells[string.Format("AY{0}", x)].Value = item._44;
+                        ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
+                        ws.Cells[string.Format("BA{0}", x)].Value = item._46;
+                        ws.Cells[string.Format("BB{0}", x)].Value = item._47;
+                        ws.Cells[string.Format("BC{0}", x)].Value = item._48;
+                        ws.Cells[string.Format("BD{0}", x)].Value = item._49;
+                        ws.Cells[string.Format("BE{0}", x)].Value = item._50;
+                        ws.Cells[string.Format("BF{0}", x)].Value = item._51;
+                        ws.Cells[string.Format("BG{0}", x)].Value = item._52;
+                        ws.Cells[string.Format("BH{0}", x)].Value = item._1;
+                        ws.Cells[string.Format("BI{0}", x)].Value = item._2;
+                        ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
+                        ws.Cells[string.Format("BK{0}", x)].Value = item._4;
+                        ws.Cells[string.Format("BL{0}", x)].Value = item._5;
+                        ws.Cells[string.Format("BM{0}", x)].Value = item._6;
+                        ws.Cells[string.Format("BN{0}", x)].Value = item._7;
+                        ws.Cells[string.Format("BO{0}", x)].Value = item._8;
+                        ws.Cells[string.Format("BP{0}", x)].Value = item._9;
+                        ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
+                        ws.Cells[string.Format("BR{0}", x)].Value = item._11;
+                        ws.Cells[string.Format("BS{0}", x)].Value = item._12;
+                        ws.Cells[string.Format("BT{0}", x)].Value = item._13;
+                        ws.Cells[string.Format("BU{0}", x)].Value = item._14;
+                        ws.Cells[string.Format("BV{0}", x)].Value = item._15;
+                        ws.Cells[string.Format("BW{0}", x)].Value = item._16;
+                        ws.Cells[string.Format("BX{0}", x)].Value = item._17;
+                        ws.Cells[string.Format("BY{0}", x)].Value = item._18;
+                        ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
+                        ws.Cells[string.Format("CA{0}", x)].Value = item._20;
+                        ws.Cells[string.Format("CB{0}", x)].Value = item._21;
+                        ws.Cells[string.Format("CC{0}", x)].Value = item._22;
+                        ws.Cells[string.Format("CD{0}", x)].Value = item._23;
+                        ws.Cells[string.Format("CE{0}", x)].Value = item._24;
+                        ws.Cells[string.Format("CF{0}", x)].Value = item._25;
+                        ws.Cells[string.Format("CG{0}", x)].Value = item._26;
+                        x++;
+                    }
+                    ws.Cells["A:CG"].AutoFitColumns();
+                }
+
+                //FRESA
+                var fresa = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
+                  "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacana, 23), '') as Fecha_podamediacana,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
+                  "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
+                  "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacana, V.Temporada," +
+                  "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
+                  "From(select * from ProdProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from ProdProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacana,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
+                  "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
+                  "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 4 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
+
+                if (fresa.Count > 0)
+                {
+                    ExcelWorksheet ws = excel.Workbook.Worksheets.Add("FRESA");
+                    ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
+                    ws.Cells["A2"].Value = "Ingeniero";
+                    ws.Cells["B2"].Value = "Codigo";
+                    ws.Cells["C2"].Value = "Productor";
+                    ws.Cells["D2"].Value = "Campo";
+                    ws.Cells["E2"].Value = "Ubicacion";
+                    ws.Cells["F2"].Value = "Num_corte";
+                    ws.Cells["G2"].Value = "Sector";
+                    ws.Cells["H2"].Value = "Superficie";
+                    ws.Cells["I2"].Value = "Cultivo";
+                    ws.Cells["J2"].Value = "Variedad";
+                    ws.Cells["K2"].Value = "Num plantas xha";
+                    ws.Cells["L2"].Value = "Manejo";
+                    ws.Cells["M2"].Value = "Tipo_plantacion";
+                    ws.Cells["N2"].Value = "Fecha_plantacion";
+                    ws.Cells["O2"].Value = "Fecha_poda";
+                    ws.Cells["P2"].Value = "Fecha_defoliacion";
+                    ws.Cells["Q2"].Value = "FechaIniciocorte1";
+                    ws.Cells["R2"].Value = "Fecha_redefoliacion";
+                    ws.Cells["S2"].Value = "FechaIniciocorte2";
+                    ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
+                    ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
+                    ws.Cells["V2"].Value = "Plantacion";
+                    ws.Cells["W2"].Value = "Caja1";
+                    ws.Cells["X2"].Value = "Caja2";
+                    ws.Cells["Y2"].Value = "Estructura";
+                    ws.Cells["Z2"].Value = "Tipo_certificacion";
+                    ws.Cells["AA2"].Value = "Programa_Tesco";
+                    ws.Cells["AB2"].Value = "Edad_planta";
+                    ws.Cells["AC2"].Value = "Tipo_plantacion2";
+                    ws.Cells["AD2"].Value = "Fecha_podamediacaña";
+                    ws.Cells["AE2"].Value = "Temporada";
+                    ws.Cells["AF2"].Value = "Zona";
+                    ws.Cells["AG2"].Value = "Acopio";
+                    ws.Cells["AH2"].Value = "27";
+                    ws.Cells["AI2"].Value = "28";
+                    ws.Cells["AJ2"].Value = "29";
+                    ws.Cells["AK2"].Value = "30";
+                    ws.Cells["AL2"].Value = "31";
+                    ws.Cells["AM2"].Value = "32";
+                    ws.Cells["AN2"].Value = "33";
+                    ws.Cells["AO2"].Value = "34";
+                    ws.Cells["AP2"].Value = "35";
+                    ws.Cells["AQ2"].Value = "36";
+                    ws.Cells["AR2"].Value = "37";
+                    ws.Cells["AS2"].Value = "38";
+                    ws.Cells["AT2"].Value = "39";
+                    ws.Cells["AU2"].Value = "40";
+                    ws.Cells["AV2"].Value = "41";
+                    ws.Cells["AW2"].Value = "42";
+                    ws.Cells["AX2"].Value = "43";
+                    ws.Cells["AY2"].Value = "44";
+                    ws.Cells["AZ2"].Value = "45";
+                    ws.Cells["BA2"].Value = "46";
+                    ws.Cells["BB2"].Value = "47";
+                    ws.Cells["BC2"].Value = "48";
+                    ws.Cells["BD2"].Value = "49";
+                    ws.Cells["BE2"].Value = "50";
+                    ws.Cells["BF2"].Value = "51";
+                    ws.Cells["BG2"].Value = "52";
+                    ws.Cells["BH2"].Value = "1";
+                    ws.Cells["BI2"].Value = "2";
+                    ws.Cells["BJ2"].Value = "3";
+                    ws.Cells["BK2"].Value = "4";
+                    ws.Cells["BL2"].Value = "5";
+                    ws.Cells["BM2"].Value = "6";
+                    ws.Cells["BN2"].Value = "7";
+                    ws.Cells["BO2"].Value = "8";
+                    ws.Cells["BP2"].Value = "9";
+                    ws.Cells["BQ2"].Value = "10";
+                    ws.Cells["BR2"].Value = "11";
+                    ws.Cells["BS2"].Value = "12";
+                    ws.Cells["BT2"].Value = "13";
+                    ws.Cells["BU2"].Value = "14";
+                    ws.Cells["BV2"].Value = "15";
+                    ws.Cells["BW2"].Value = "16";
+                    ws.Cells["BX2"].Value = "17";
+                    ws.Cells["BY2"].Value = "18";
+                    ws.Cells["BZ2"].Value = "19";
+                    ws.Cells["CA2"].Value = "20";
+                    ws.Cells["CB2"].Value = "21";
+                    ws.Cells["CC2"].Value = "22";
+                    ws.Cells["CD2"].Value = "23";
+                    ws.Cells["CE2"].Value = "24";
+                    ws.Cells["CF2"].Value = "25";
+                    ws.Cells["CG2"].Value = "26";
+                    int x = 3;
+                    foreach (var item in fresa)
+                    {
+                        ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
+                        ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
+                        ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
+                        ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
+                        ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
+                        ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
+                        ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
+                        ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
+                        ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
+                        ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
+                        ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
+                        ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
+                        ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
+                        ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
+                        ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
+                        ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
+                        ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
+                        ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
+                        ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
+                        ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
+                        ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
+                        ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
+                        ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
+                        ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
+                        ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
+                        ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
+                        ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
+                        ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
+                        ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
+                        ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacana;
+                        ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
+                        ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
+                        ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
+                        ws.Cells[string.Format("AH{0}", x)].Value = item._27;
+                        ws.Cells[string.Format("AI{0}", x)].Value = item._28;
+                        ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
+                        ws.Cells[string.Format("AK{0}", x)].Value = item._30;
+                        ws.Cells[string.Format("AL{0}", x)].Value = item._31;
+                        ws.Cells[string.Format("AM{0}", x)].Value = item._32;
+                        ws.Cells[string.Format("AN{0}", x)].Value = item._33;
+                        ws.Cells[string.Format("AO{0}", x)].Value = item._34;
+                        ws.Cells[string.Format("AP{0}", x)].Value = item._35;
+                        ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
+                        ws.Cells[string.Format("AR{0}", x)].Value = item._37;
+                        ws.Cells[string.Format("AS{0}", x)].Value = item._38;
+                        ws.Cells[string.Format("AT{0}", x)].Value = item._39;
+                        ws.Cells[string.Format("AU{0}", x)].Value = item._40;
+                        ws.Cells[string.Format("AV{0}", x)].Value = item._41;
+                        ws.Cells[string.Format("AW{0}", x)].Value = item._42;
+                        ws.Cells[string.Format("AX{0}", x)].Value = item._43;
+                        ws.Cells[string.Format("AY{0}", x)].Value = item._44;
+                        ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
+                        ws.Cells[string.Format("BA{0}", x)].Value = item._46;
+                        ws.Cells[string.Format("BB{0}", x)].Value = item._47;
+                        ws.Cells[string.Format("BC{0}", x)].Value = item._48;
+                        ws.Cells[string.Format("BD{0}", x)].Value = item._49;
+                        ws.Cells[string.Format("BE{0}", x)].Value = item._50;
+                        ws.Cells[string.Format("BF{0}", x)].Value = item._51;
+                        ws.Cells[string.Format("BG{0}", x)].Value = item._52;
+                        ws.Cells[string.Format("BH{0}", x)].Value = item._1;
+                        ws.Cells[string.Format("BI{0}", x)].Value = item._2;
+                        ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
+                        ws.Cells[string.Format("BK{0}", x)].Value = item._4;
+                        ws.Cells[string.Format("BL{0}", x)].Value = item._5;
+                        ws.Cells[string.Format("BM{0}", x)].Value = item._6;
+                        ws.Cells[string.Format("BN{0}", x)].Value = item._7;
+                        ws.Cells[string.Format("BO{0}", x)].Value = item._8;
+                        ws.Cells[string.Format("BP{0}", x)].Value = item._9;
+                        ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
+                        ws.Cells[string.Format("BR{0}", x)].Value = item._11;
+                        ws.Cells[string.Format("BS{0}", x)].Value = item._12;
+                        ws.Cells[string.Format("BT{0}", x)].Value = item._13;
+                        ws.Cells[string.Format("BU{0}", x)].Value = item._14;
+                        ws.Cells[string.Format("BV{0}", x)].Value = item._15;
+                        ws.Cells[string.Format("BW{0}", x)].Value = item._16;
+                        ws.Cells[string.Format("BX{0}", x)].Value = item._17;
+                        ws.Cells[string.Format("BY{0}", x)].Value = item._18;
+                        ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
+                        ws.Cells[string.Format("CA{0}", x)].Value = item._20;
+                        ws.Cells[string.Format("CB{0}", x)].Value = item._21;
+                        ws.Cells[string.Format("CC{0}", x)].Value = item._22;
+                        ws.Cells[string.Format("CD{0}", x)].Value = item._23;
+                        ws.Cells[string.Format("CE{0}", x)].Value = item._24;
+                        ws.Cells[string.Format("CF{0}", x)].Value = item._25;
+                        ws.Cells[string.Format("CG{0}", x)].Value = item._26;
+                        x++;
+                    }
+                    ws.Cells["A:CG"].AutoFitColumns();
+                }
+                //ws.Row(2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                //ws.Row(2).Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("white")));
+
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment: filename=" + "ExcelReport.xlsx");
+                Response.BinaryWrite(excel.GetAsByteArray());
+                Response.End();
+            }
+            catch (Exception e)
             {
-                ExcelWorksheet ws = excel.Workbook.Worksheets.Add("FRAMBUESA");
-                ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
-                ws.Cells["A2"].Value = "Ingeniero";
-                ws.Cells["B2"].Value = "Codigo";
-                ws.Cells["C2"].Value = "Productor";
-                ws.Cells["D2"].Value = "Campo";
-                ws.Cells["E2"].Value = "Ubicacion";
-                ws.Cells["F2"].Value = "Num_corte";
-                ws.Cells["G2"].Value = "Sector";
-                ws.Cells["H2"].Value = "Superficie";
-                ws.Cells["I2"].Value = "Cultivo";
-                ws.Cells["J2"].Value = "Variedad";
-                ws.Cells["K2"].Value = "Num plantas xha";
-                ws.Cells["L2"].Value = "Manejo";
-                ws.Cells["M2"].Value = "Tipo_plantacion";
-                ws.Cells["N2"].Value = "Fecha_plantacion";
-                ws.Cells["O2"].Value = "Fecha_poda";
-                ws.Cells["P2"].Value = "Fecha_defoliacion";
-                ws.Cells["Q2"].Value = "FechaIniciocorte1";
-                ws.Cells["R2"].Value = "Fecha_redefoliacion";
-                ws.Cells["S2"].Value = "FechaIniciocorte2";
-                ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
-                ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
-                ws.Cells["V2"].Value = "Plantacion";
-                ws.Cells["W2"].Value = "Caja1";
-                ws.Cells["X2"].Value = "Caja2";
-                ws.Cells["Y2"].Value = "Estructura";
-                ws.Cells["Z2"].Value = "Tipo_certificacion";
-                ws.Cells["AA2"].Value = "Programa_Tesco";
-                ws.Cells["AB2"].Value = "Edad_planta";
-                ws.Cells["AC2"].Value = "Tipo_plantacion2";
-                ws.Cells["AD2"].Value = "Fecha_podamediacaña";
-                ws.Cells["AE2"].Value = "Temporada";
-                ws.Cells["AF2"].Value = "Zona";
-                ws.Cells["AG2"].Value = "Acopio";
-                ws.Cells["AH2"].Value = "27";
-                ws.Cells["AI2"].Value = "28";
-                ws.Cells["AJ2"].Value = "29";
-                ws.Cells["AK2"].Value = "30";
-                ws.Cells["AL2"].Value = "31";
-                ws.Cells["AM2"].Value = "32";
-                ws.Cells["AN2"].Value = "33";
-                ws.Cells["AO2"].Value = "34";
-                ws.Cells["AP2"].Value = "35";
-                ws.Cells["AQ2"].Value = "36";
-                ws.Cells["AR2"].Value = "37";
-                ws.Cells["AS2"].Value = "38";
-                ws.Cells["AT2"].Value = "39";
-                ws.Cells["AU2"].Value = "40";
-                ws.Cells["AV2"].Value = "41";
-                ws.Cells["AW2"].Value = "42";
-                ws.Cells["AX2"].Value = "43";
-                ws.Cells["AY2"].Value = "44";
-                ws.Cells["AZ2"].Value = "45";
-                ws.Cells["BA2"].Value = "46";
-                ws.Cells["BB2"].Value = "47";
-                ws.Cells["BC2"].Value = "48";
-                ws.Cells["BD2"].Value = "49";
-                ws.Cells["BE2"].Value = "50";
-                ws.Cells["BF2"].Value = "51";
-                ws.Cells["BG2"].Value = "52";
-                ws.Cells["BH2"].Value = "1";
-                ws.Cells["BI2"].Value = "2";
-                ws.Cells["BJ2"].Value = "3";
-                ws.Cells["BK2"].Value = "4";
-                ws.Cells["BL2"].Value = "5";
-                ws.Cells["BM2"].Value = "6";
-                ws.Cells["BN2"].Value = "7";
-                ws.Cells["BO2"].Value = "8";
-                ws.Cells["BP2"].Value = "9";
-                ws.Cells["BQ2"].Value = "10";
-                ws.Cells["BR2"].Value = "11";
-                ws.Cells["BS2"].Value = "12";
-                ws.Cells["BT2"].Value = "13";
-                ws.Cells["BU2"].Value = "14";
-                ws.Cells["BV2"].Value = "15";
-                ws.Cells["BW2"].Value = "16";
-                ws.Cells["BX2"].Value = "17";
-                ws.Cells["BY2"].Value = "18";
-                ws.Cells["BZ2"].Value = "19";
-                ws.Cells["CA2"].Value = "20";
-                ws.Cells["CB2"].Value = "21";
-                ws.Cells["CC2"].Value = "22";
-                ws.Cells["CD2"].Value = "23";
-                ws.Cells["CE2"].Value = "24";
-                ws.Cells["CF2"].Value = "25";
-                ws.Cells["CG2"].Value = "26";
-                int x = 3;
-                foreach (var item in fram)
-                {
-                    ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
-                    ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
-                    ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
-                    ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
-                    ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
-                    ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
-                    ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
-                    ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
-                    ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
-                    ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
-                    ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
-                    ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
-                    ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
-                    ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
-                    ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
-                    ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
-                    ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
-                    ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
-                    ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
-                    ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
-                    ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
-                    ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
-                    ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
-                    ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
-                    ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
-                    ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
-                    ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
-                    ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
-                    ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
-                    ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacaña;
-                    ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
-                    ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
-                    ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
-                    ws.Cells[string.Format("AH{0}", x)].Value = item._27;
-                    ws.Cells[string.Format("AI{0}", x)].Value = item._28;
-                    ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
-                    ws.Cells[string.Format("AK{0}", x)].Value = item._30;
-                    ws.Cells[string.Format("AL{0}", x)].Value = item._31;
-                    ws.Cells[string.Format("AM{0}", x)].Value = item._32;
-                    ws.Cells[string.Format("AN{0}", x)].Value = item._33;
-                    ws.Cells[string.Format("AO{0}", x)].Value = item._34;
-                    ws.Cells[string.Format("AP{0}", x)].Value = item._35;
-                    ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
-                    ws.Cells[string.Format("AR{0}", x)].Value = item._37;
-                    ws.Cells[string.Format("AS{0}", x)].Value = item._38;
-                    ws.Cells[string.Format("AT{0}", x)].Value = item._39;
-                    ws.Cells[string.Format("AU{0}", x)].Value = item._40;
-                    ws.Cells[string.Format("AV{0}", x)].Value = item._41;
-                    ws.Cells[string.Format("AW{0}", x)].Value = item._42;
-                    ws.Cells[string.Format("AX{0}", x)].Value = item._43;
-                    ws.Cells[string.Format("AY{0}", x)].Value = item._44;
-                    ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
-                    ws.Cells[string.Format("BA{0}", x)].Value = item._46;
-                    ws.Cells[string.Format("BB{0}", x)].Value = item._47;
-                    ws.Cells[string.Format("BC{0}", x)].Value = item._48;
-                    ws.Cells[string.Format("BD{0}", x)].Value = item._49;
-                    ws.Cells[string.Format("BE{0}", x)].Value = item._50;
-                    ws.Cells[string.Format("BF{0}", x)].Value = item._51;
-                    ws.Cells[string.Format("BG{0}", x)].Value = item._52;
-                    ws.Cells[string.Format("BH{0}", x)].Value = item._1;
-                    ws.Cells[string.Format("BI{0}", x)].Value = item._2;
-                    ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
-                    ws.Cells[string.Format("BK{0}", x)].Value = item._4;
-                    ws.Cells[string.Format("BL{0}", x)].Value = item._5;
-                    ws.Cells[string.Format("BM{0}", x)].Value = item._6;
-                    ws.Cells[string.Format("BN{0}", x)].Value = item._7;
-                    ws.Cells[string.Format("BO{0}", x)].Value = item._8;
-                    ws.Cells[string.Format("BP{0}", x)].Value = item._9;
-                    ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
-                    ws.Cells[string.Format("BR{0}", x)].Value = item._11;
-                    ws.Cells[string.Format("BS{0}", x)].Value = item._12;
-                    ws.Cells[string.Format("BT{0}", x)].Value = item._13;
-                    ws.Cells[string.Format("BU{0}", x)].Value = item._14;
-                    ws.Cells[string.Format("BV{0}", x)].Value = item._15;
-                    ws.Cells[string.Format("BW{0}", x)].Value = item._16;
-                    ws.Cells[string.Format("BX{0}", x)].Value = item._17;
-                    ws.Cells[string.Format("BY{0}", x)].Value = item._18;
-                    ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
-                    ws.Cells[string.Format("CA{0}", x)].Value = item._20;
-                    ws.Cells[string.Format("CB{0}", x)].Value = item._21;
-                    ws.Cells[string.Format("CC{0}", x)].Value = item._22;
-                    ws.Cells[string.Format("CD{0}", x)].Value = item._23;
-                    ws.Cells[string.Format("CE{0}", x)].Value = item._24;
-                    ws.Cells[string.Format("CF{0}", x)].Value = item._25;
-                    ws.Cells[string.Format("CG{0}", x)].Value = item._26;
-                    x++;
-                }
-                ws.Cells["A:CG"].AutoFitColumns();
+                e.ToString();
             }
-
-            //ARANDANO
-            var aran = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
-              "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacaña, 23), '') as Fecha_podamediacaña,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
-              "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
-              "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacaña, V.Temporada," +
-              "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
-              "From(select * from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from SIPGProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacaña,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
-              "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
-              "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 3 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
-
-            if (aran.Count > 0)
-            {
-                ExcelWorksheet ws = excel.Workbook.Worksheets.Add("ARANDANO");
-                ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
-                ws.Cells["A2"].Value = "Ingeniero";
-                ws.Cells["B2"].Value = "Codigo";
-                ws.Cells["C2"].Value = "Productor";
-                ws.Cells["D2"].Value = "Campo";
-                ws.Cells["E2"].Value = "Ubicacion";
-                ws.Cells["F2"].Value = "Num_corte";
-                ws.Cells["G2"].Value = "Sector";
-                ws.Cells["H2"].Value = "Superficie";
-                ws.Cells["I2"].Value = "Cultivo";
-                ws.Cells["J2"].Value = "Variedad";
-                ws.Cells["K2"].Value = "Num plantas xha";
-                ws.Cells["L2"].Value = "Manejo";
-                ws.Cells["M2"].Value = "Tipo_plantacion";
-                ws.Cells["N2"].Value = "Fecha_plantacion";
-                ws.Cells["O2"].Value = "Fecha_poda";
-                ws.Cells["P2"].Value = "Fecha_defoliacion";
-                ws.Cells["Q2"].Value = "FechaIniciocorte1";
-                ws.Cells["R2"].Value = "Fecha_redefoliacion";
-                ws.Cells["S2"].Value = "FechaIniciocorte2";
-                ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
-                ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
-                ws.Cells["V2"].Value = "Plantacion";
-                ws.Cells["W2"].Value = "Caja1";
-                ws.Cells["X2"].Value = "Caja2";
-                ws.Cells["Y2"].Value = "Estructura";
-                ws.Cells["Z2"].Value = "Tipo_certificacion";
-                ws.Cells["AA2"].Value = "Programa_Tesco";
-                ws.Cells["AB2"].Value = "Edad_planta";
-                ws.Cells["AC2"].Value = "Tipo_plantacion2";
-                ws.Cells["AD2"].Value = "Fecha_podamediacaña";
-                ws.Cells["AE2"].Value = "Temporada";
-                ws.Cells["AF2"].Value = "Zona";
-                ws.Cells["AG2"].Value = "Acopio";
-                ws.Cells["AH2"].Value = "27";
-                ws.Cells["AI2"].Value = "28";
-                ws.Cells["AJ2"].Value = "29";
-                ws.Cells["AK2"].Value = "30";
-                ws.Cells["AL2"].Value = "31";
-                ws.Cells["AM2"].Value = "32";
-                ws.Cells["AN2"].Value = "33";
-                ws.Cells["AO2"].Value = "34";
-                ws.Cells["AP2"].Value = "35";
-                ws.Cells["AQ2"].Value = "36";
-                ws.Cells["AR2"].Value = "37";
-                ws.Cells["AS2"].Value = "38";
-                ws.Cells["AT2"].Value = "39";
-                ws.Cells["AU2"].Value = "40";
-                ws.Cells["AV2"].Value = "41";
-                ws.Cells["AW2"].Value = "42";
-                ws.Cells["AX2"].Value = "43";
-                ws.Cells["AY2"].Value = "44";
-                ws.Cells["AZ2"].Value = "45";
-                ws.Cells["BA2"].Value = "46";
-                ws.Cells["BB2"].Value = "47";
-                ws.Cells["BC2"].Value = "48";
-                ws.Cells["BD2"].Value = "49";
-                ws.Cells["BE2"].Value = "50";
-                ws.Cells["BF2"].Value = "51";
-                ws.Cells["BG2"].Value = "52";
-                ws.Cells["BH2"].Value = "1";
-                ws.Cells["BI2"].Value = "2";
-                ws.Cells["BJ2"].Value = "3";
-                ws.Cells["BK2"].Value = "4";
-                ws.Cells["BL2"].Value = "5";
-                ws.Cells["BM2"].Value = "6";
-                ws.Cells["BN2"].Value = "7";
-                ws.Cells["BO2"].Value = "8";
-                ws.Cells["BP2"].Value = "9";
-                ws.Cells["BQ2"].Value = "10";
-                ws.Cells["BR2"].Value = "11";
-                ws.Cells["BS2"].Value = "12";
-                ws.Cells["BT2"].Value = "13";
-                ws.Cells["BU2"].Value = "14";
-                ws.Cells["BV2"].Value = "15";
-                ws.Cells["BW2"].Value = "16";
-                ws.Cells["BX2"].Value = "17";
-                ws.Cells["BY2"].Value = "18";
-                ws.Cells["BZ2"].Value = "19";
-                ws.Cells["CA2"].Value = "20";
-                ws.Cells["CB2"].Value = "21";
-                ws.Cells["CC2"].Value = "22";
-                ws.Cells["CD2"].Value = "23";
-                ws.Cells["CE2"].Value = "24";
-                ws.Cells["CF2"].Value = "25";
-                ws.Cells["CG2"].Value = "26";
-                int x = 3;
-                foreach (var item in aran)
-                {
-                    ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
-                    ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
-                    ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
-                    ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
-                    ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
-                    ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
-                    ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
-                    ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
-                    ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
-                    ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
-                    ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
-                    ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
-                    ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
-                    ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
-                    ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
-                    ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
-                    ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
-                    ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
-                    ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
-                    ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
-                    ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
-                    ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
-                    ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
-                    ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
-                    ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
-                    ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
-                    ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
-                    ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
-                    ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
-                    ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacaña;
-                    ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
-                    ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
-                    ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
-                    ws.Cells[string.Format("AH{0}", x)].Value = item._27;
-                    ws.Cells[string.Format("AI{0}", x)].Value = item._28;
-                    ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
-                    ws.Cells[string.Format("AK{0}", x)].Value = item._30;
-                    ws.Cells[string.Format("AL{0}", x)].Value = item._31;
-                    ws.Cells[string.Format("AM{0}", x)].Value = item._32;
-                    ws.Cells[string.Format("AN{0}", x)].Value = item._33;
-                    ws.Cells[string.Format("AO{0}", x)].Value = item._34;
-                    ws.Cells[string.Format("AP{0}", x)].Value = item._35;
-                    ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
-                    ws.Cells[string.Format("AR{0}", x)].Value = item._37;
-                    ws.Cells[string.Format("AS{0}", x)].Value = item._38;
-                    ws.Cells[string.Format("AT{0}", x)].Value = item._39;
-                    ws.Cells[string.Format("AU{0}", x)].Value = item._40;
-                    ws.Cells[string.Format("AV{0}", x)].Value = item._41;
-                    ws.Cells[string.Format("AW{0}", x)].Value = item._42;
-                    ws.Cells[string.Format("AX{0}", x)].Value = item._43;
-                    ws.Cells[string.Format("AY{0}", x)].Value = item._44;
-                    ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
-                    ws.Cells[string.Format("BA{0}", x)].Value = item._46;
-                    ws.Cells[string.Format("BB{0}", x)].Value = item._47;
-                    ws.Cells[string.Format("BC{0}", x)].Value = item._48;
-                    ws.Cells[string.Format("BD{0}", x)].Value = item._49;
-                    ws.Cells[string.Format("BE{0}", x)].Value = item._50;
-                    ws.Cells[string.Format("BF{0}", x)].Value = item._51;
-                    ws.Cells[string.Format("BG{0}", x)].Value = item._52;
-                    ws.Cells[string.Format("BH{0}", x)].Value = item._1;
-                    ws.Cells[string.Format("BI{0}", x)].Value = item._2;
-                    ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
-                    ws.Cells[string.Format("BK{0}", x)].Value = item._4;
-                    ws.Cells[string.Format("BL{0}", x)].Value = item._5;
-                    ws.Cells[string.Format("BM{0}", x)].Value = item._6;
-                    ws.Cells[string.Format("BN{0}", x)].Value = item._7;
-                    ws.Cells[string.Format("BO{0}", x)].Value = item._8;
-                    ws.Cells[string.Format("BP{0}", x)].Value = item._9;
-                    ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
-                    ws.Cells[string.Format("BR{0}", x)].Value = item._11;
-                    ws.Cells[string.Format("BS{0}", x)].Value = item._12;
-                    ws.Cells[string.Format("BT{0}", x)].Value = item._13;
-                    ws.Cells[string.Format("BU{0}", x)].Value = item._14;
-                    ws.Cells[string.Format("BV{0}", x)].Value = item._15;
-                    ws.Cells[string.Format("BW{0}", x)].Value = item._16;
-                    ws.Cells[string.Format("BX{0}", x)].Value = item._17;
-                    ws.Cells[string.Format("BY{0}", x)].Value = item._18;
-                    ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
-                    ws.Cells[string.Format("CA{0}", x)].Value = item._20;
-                    ws.Cells[string.Format("CB{0}", x)].Value = item._21;
-                    ws.Cells[string.Format("CC{0}", x)].Value = item._22;
-                    ws.Cells[string.Format("CD{0}", x)].Value = item._23;
-                    ws.Cells[string.Format("CE{0}", x)].Value = item._24;
-                    ws.Cells[string.Format("CF{0}", x)].Value = item._25;
-                    ws.Cells[string.Format("CG{0}", x)].Value = item._26;
-                    x++;
-                }
-                ws.Cells["A:CG"].AutoFitColumns();
-            }
-
-            //FRESA
-            var fresa = bd.Database.SqlQuery<ClassCurva>("Select I.Nombre as Asesor, P.Nombre as Productor, S.Cod_Prod, S.Cod_Campo, C.Descripcion as Campo, L.Descripcion as Localidad, isnull(S.Num_corte,0) as Num_corte,S.Sector,round(S.Ha,2) as Ha,isnull(T.Descripcion,'') AS Tipo, isnull(V.Descripcion, '') AS Producto, isnull(S.Numplantas_xha, 0) as Numplantas_xha, isnull(S.Manejo, '') as Manejo, isnull(S.Tipo_plantacion, '') as Tipo_plantacion, isnull(CONVERT(VARCHAR(10), S.Fecha_plantacion, 23), '') as Fecha_plantacion,isnull(CONVERT(VARCHAR(10), S.Fecha_poda, 23), '') as Fecha_poda, " +
-              "isnull(CONVERT(VARCHAR(10), S.Fecha_defoliacion, 23), '') as Fecha_defoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte1, 23), '') as Fecha_corte1R,isnull(CONVERT(VARCHAR(10), S.Fecha_redefoliacion, 23), '') as Fecha_redefoliacionR, isnull(CONVERT(VARCHAR(10), S.Fecha_corte2, 23), '') as Fecha_corte2R, isnull(S.Sem1, '') as Sem1, isnull(S.Sem2, '') as Sem2,isnull(S.Plantacion, 0) as Plantacion, isnull(S.Caja1, 0) as Caja1, isnull(S.Caja2, 0) as Caja2, isnull(S.Estructura, '') as Estructura, isnull(S.Tipo_certificacion, '') as Tipo_certificacion,isnull(S.Tesco, '') as Tesco,isnull(S.Edad_planta, 0) as Edad_planta,isnull(S.Tipo_plantacion2, '') as Tipo_plantacion2,isnull(CONVERT(VARCHAR(10), S.Fecha_podamediacaña, 23), '') as Fecha_podamediacaña,isnull(S.Temporada, '') as Temporada,isnull(Z.DescZona, '') as Zona,isnull(A.Acopio, '') as Acopio," +
-              "isnull(S.[27], 0) as _27, isnull(S.[28], 0) as _28, isnull(S.[29], 0) as _29, isnull(S.[30], 0) as _30, isnull(S.[31], 0) as _31, isnull(S.[32], 0) as _32, isnull(S.[33], 0) _33, isnull(S.[34], 0) as _34, isnull(S.[35], 0) as _35,isnull(S.[36], 0) as _36, isnull(S.[37], 0) as _37, isnull(S.[38], 0) as _38, isnull(S.[39], 0) as _39, isnull(S.[40], 0) as _40, isnull(S.[41], 0) as _41, isnull(S.[42], 0) as _42, isnull(S.[43], 0) as _43, isnull(S.[44], 0) as _44, isnull(S.[45], 0) as _45, isnull(S.[46], 0) as _46,isnull(S.[47], 0) as _47, isnull(S.[48], 0) as _48, isnull(S.[49], 0) as _49, isnull(S.[50], 0) as _50, isnull(S.[51], 0) as _51, isnull(S.[52], 0) as _52, isnull(S.[1], 0) as _1, isnull(S.[2], 0) as _2, isnull(S.[3], 0) as _3, isnull(S.[4], 0) as _4, isnull(S.[5], 0) as _5,isnull(S.[6], 0) as _6, isnull(S.[7], 0) as _7, isnull(S.[8], 0) as _8, isnull(S.[9], 0) as _9, isnull(S.[10], 0) as _10, isnull(S.[11], 0) as _11, isnull(S.[12], 0) as _12, isnull(S.[13], 0) as _13, isnull(S.[14], 0) as _14, isnull(S.[15], 0) as _15, isnull(S.[16], 0) as _16,isnull(S.[17], 0) as _17, isnull(S.[18], 0) as _18, isnull(S.[19], 0) as _19, isnull(S.[20], 0) as _20, isnull(S.[21], 0) as _21, isnull(S.[22], 0) as _22, isnull(S.[23], 0) as _23, isnull(S.[24], 0) as _24, isnull(S.[25], 0) as _25, isnull(S.[26], 0) as _26 " +
-              "FROM(select V.IdAgen, V.Cod_Prod, V.Cod_Campo, V.Num_corte, V.Sector, V.Ha, V.Numplantas_xha, V.Manejo, V.Tipo_plantacion, V.Fecha_plantacion, V.Fecha_poda, V.Fecha_defoliacion, V.Fecha_corte1, V.Fecha_redefoliacion, V.Fecha_corte2, V.Sem1,V.Sem2, V.Plantacion, V.Caja1, V.Caja2, V.Estructura, V.Tipo_certificacion, V.Tesco, V.Edad_planta, V.Tipo_plantacion2, V.Fecha_podamediacaña, V.Temporada," +
-              "max(V.Fecha) as fecha, V.[27], V.[28], V.[29], V.[30], V.[31], V.[32], V.[33], V.[34], V.[35], V.[36], V.[37], V.[38], V.[39], V.[40], V.[41], V.[42], V.[43], V.[44], V.[45], V.[46], V.[47], V.[48], V.[49], V.[50], V.[51], V.[52], V.[1], V.[2], V.[3], V.[4], V.[5], V.[6], V.[7], V.[8], V.[9], V.[10], V.[11], V.[12], V.[13], V.[14], V.[15], V.[16], V.[17], V.[18], V.[19], V.[20], V.[21], V.[22], V.[23], V.[24], V.[25], V.[26] " +
-              "From(select * from SIPGProyeccion P where Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin)  and Fecha = (select max(Fecha) from SIPGProyeccion))V GROUP BY V.IdAgen,V.Cod_Prod,V.Cod_Campo,V.Num_corte,V.Sector,V.Ha,V.Numplantas_xha,V.Manejo,V.Tipo_plantacion,V.Fecha_plantacion,V.Fecha_poda,V.Fecha_poda,V.Fecha_defoliacion,V.Fecha_corte1,V.Fecha_redefoliacion,V.Fecha_corte2,V.Sem1, V.Sem2,V.Plantacion,V.Caja1,V.Caja2,V.Estructura,V.Tipo_certificacion,V.Tesco,V.Edad_planta,V.Tipo_plantacion2,V.Fecha_podamediacaña,V.Temporada,V.[27],V.[28],V.[29],V.[30],V.[31],V.[32],V.[33],V.[34],V.[35],V.[36],V.[37],V.[38],V.[39],V.[40],V.[41],V.[42],V.[43],V.[44],V.[45],V.[46],V.[47],V.[48],V.[49],V.[50],V.[51],V.[52],V.[1],V.[2],V.[3],V.[4],V.[5],V.[6],V.[7],V.[8],V.[9],V.[10],V.[11],V.[12],V.[13],V.[14],V.[15],V.[16],V.[17],V.[18],V.[19],V.[20],V.[21],V.[22],V.[23],V.[24],V.[25],V.[26])S " +
-              "LEFT JOIN ProdAgenteCat I on S.IdAgen = I.IdAgen LEFT JOIN ProdCamposCat C on S.IdAgen = C.IdAgen and S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo LEFT JOIN ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod LEFT JOIN ProdZonasRastreoCat Z on C.IdZona = Z.IdZona LEFT JOIN CatAcopios A on C.IdAcopio = A.IdAcopio LEFT JOIN CatTiposProd T on C.Tipo = T.Tipo LEFT JOIN CatProductos V on C.Producto = V.Producto AND C.Tipo = V.Tipo LEFT JOIN CatLocalidades L on C.CodLocalidad = L.CodLocalidad " +
-              "WHERE I.IdAgen = " + (short)Session["IdAgen"] + " and C.Tipo = 4 order by S.Cod_Prod, S.Cod_Campo, C.Descripcion, L.Descripcion, S.Num_corte,S.Sector").ToList();
-
-            if (fresa.Count > 0)
-            {
-                ExcelWorksheet ws = excel.Workbook.Worksheets.Add("FRESA");
-                ws.Cells["A1"].Value = "CURVA DE PRODUCCION " + fecha_actual.Temporada;
-                ws.Cells["A2"].Value = "Ingeniero";
-                ws.Cells["B2"].Value = "Codigo";
-                ws.Cells["C2"].Value = "Productor";
-                ws.Cells["D2"].Value = "Campo";
-                ws.Cells["E2"].Value = "Ubicacion";
-                ws.Cells["F2"].Value = "Num_corte";
-                ws.Cells["G2"].Value = "Sector";
-                ws.Cells["H2"].Value = "Superficie";
-                ws.Cells["I2"].Value = "Cultivo";
-                ws.Cells["J2"].Value = "Variedad";
-                ws.Cells["K2"].Value = "Num plantas xha";
-                ws.Cells["L2"].Value = "Manejo";
-                ws.Cells["M2"].Value = "Tipo_plantacion";
-                ws.Cells["N2"].Value = "Fecha_plantacion";
-                ws.Cells["O2"].Value = "Fecha_poda";
-                ws.Cells["P2"].Value = "Fecha_defoliacion";
-                ws.Cells["Q2"].Value = "FechaIniciocorte1";
-                ws.Cells["R2"].Value = "Fecha_redefoliacion";
-                ws.Cells["S2"].Value = "FechaIniciocorte2";
-                ws.Cells["T2"].Value = "Sem.Inic -1ra cosecha";
-                ws.Cells["U2"].Value = "Sem.Inic - 2da cosecha";
-                ws.Cells["V2"].Value = "Plantacion";
-                ws.Cells["W2"].Value = "Caja1";
-                ws.Cells["X2"].Value = "Caja2";
-                ws.Cells["Y2"].Value = "Estructura";
-                ws.Cells["Z2"].Value = "Tipo_certificacion";
-                ws.Cells["AA2"].Value = "Programa_Tesco";
-                ws.Cells["AB2"].Value = "Edad_planta";
-                ws.Cells["AC2"].Value = "Tipo_plantacion2";
-                ws.Cells["AD2"].Value = "Fecha_podamediacaña";
-                ws.Cells["AE2"].Value = "Temporada";
-                ws.Cells["AF2"].Value = "Zona";
-                ws.Cells["AG2"].Value = "Acopio";
-                ws.Cells["AH2"].Value = "27";
-                ws.Cells["AI2"].Value = "28";
-                ws.Cells["AJ2"].Value = "29";
-                ws.Cells["AK2"].Value = "30";
-                ws.Cells["AL2"].Value = "31";
-                ws.Cells["AM2"].Value = "32";
-                ws.Cells["AN2"].Value = "33";
-                ws.Cells["AO2"].Value = "34";
-                ws.Cells["AP2"].Value = "35";
-                ws.Cells["AQ2"].Value = "36";
-                ws.Cells["AR2"].Value = "37";
-                ws.Cells["AS2"].Value = "38";
-                ws.Cells["AT2"].Value = "39";
-                ws.Cells["AU2"].Value = "40";
-                ws.Cells["AV2"].Value = "41";
-                ws.Cells["AW2"].Value = "42";
-                ws.Cells["AX2"].Value = "43";
-                ws.Cells["AY2"].Value = "44";
-                ws.Cells["AZ2"].Value = "45";
-                ws.Cells["BA2"].Value = "46";
-                ws.Cells["BB2"].Value = "47";
-                ws.Cells["BC2"].Value = "48";
-                ws.Cells["BD2"].Value = "49";
-                ws.Cells["BE2"].Value = "50";
-                ws.Cells["BF2"].Value = "51";
-                ws.Cells["BG2"].Value = "52";
-                ws.Cells["BH2"].Value = "1";
-                ws.Cells["BI2"].Value = "2";
-                ws.Cells["BJ2"].Value = "3";
-                ws.Cells["BK2"].Value = "4";
-                ws.Cells["BL2"].Value = "5";
-                ws.Cells["BM2"].Value = "6";
-                ws.Cells["BN2"].Value = "7";
-                ws.Cells["BO2"].Value = "8";
-                ws.Cells["BP2"].Value = "9";
-                ws.Cells["BQ2"].Value = "10";
-                ws.Cells["BR2"].Value = "11";
-                ws.Cells["BS2"].Value = "12";
-                ws.Cells["BT2"].Value = "13";
-                ws.Cells["BU2"].Value = "14";
-                ws.Cells["BV2"].Value = "15";
-                ws.Cells["BW2"].Value = "16";
-                ws.Cells["BX2"].Value = "17";
-                ws.Cells["BY2"].Value = "18";
-                ws.Cells["BZ2"].Value = "19";
-                ws.Cells["CA2"].Value = "20";
-                ws.Cells["CB2"].Value = "21";
-                ws.Cells["CC2"].Value = "22";
-                ws.Cells["CD2"].Value = "23";
-                ws.Cells["CE2"].Value = "24";
-                ws.Cells["CF2"].Value = "25";
-                ws.Cells["CG2"].Value = "26";
-                int x = 3;
-                foreach (var item in fresa)
-                {
-                    ws.Cells[string.Format("A{0}", x)].Value = item.Asesor;
-                    ws.Cells[string.Format("B{0}", x)].Value = item.Cod_Prod;
-                    ws.Cells[string.Format("C{0}", x)].Value = item.Productor;
-                    ws.Cells[string.Format("D{0}", x)].Value = item.Cod_Campo;
-                    ws.Cells[string.Format("E{0}", x)].Value = item.Localidad;
-                    ws.Cells[string.Format("F{0}", x)].Value = item.Num_corte;
-                    ws.Cells[string.Format("G{0}", x)].Value = item.Sector;
-                    ws.Cells[string.Format("H{0}", x)].Value = item.Ha;
-                    ws.Cells[string.Format("I{0}", x)].Value = item.Tipo;
-                    ws.Cells[string.Format("J{0}", x)].Value = item.Producto;
-                    ws.Cells[string.Format("K{0}", x)].Value = item.Numplantas_xha;
-                    ws.Cells[string.Format("L{0}", x)].Value = item.Manejo;
-                    ws.Cells[string.Format("M{0}", x)].Value = item.Tipo_plantacion;
-                    ws.Cells[string.Format("N{0}", x)].Value = item.Fecha_plantacion;
-                    ws.Cells[string.Format("O{0}", x)].Value = item.Fecha_poda;
-                    ws.Cells[string.Format("P{0}", x)].Value = item.Fecha_defoliacionR;
-                    ws.Cells[string.Format("Q{0}", x)].Value = item.Fecha_corte1R;
-                    ws.Cells[string.Format("R{0}", x)].Value = item.Fecha_redefoliacionR;
-                    ws.Cells[string.Format("S{0}", x)].Value = item.Fecha_corte2R;
-                    ws.Cells[string.Format("T{0}", x)].Value = item.Sem1;
-                    ws.Cells[string.Format("U{0}", x)].Value = item.Sem2;
-                    ws.Cells[string.Format("V{0}", x)].Value = item.Plantacion;
-                    ws.Cells[string.Format("W{0}", x)].Value = item.Caja1;
-                    ws.Cells[string.Format("X{0}", x)].Value = item.Caja2;
-                    ws.Cells[string.Format("Y{0}", x)].Value = item.Estructura;
-                    ws.Cells[string.Format("Z{0}", x)].Value = item.Tipo_certificacion;
-                    ws.Cells[string.Format("AA{0}", x)].Value = item.Tesco;
-                    ws.Cells[string.Format("AB{0}", x)].Value = item.Edad_planta;
-                    ws.Cells[string.Format("AC{0}", x)].Value = item.Tipo_plantacion2;
-                    ws.Cells[string.Format("AD{0}", x)].Value = item.Fecha_podamediacaña;
-                    ws.Cells[string.Format("AE{0}", x)].Value = item.Temporada;
-                    ws.Cells[string.Format("AF{0}", x)].Value = item.Zona;
-                    ws.Cells[string.Format("AG{0}", x)].Value = item.Acopio;
-                    ws.Cells[string.Format("AH{0}", x)].Value = item._27;
-                    ws.Cells[string.Format("AI{0}", x)].Value = item._28;
-                    ws.Cells[string.Format("AJ{0}", x)].Value = item._29;
-                    ws.Cells[string.Format("AK{0}", x)].Value = item._30;
-                    ws.Cells[string.Format("AL{0}", x)].Value = item._31;
-                    ws.Cells[string.Format("AM{0}", x)].Value = item._32;
-                    ws.Cells[string.Format("AN{0}", x)].Value = item._33;
-                    ws.Cells[string.Format("AO{0}", x)].Value = item._34;
-                    ws.Cells[string.Format("AP{0}", x)].Value = item._35;
-                    ws.Cells[string.Format("AQ{0}", x)].Value = item._36;
-                    ws.Cells[string.Format("AR{0}", x)].Value = item._37;
-                    ws.Cells[string.Format("AS{0}", x)].Value = item._38;
-                    ws.Cells[string.Format("AT{0}", x)].Value = item._39;
-                    ws.Cells[string.Format("AU{0}", x)].Value = item._40;
-                    ws.Cells[string.Format("AV{0}", x)].Value = item._41;
-                    ws.Cells[string.Format("AW{0}", x)].Value = item._42;
-                    ws.Cells[string.Format("AX{0}", x)].Value = item._43;
-                    ws.Cells[string.Format("AY{0}", x)].Value = item._44;
-                    ws.Cells[string.Format("AZ{0}", x)].Value = item._45;
-                    ws.Cells[string.Format("BA{0}", x)].Value = item._46;
-                    ws.Cells[string.Format("BB{0}", x)].Value = item._47;
-                    ws.Cells[string.Format("BC{0}", x)].Value = item._48;
-                    ws.Cells[string.Format("BD{0}", x)].Value = item._49;
-                    ws.Cells[string.Format("BE{0}", x)].Value = item._50;
-                    ws.Cells[string.Format("BF{0}", x)].Value = item._51;
-                    ws.Cells[string.Format("BG{0}", x)].Value = item._52;
-                    ws.Cells[string.Format("BH{0}", x)].Value = item._1;
-                    ws.Cells[string.Format("BI{0}", x)].Value = item._2;
-                    ws.Cells[string.Format("BJ{0}", x)].Value = item._3;
-                    ws.Cells[string.Format("BK{0}", x)].Value = item._4;
-                    ws.Cells[string.Format("BL{0}", x)].Value = item._5;
-                    ws.Cells[string.Format("BM{0}", x)].Value = item._6;
-                    ws.Cells[string.Format("BN{0}", x)].Value = item._7;
-                    ws.Cells[string.Format("BO{0}", x)].Value = item._8;
-                    ws.Cells[string.Format("BP{0}", x)].Value = item._9;
-                    ws.Cells[string.Format("BQ{0}", x)].Value = item._10;
-                    ws.Cells[string.Format("BR{0}", x)].Value = item._11;
-                    ws.Cells[string.Format("BS{0}", x)].Value = item._12;
-                    ws.Cells[string.Format("BT{0}", x)].Value = item._13;
-                    ws.Cells[string.Format("BU{0}", x)].Value = item._14;
-                    ws.Cells[string.Format("BV{0}", x)].Value = item._15;
-                    ws.Cells[string.Format("BW{0}", x)].Value = item._16;
-                    ws.Cells[string.Format("BX{0}", x)].Value = item._17;
-                    ws.Cells[string.Format("BY{0}", x)].Value = item._18;
-                    ws.Cells[string.Format("BZ{0}", x)].Value = item._19;
-                    ws.Cells[string.Format("CA{0}", x)].Value = item._20;
-                    ws.Cells[string.Format("CB{0}", x)].Value = item._21;
-                    ws.Cells[string.Format("CC{0}", x)].Value = item._22;
-                    ws.Cells[string.Format("CD{0}", x)].Value = item._23;
-                    ws.Cells[string.Format("CE{0}", x)].Value = item._24;
-                    ws.Cells[string.Format("CF{0}", x)].Value = item._25;
-                    ws.Cells[string.Format("CG{0}", x)].Value = item._26;
-                    x++;
-                }
-                ws.Cells["A:CG"].AutoFitColumns();
-            }
-            //ws.Row(2).Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
-            //ws.Row(2).Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml(string.Format("white")));
-
-            Response.Clear();
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment: filename=" + "ExcelReport.xlsx");
-            Response.BinaryWrite(excel.GetAsByteArray());
-            Response.End();
         }
 
         //isabel
@@ -2438,12 +2438,11 @@ namespace Sistema_Indicadores.Controllers
         {
             if (agente != 0 && codigo != null)
             {
-                var query = from x in bd.SIPGProyeccion
+                var query = from x in bd.ProdProyeccion
                             where x.IdAgen == agente && x.Cod_Prod == codigo
                             select x;
-                foreach (SIPGProyeccion item in query)
+                foreach (ProdProyeccion item in query)
                 {
-                    item.Estado_M = "A";
                     item.Fecha = DateTime.Now;
                 }
                 bd.SaveChanges();
@@ -2455,7 +2454,7 @@ namespace Sistema_Indicadores.Controllers
             }
         }
 
-        public ActionResult Seguimiento(string datos = "")
+        public ActionResult Seguimiento()
         {
             if (Session["Nombre"] != null)
             {
@@ -2465,238 +2464,214 @@ namespace Sistema_Indicadores.Controllers
 
                 if (Session["Id"].ToString() == "391")
                 {
-                    if (datos == "A")
-                    {
-                        item = (from m in (from m in bd.Seguimiento_financ
-                                           group m by new
-                                           {
-                                               Cod_Empresa = m.Cod_Empresa,
-                                               Cod_Prod = m.Cod_Prod,
-                                               Cod_Campo = m.Cod_Campo
-                                           } into x
-                                           select new
-                                           {
-                                               Cod_Empresa = x.Key.Cod_Empresa,
-                                               Cod_Prod = x.Key.Cod_Prod,
-                                               Cod_Campo = x.Key.Cod_Campo,
-                                               Fecha = x.Max(m => m.Fecha)
-                                           })
+                    item = (from m in (from m in bd.Seguimiento_financ
+                                       group m by new
+                                       {
+                                           Cod_Empresa = m.Cod_Empresa,
+                                           Cod_Prod = m.Cod_Prod,
+                                           Cod_Campo = m.Cod_Campo
+                                       } into x
+                                       select new
+                                       {
+                                           Cod_Empresa = x.Key.Cod_Empresa,
+                                           Cod_Prod = x.Key.Cod_Prod,
+                                           Cod_Campo = x.Key.Cod_Campo,
+                                           Fecha = x.Max(m => m.Fecha)
+                                       })
 
-                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
-                                from s in Sfinanc.DefaultIfEmpty()
+                            join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                            from s in Sfinanc.DefaultIfEmpty()
 
-                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
-                                from mcam in Campos.DefaultIfEmpty()
+                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                            from mcam in Campos.DefaultIfEmpty()
 
-                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
-                                from prod in Prod.DefaultIfEmpty()
+                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                            from prod in Prod.DefaultIfEmpty()
 
-                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
-                                from ageP in Agen.DefaultIfEmpty()
-                                where s.IdAgen!=null && s.Estatus == null
-                                group m by new
-                                {
-                                    Id = s.Id,
-                                    Cod_Prod = m.Cod_Prod,
-                                    Productor = prod.Nombre,
-                                    Cod_Campo = m.Cod_Campo,
-                                    Campo = mcam.Descripcion,
-                                    IdAgen = mcam.IdAgen,
-                                    Asesor = ageP.Nombre,
-                                    Estatus = s.Estatus,
-                                    Comentarios = s.Comentarios,
-                                    Fecha = m.Fecha,
-                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
-                                } into x
-                                select new ClassProductor()
-                                {
-                                    Id = x.Key.Id,
-                                    Cod_Prod = x.Key.Cod_Prod,
-                                    Productor = x.Key.Productor,
-                                    Cod_Campo = x.Key.Cod_Campo,
-                                    Campo = x.Key.Campo,
-                                    IdAgen = x.Key.IdAgen,
-                                    Asesor = x.Key.Asesor,
-                                    Estatus = x.Key.Estatus,
-                                    Comentarios = x.Key.Comentarios,
-                                    Fecha = x.Key.Fecha,
-                                    dias = x.Key.dias
-                                }).Distinct();
-                    }
-                    else if (datos == "C")
-                    {
-                        item = (from m in (from m in bd.Seguimiento_financ
-                                           group m by new
-                                           {
-                                               Cod_Empresa = m.Cod_Empresa,
-                                               Cod_Prod = m.Cod_Prod,
-                                               Cod_Campo = m.Cod_Campo
-                                           } into x
-                                           select new
-                                           {
-                                               Cod_Empresa = x.Key.Cod_Empresa,
-                                               Cod_Prod = x.Key.Cod_Prod,
-                                               Cod_Campo = x.Key.Cod_Campo,
-                                               Fecha = x.Max(m => m.Fecha)
-                                           })
+                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                            from ageP in Agen.DefaultIfEmpty()
+                            where s.IdAgen == null
+                            group m by new
+                            {
+                                Id = s.Id,
+                                Cod_Prod = m.Cod_Prod,
+                                Productor = prod.Nombre,
+                                Cod_Campo = m.Cod_Campo,
+                                Campo = mcam.Descripcion,
+                                IdAgen = mcam.IdAgen,
+                                Asesor = ageP.Nombre,
+                                Estatus = s.Estatus,
+                                Comentarios = s.Comentarios,
+                                Fecha = m.Fecha,
+                                dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now),
+                                cjs1 = (from r in bd.UV_ProdRecepcion
+                                        where r.CodEstatus == "V"
+&& (r.Fecha >= new DateTime(2020, 07, 01) && r.Fecha <= new DateTime(2020, 12, 31))
+&& r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum(),
+                                cjs2 = (from r in bd.UV_ProdRecepcion
+                                        where r.CodEstatus == "V"
+   && (r.Fecha >= new DateTime(2021, 01, 01) && r.Fecha <= DateTime.Now)
+  && r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum()
+                            } into x
+                            select new ClassProductor()
+                            {
+                                Id = x.Key.Id,
+                                Cod_Prod = x.Key.Cod_Prod,
+                                Productor = x.Key.Productor,
+                                Cod_Campo = x.Key.Cod_Campo,
+                                Campo = x.Key.Campo,
+                                IdAgen = x.Key.IdAgen,
+                                Asesor = x.Key.Asesor,
+                                Estatus = x.Key.Estatus,
+                                Comentarios = x.Key.Comentarios,
+                                Fecha = x.Key.Fecha,
+                                dias = x.Key.dias,
+                                cjs1=x.Key.cjs1,
+                                cjs2 = x.Key.cjs2
+                            }).Distinct();
+                }
 
-                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
-                                from s in Sfinanc.DefaultIfEmpty()
+                else if (Session["IdAgen"].ToString() == "1")
+                {
+                    item = (from m in (from m in bd.Seguimiento_financ
+                                       group m by new
+                                       {
+                                           Cod_Empresa = m.Cod_Empresa,
+                                           Cod_Prod = m.Cod_Prod,
+                                           Cod_Campo = m.Cod_Campo
+                                       } into x
+                                       select new
+                                       {
+                                           Cod_Empresa = x.Key.Cod_Empresa,
+                                           Cod_Prod = x.Key.Cod_Prod,
+                                           Cod_Campo = x.Key.Cod_Campo,
+                                           Fecha = x.Max(m => m.Fecha)
+                                       })
 
-                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
-                                from mcam in Campos.DefaultIfEmpty()
+                            join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                            from s in Sfinanc.DefaultIfEmpty()
 
-                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
-                                from prod in Prod.DefaultIfEmpty()
+                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                            from mcam in Campos.DefaultIfEmpty()
 
-                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
-                                from ageP in Agen.DefaultIfEmpty()
-                                where s.IdAgen != null && s.Estatus != null
-                                group m by new
-                                {
-                                    Id = s.Id,
-                                    Cod_Prod = m.Cod_Prod,
-                                    Productor = prod.Nombre,
-                                    Cod_Campo = m.Cod_Campo,
-                                    Campo = mcam.Descripcion,
-                                    IdAgen = mcam.IdAgen,
-                                    Asesor = ageP.Nombre,
-                                    Estatus = s.Estatus,
-                                    Comentarios = s.Comentarios,
-                                    Fecha = m.Fecha,
-                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
-                                } into x
-                                select new ClassProductor()
-                                {
-                                    Id = x.Key.Id,
-                                    Cod_Prod = x.Key.Cod_Prod,
-                                    Productor = x.Key.Productor,
-                                    Cod_Campo = x.Key.Cod_Campo,
-                                    Campo = x.Key.Campo,
-                                    IdAgen = x.Key.IdAgen,
-                                    Asesor = x.Key.Asesor,
-                                    Estatus = x.Key.Estatus,
-                                    Comentarios = x.Key.Comentarios,
-                                    Fecha = x.Key.Fecha,
-                                    dias = x.Key.dias
-                                }).Distinct();
-                    }
-                    else if (datos == "T")
-                    {
-                        item = (from m in (from m in bd.Seguimiento_financ
-                                           group m by new
-                                           {
-                                               Cod_Empresa = m.Cod_Empresa,
-                                               Cod_Prod = m.Cod_Prod,
-                                               Cod_Campo = m.Cod_Campo
-                                           } into x
-                                           select new
-                                           {
-                                               Cod_Empresa = x.Key.Cod_Empresa,
-                                               Cod_Prod = x.Key.Cod_Prod,
-                                               Cod_Campo = x.Key.Cod_Campo,
-                                               Fecha = x.Max(m => m.Fecha)
-                                           })
+                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                            from prod in Prod.DefaultIfEmpty()
 
-                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
-                                from s in Sfinanc.DefaultIfEmpty()
+                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                            from ageP in Agen.DefaultIfEmpty()
 
-                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
-                                from mcam in Campos.DefaultIfEmpty()
+                            group m by new
+                            {
+                                Id = s.Id,
+                                Cod_Prod = m.Cod_Prod,
+                                Productor = prod.Nombre,
+                                Cod_Campo = m.Cod_Campo,
+                                Campo = mcam.Descripcion,
+                                IdAgen = mcam.IdAgen,
+                                Asesor = ageP.Nombre,
+                                Estatus = s.Estatus,
+                                Comentarios = s.Comentarios,
+                                Fecha = m.Fecha,
+                                dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now),
+                                cjs1 = (from r in bd.UV_ProdRecepcion
+                                        where r.CodEstatus == "V"
+&& (r.Fecha >= new DateTime(2020, 07, 01) && r.Fecha <= new DateTime(2020, 12, 31))
+&& r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum(),
+                                cjs2 = (from r in bd.UV_ProdRecepcion
+                                        where r.CodEstatus == "V"
+   && (r.Fecha >= new DateTime(2021, 01, 01) && r.Fecha <= DateTime.Now)
+  && r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum()
+                            } into x
+                            select new ClassProductor()
+                            {
+                                Id = x.Key.Id,
+                                Cod_Prod = x.Key.Cod_Prod,
+                                Productor = x.Key.Productor,
+                                Cod_Campo = x.Key.Cod_Campo,
+                                Campo = x.Key.Campo,
+                                IdAgen = x.Key.IdAgen,
+                                Asesor = x.Key.Asesor,
+                                Estatus = x.Key.Estatus,
+                                Comentarios = x.Key.Comentarios,
+                                Fecha = x.Key.Fecha,
+                                dias = x.Key.dias,
+                                cjs1 = x.Key.cjs1,
+                                cjs2 = x.Key.cjs2
+                            }).Distinct();
+                }
+                else if (Session["IdAgen"].ToString() == "5")
+                {
+                    item = (from m in (from m in bd.Seguimiento_financ
+                                       group m by new
+                                       {
+                                           Cod_Empresa = m.Cod_Empresa,
+                                           Cod_Prod = m.Cod_Prod,
+                                           Cod_Campo = m.Cod_Campo
+                                       } into x
+                                       select new
+                                       {
+                                           Cod_Empresa = x.Key.Cod_Empresa,
+                                           Cod_Prod = x.Key.Cod_Prod,
+                                           Cod_Campo = x.Key.Cod_Campo,
+                                           Fecha = x.Max(m => m.Fecha)
+                                       })
 
-                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
-                                from prod in Prod.DefaultIfEmpty()
+                            join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
+                            from s in Sfinanc.DefaultIfEmpty()
 
-                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
-                                from ageP in Agen.DefaultIfEmpty()
-                                //where s.IdAgen != null
-                                group m by new
-                                {
-                                    Id = s.Id,
-                                    Cod_Prod = m.Cod_Prod,
-                                    Productor = prod.Nombre,
-                                    Cod_Campo = m.Cod_Campo,
-                                    Campo = mcam.Descripcion,
-                                    IdAgen = mcam.IdAgen,
-                                    Asesor = ageP.Nombre,
-                                    Estatus = s.Estatus,
-                                    Comentarios = s.Comentarios,
-                                    Fecha = m.Fecha,
-                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
-                                } into x
-                                select new ClassProductor()
-                                {
-                                    Id = x.Key.Id,
-                                    Cod_Prod = x.Key.Cod_Prod,
-                                    Productor = x.Key.Productor,
-                                    Cod_Campo = x.Key.Cod_Campo,
-                                    Campo = x.Key.Campo,
-                                    IdAgen = x.Key.IdAgen,
-                                    Asesor = x.Key.Asesor,
-                                    Estatus = x.Key.Estatus,
-                                    Comentarios = x.Key.Comentarios,
-                                    Fecha = x.Key.Fecha,
-                                    dias = x.Key.dias
-                                }).Distinct();
-                    }
-                    else
-                    {
-                        item = (from m in (from m in bd.Seguimiento_financ
-                                           group m by new
-                                           {
-                                               Cod_Empresa = m.Cod_Empresa,
-                                               Cod_Prod = m.Cod_Prod,
-                                               Cod_Campo = m.Cod_Campo
-                                           } into x
-                                           select new
-                                           {
-                                               Cod_Empresa = x.Key.Cod_Empresa,
-                                               Cod_Prod = x.Key.Cod_Prod,
-                                               Cod_Campo = x.Key.Cod_Campo,
-                                               Fecha = x.Max(m => m.Fecha)
-                                           })
+                            join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
+                            from mcam in Campos.DefaultIfEmpty()
 
-                                join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
-                                from s in Sfinanc.DefaultIfEmpty()
+                            join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
+                            from prod in Prod.DefaultIfEmpty()
 
-                                join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
-                                from mcam in Campos.DefaultIfEmpty()
-
-                                join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
-                                from prod in Prod.DefaultIfEmpty()
-
-                                join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
-                                from ageP in Agen.DefaultIfEmpty()
-                                where s.IdAgen == null
-                                group m by new
-                                {
-                                    Id = s.Id,
-                                    Cod_Prod = m.Cod_Prod,
-                                    Productor = prod.Nombre,
-                                    Cod_Campo = m.Cod_Campo,
-                                    Campo = mcam.Descripcion,
-                                    IdAgen = mcam.IdAgen,
-                                    Asesor = ageP.Nombre,
-                                    Estatus = s.Estatus,
-                                    Comentarios = s.Comentarios,
-                                    Fecha = m.Fecha,
-                                    dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
-                                } into x
-                                select new ClassProductor()
-                                {
-                                    Id = x.Key.Id,
-                                    Cod_Prod = x.Key.Cod_Prod,
-                                    Productor = x.Key.Productor,
-                                    Cod_Campo = x.Key.Cod_Campo,
-                                    Campo = x.Key.Campo,
-                                    IdAgen = x.Key.IdAgen,
-                                    Asesor = x.Key.Asesor,
-                                    Estatus = x.Key.Estatus,
-                                    Comentarios = x.Key.Comentarios,
-                                    Fecha = x.Key.Fecha,
-                                    dias = x.Key.dias
-                                }).Distinct();
-                    }
+                            join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
+                            from ageP in Agen.DefaultIfEmpty()
+                            where mcam.IdAgen == 33
+                            group m by new
+                            {
+                                Id = s.Id,
+                                Cod_Prod = m.Cod_Prod,
+                                Productor = prod.Nombre,
+                                Cod_Campo = m.Cod_Campo,
+                                Campo = mcam.Descripcion,
+                                IdAgen = mcam.IdAgen,
+                                Asesor = ageP.Nombre,
+                                Estatus = s.Estatus,
+                                Comentarios = s.Comentarios,
+                                Fecha = m.Fecha,
+                                dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now),
+                                cjs1 = (from r in bd.UV_ProdRecepcion
+                                        where r.CodEstatus == "V"
+&& (r.Fecha >= new DateTime(2020, 07, 01) && r.Fecha <= new DateTime(2020, 12, 31))
+&& r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum(),
+                                cjs2 = (from r in bd.UV_ProdRecepcion
+                                        where r.CodEstatus == "V"
+   && (r.Fecha >= new DateTime(2021, 01, 01) && r.Fecha <= DateTime.Now)
+  && r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum()
+                            } into x
+                            select new ClassProductor()
+                            {
+                                Id = x.Key.Id,
+                                Cod_Prod = x.Key.Cod_Prod,
+                                Productor = x.Key.Productor,
+                                Cod_Campo = x.Key.Cod_Campo,
+                                Campo = x.Key.Campo,
+                                IdAgen = x.Key.IdAgen,
+                                Asesor = x.Key.Asesor,
+                                Estatus = x.Key.Estatus,
+                                Comentarios = x.Key.Comentarios,
+                                Fecha = x.Key.Fecha,
+                                dias = x.Key.dias,
+                                cjs1 = x.Key.cjs1,
+                                cjs2 = x.Key.cjs2
+                            }).Distinct();
                 }
                 else
                 {
@@ -2740,7 +2715,16 @@ namespace Sistema_Indicadores.Controllers
                                 Estatus = s.Estatus,
                                 Comentarios = s.Comentarios,
                                 Fecha = m.Fecha,
-                                dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now)
+                                dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now),
+                                cjs1 = (from r in bd.UV_ProdRecepcion where r.CodEstatus == "V"
+         && (r.Fecha >= new DateTime(2020, 07, 01) && r.Fecha <= new DateTime(2020, 12, 31))
+         && r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum(),
+                                cjs2 = (from r in bd.UV_ProdRecepcion
+                                        where r.CodEstatus == "V"
+   && (r.Fecha >= new DateTime(2021, 01, 01) && r.Fecha <= DateTime.Now)
+  && r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
+                                        select r.Convertidas).Sum()
                             } into x
                             select new ClassProductor()
                             {
@@ -2754,10 +2738,11 @@ namespace Sistema_Indicadores.Controllers
                                 Estatus = x.Key.Estatus,
                                 Comentarios = x.Key.Comentarios,
                                 Fecha = x.Key.Fecha,
-                                dias = x.Key.dias
-                            }).Distinct();
-                }
-
+                                dias = x.Key.dias,
+                                cjs1 = x.Key.cjs1,
+                                cjs2 = x.Key.cjs2
+                            }).Distinct();                
+                }              
                 if (Session["Id"].ToString() != "391")
                 {
                     if (item.Count() != 0)
@@ -2779,59 +2764,36 @@ namespace Sistema_Indicadores.Controllers
                 return RedirectToAction("Index", "Login");
             }
         }
-        public JsonResult SeguimientoList(string datos = "")
+        public JsonResult SeguimientoList(string datos = "T")
         {
-            List<ClassProductor> list;
-            if (Session["Id"].ToString() == "391")
+            List<ClassProductor> list = new List<ClassProductor>();
+            if (datos == "A")
             {
-                if (datos == "A")
-                {
-                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
-                        "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
-                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
-                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
-                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
-                        "where S.Estatus==null").ToList();
-                }
-                else if (datos == "C")
-                {
-                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
-                         "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
-                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
-                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
-                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
-                        "where S.Estatus!=null").ToList();
-                }
-                if (datos == "T")
-                {
-                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
-                         "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
-                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
-                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
-                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
-                        "where A.IdAgen!=null").ToList();
-                }
-                else
-                {
-                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
-                         "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
-                        "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
-                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
-                        "left join ProdAgenteCat A on C.IdAgen = A.IdAgen").ToList();
-                }
+                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias, isnull(round(R.cjs1, 0),0) as cjs1, isnull(round(R2.cjs2, 0),0) as cjs2 " +
+                   "From Seguimiento_financ S left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod left join ProdAgenteCat A on C.IdAgen = A.IdAgen left join(Select sum(Convertidas) as cjs1, Cod_prod, Cod_Campo " +
+                   "from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod, Cod_Campo)R on S.Cod_Prod = R.Cod_Prod and S.Cod_Campo = R.Cod_Campo left join(Select sum(Convertidas) as cjs2, Cod_prod, Cod_Campo " +
+                   "from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2021-01-01' and getdate() group by Cod_prod, Cod_Campo)R2 on S.Cod_Prod = R2.Cod_Prod and S.Cod_Campo = R2.Cod_Campo " +
+                   "where S.Estatus is null").ToList();
             }
-            else
+            else if (datos == "C")
             {
-                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, DATEDIFF(day, S.Fecha, getdate()) as dias " +
-                 "from(select V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios, max(V.Fecha) as fecha from(select distinct Id, Cod_Prod, Cod_Campo, Estatus, Comentarios, Fecha from Seguimiento_financ where Fecha = (select max(Fecha) from Seguimiento_financ group by Cod_Prod, Cod_Campo))V GROUP BY V.Id, V.Cod_Prod, V.Cod_Campo, V.Estatus, V.Comentarios)S " +
-                    "left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo " +
-                    "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
-                    "left join ProdAgenteCat A on C.IdAgen = A.IdAgen " +
-                    "where C.IdAgen=" + (short)Session["IdAgen"] + "").ToList();
+                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,isnull(round(R.cjs1, 0),0) as cjs1, isnull(round(R2.cjs2, 0),0) as cjs2 " +
+                     "From Seguimiento_financ S left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod left join ProdAgenteCat A on C.IdAgen = A.IdAgen left join(Select sum(Convertidas) as cjs1, Cod_prod, Cod_Campo " +
+                     "from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod, Cod_Campo)R on S.Cod_Prod = R.Cod_Prod and S.Cod_Campo = R.Cod_Campo left join(Select sum(Convertidas) as cjs2, Cod_prod, Cod_Campo " +
+                     "from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2021-01-01' and getdate() group by Cod_prod, Cod_Campo)R2 on S.Cod_Prod = R2.Cod_Prod and S.Cod_Campo = R2.Cod_Campo " +
+                     "where S.Estatus is not null").ToList();
             }
+            else if (datos == "T")
+            {
+                list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo,C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, (case when S.Estatus is null then '' else S.Estatus end) as Estatus, (case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,isnull(round(R.cjs1, 0),0) as cjs1, isnull(round(R2.cjs2, 0),0) as cjs2 " +
+                    "From Seguimiento_financ S left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod left join ProdAgenteCat A on C.IdAgen = A.IdAgen left join(Select sum(Convertidas) as cjs1, Cod_prod, Cod_Campo " +
+                    "from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod, Cod_Campo)R on S.Cod_Prod = R.Cod_Prod and S.Cod_Campo = R.Cod_Campo left join(Select sum(Convertidas) as cjs2, Cod_prod, Cod_Campo " +
+                    "from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2021-01-01' and getdate() group by Cod_prod, Cod_Campo)R2 on S.Cod_Prod = R2.Cod_Prod and S.Cod_Campo = R2.Cod_Campo").ToList();
+            }
+
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult Seguimiento_sendMail(IEnumerable<Seguimiento_financ> ids)
+        public JsonResult Seguimiento_sendMail(IEnumerable<Seguimiento_financ> ids, IEnumerable<ClassProductor> tabla = null)
         {
             try
             {
@@ -2840,18 +2802,22 @@ namespace Sistema_Indicadores.Controllers
                     if (a.IdAgen == null)
                     {
                         var s = bd.Seguimiento_financ.Where(x => x.Id == a.Id).First();
+                        var p = bd.ProdProductoresCat.Where(x => x.Cod_Prod == s.Cod_Prod).First();
                         var c = bd.ProdCamposCat.Where(x => x.Cod_Prod == s.Cod_Prod && x.Cod_Campo == s.Cod_Campo).First();
                         var i = bd.ProdAgenteCat.Where(x => x.IdAgen == c.IdAgen).First();
                         s.IdAgen = i.IdAgen;
+                        s.Fecha = DateTime.Now;
 
                         var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == i.IdAgen);
                         string correo = email_p.correo;
-                        email.sendmail(correo);
+                        int region = (int)email_p.IdRegion;
+                        email.sendmail(correo, region, null, s.Cod_Prod, p.Nombre, s.Cod_Campo + " - " + c.Descripcion);
                     }
                     else
                     {
                         var s = bd.Seguimiento_financ.Where(x => x.Id == a.Id).First();
                         s.IdAgen = a.IdAgen;
+                        s.Fecha = DateTime.Now;
                     }
                     bd.SaveChanges();
                 }
@@ -2865,13 +2831,25 @@ namespace Sistema_Indicadores.Controllers
 
                 var q = result.AsQueryable();
 
+
                 foreach (var item in q)
                 {
                     if (item.IdAgen != null)
                     {
+                        var tbl = (from t in tabla
+                                   where t.IdAgen == item.IdAgen
+                                   group t by new { t.Cod_Prod, t.Productor, t.Campo } into g
+                                   select new ClassProductor()
+                                   {
+                                       Cod_Prod = g.Key.Cod_Prod,
+                                       Productor = g.Key.Productor,
+                                       Campo = g.Key.Campo
+                                   }).ToList();
+
                         var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == item.IdAgen);
                         string correo = email_p.correo;
-                        email.sendmail(correo);
+                        int region = (int)email_p.IdRegion;
+                        email.sendmail(correo, region, tbl, "", "", "");
                     }
                 }
 

@@ -156,8 +156,7 @@
                             if (Session["Tipo"] != null && Session["Tipo"].ToString() == "P")
                             {
                                 <li class="nav-item">
-                                    @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
-                                    {
+                                   
                                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#indicadores" aria-expanded="true" aria-controls="indicadores">
                                             <i class="fas fa-users-cog"></i>
                                             <span>Indicadores</span>
@@ -165,12 +164,15 @@
                                         <div id="indicadores" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                                             <div class="bg-white py-2 collapse-inner rounded">
                                                 <h6 class="collapse-header">Consultar:</h6>
-                                                <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
-                                                <a class="collapse-item" href="@Url.Action("Produccion", "Indicadores")"><i class="fas fa-truck-loading"></i> Produccion</a>
+                                                @if (Session["IdAgen"].ToString() != "1" && Session["IdAgen"].ToString() != "5")
+                                                {
+                                                    <a class="collapse-item" href="@Url.Action("Curva", "Indicadores")"><i class="fas fa-chart-line"></i> Curva</a>
+                                                    <a class="collapse-item" href="@Url.Action("Produccion", "Indicadores")"><i class="fas fa-truck-loading"></i> Produccion</a>
+                                                }
                                                 <a class="collapse-item" href="@Url.Action("Seguimiento", "Indicadores")"><i class="fas fa-search-dollar"></i> Status financiamiento</a>
-                                            </div>
+                                                </div>
                                         </div>
-                                    }
+                                    
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#visitas" aria-expanded="true" aria-controls="visitas">
                                         <i class="fas fa-map-marked-alt"></i>
                                         <span>Visitas</span>

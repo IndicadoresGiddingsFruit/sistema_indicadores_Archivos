@@ -237,9 +237,10 @@
     </AssociationSet>
     <EntitySet Name="SIPGComentarios" EntityType="SeasonSun1213Model2.SIPGComentarios" />
     <EntitySet Name="ProdVisitasCab" EntityType="SeasonSun1213Model2.ProdVisitasCab" />
-    <EntitySet Name="SIPGProyeccion" EntityType="SeasonSun1213Model2.SIPGProyeccion" />
     <EntitySet Name="Seguimiento_financ" EntityType="SeasonSun1213Model2.Seguimiento_financ" />
     <EntitySet Name="SIPGUsuarios" EntityType="SeasonSun1213Model2.SIPGUsuarios" />
+    <EntitySet Name="ProdProyeccion" EntityType="SeasonSun1213Model2.ProdProyeccion" />
+    <EntitySet Name="UV_ProdRecepcion" EntityType="SeasonSun1213Model2.UV_ProdRecepcion" />
   </EntityContainer>
   <EntityType Name="SIPGComentarios">
     <Key>
@@ -268,25 +269,46 @@
     <Property Name="rowguid" Type="Guid" />
     <Property Name="TipoVisita" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="SIPGProyeccion">
+  <EntityType Name="Seguimiento_financ">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
+    <Property Name="Comentarios" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Fecha" Type="DateTime" Precision="3" />
+    <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
+    <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="IdAgen" Type="Int16" />
+  </EntityType>
+  <EntityType Name="SIPGUsuarios">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Completo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IdAgen" Type="Int16" />
+    <Property Name="IdRegion" Type="Int16" />
+    <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="ProdProyeccion">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Estado" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
-    <Property Name="Estado_M" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
     <Property Name="IdAgen" Type="Int16" />
     <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
     <Property Name="Cod_Campo" Type="Int16" />
-    <Property Name="Ubicacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Num_corte" Type="Int32" />
     <Property Name="Sector" Type="Int32" />
     <Property Name="Ha" Type="Double" />
-    <Property Name="Tipo" Type="Int32" />
-    <Property Name="Producto" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Numplantas_xha" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Numplantas_xha" Type="Int32" />
     <Property Name="Manejo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Tipo_plantacion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Tipo_plantacion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Name="Fecha_plantacion" Type="DateTime" Precision="0" />
     <Property Name="Fecha_poda" Type="DateTime" Precision="0" />
     <Property Name="Fecha_defoliacion" Type="DateTime" Precision="0" />
@@ -299,21 +321,16 @@
     <Property Name="Caja1" Type="Double" />
     <Property Name="Caja2" Type="Double" />
     <Property Name="Estructura" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Tipo_certificacion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Tesco" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-    <Property Name="Edad_planta" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Tipo_plantacion2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Fecha_podamediacaña" Type="DateTime" Precision="0" />
-    <Property Name="RendxKg" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="RendxHa" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Tipo_certificacion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Tesco" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="Edad_planta" Type="Int32" />
+    <Property Name="Tipo_plantacion2" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Fecha_podamediacana" Type="DateTime" Precision="0" />
+    <Property Name="RendxKg" Type="Double" />
+    <Property Name="RendxHa" Type="Double" />
     <Property Name="TotalCajas" Type="Double" />
     <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
     <Property Name="Fecha" Type="DateTime" Precision="3" />
-    <Property Name="Zona" Type="Int16" />
-    <Property Name="Acopio" Type="Int16" />
-    <Property Name="Just_Estado" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="Semana" Type="Int32" />
-    <Property Name="Mes" Type="Int32" />
     <Property Name="C27" Type="Double" />
     <Property Name="C28" Type="Double" />
     <Property Name="C29" Type="Double" />
@@ -368,30 +385,82 @@
     <Property Name="C25" Type="Double" />
     <Property Name="C26" Type="Double" />
   </EntityType>
-  <EntityType Name="Seguimiento_financ">
+  <EntityType Name="UV_ProdRecepcion">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="Empresa" />
+      <PropertyRef Name="Ticket" />
+      <PropertyRef Name="Fecha" />
+      <PropertyRef Name="Hora" />
+      <PropertyRef Name="Cod_prod" />
+      <PropertyRef Name="CodProducto" />
+      <PropertyRef Name="CodTamano" />
+      <PropertyRef Name="CodClasificacion" />
+      <PropertyRef Name="DescClasificacion" />
+      <PropertyRef Name="CodEnvase" />
+      <PropertyRef Name="CodEtiqueta" />
+      <PropertyRef Name="Rechazo" />
+      <PropertyRef Name="Reembalaje" />
+      <PropertyRef Name="Disponibles" />
+      <PropertyRef Name="Grupo" />
+      <PropertyRef Name="Estatus" />
+      <PropertyRef Name="CodEstatus" />
+      <PropertyRef Name="CodEmpaque" />
+      <PropertyRef Name="Mercado" />
+      <PropertyRef Name="Certificado" />
+      <PropertyRef Name="Refrigerada" />
     </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" />
-    <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
-    <Property Name="Comentarios" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="Fecha" Type="DateTime" Precision="3" />
-    <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
-    <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="Empresa" Type="String" Nullable="false" MaxLength="3" FixedLength="true" Unicode="false" />
+    <Property Name="FolioNota" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Ticket" Type="Int64" Nullable="false" />
+    <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Hora" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Cod_prod" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CodTipo" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="DescProducto" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CodProducto" Type="Int16" Nullable="false" />
+    <Property Name="DescVariedad" Type="String" MaxLength="51" FixedLength="false" Unicode="false" />
+    <Property Name="CodTamano" Type="Int16" Nullable="false" />
+    <Property Name="DescTamano" Type="String" MaxLength="31" FixedLength="false" Unicode="false" />
+    <Property Name="CodClasificacion" Type="Int16" Nullable="false" />
+    <Property Name="DescClasificacion" Type="String" Nullable="false" MaxLength="111" FixedLength="false" Unicode="false" />
+    <Property Name="CodEnvase" Type="Int16" Nullable="false" />
+    <Property Name="DescEnvase" Type="String" MaxLength="41" FixedLength="false" Unicode="false" />
+    <Property Name="CodEtiqueta" Type="Int16" Nullable="false" />
+    <Property Name="Producto" Type="String" MaxLength="399" FixedLength="false" Unicode="false" />
+    <Property Name="CajasRecibidas" Type="Int16" />
+    <Property Name="Rechazo" Type="Int16" Nullable="false" />
+    <Property Name="Reembalaje" Type="Int16" Nullable="false" />
+    <Property Name="Disponibles" Type="Int16" Nullable="false" />
+    <Property Name="Cod_Campo" Type="Int16" />
+    <Property Name="DescCampo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Hectareas" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="Factor" Type="Double" />
+    <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+    <Property Name="Semana" Type="Byte" />
+    <Property Name="Cajas" Type="Int16" />
+    <Property Name="CantidadEnvase" Type="Int16" />
+    <Property Name="Grupo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CodChofer" Type="Int16" />
+    <Property Name="Chofer" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="Acopio" Type="String" MaxLength="50" FixedLength="true" Unicode="false" />
+    <Property Name="CodAcopio" Type="Int32" />
+    <Property Name="Estatus" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="false" />
+    <Property Name="CodEstatus" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="CodEmpaque" Type="Int16" Nullable="false" />
+    <Property Name="Empaque" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+    <Property Name="DescEtiqueta" Type="String" MaxLength="40" FixedLength="true" Unicode="false" />
+    <Property Name="Mercado" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="Convertidas" Type="Double" />
+    <Property Name="Mes" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="Yearr" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+    <Property Name="Zona" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+    <Property Name="Area" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Agente" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="REGION" Type="String" MaxLength="9" FixedLength="false" Unicode="false" />
     <Property Name="IdAgen" Type="Int16" />
-  </EntityType>
-  <EntityType Name="SIPGUsuarios">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Clave" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Completo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="IdAgen" Type="Int16" />
-    <Property Name="IdRegion" Type="Int16" />
-    <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Organico" Type="Boolean" />
+    <Property Name="Certificado" Type="Int32" Nullable="false" />
+    <Property Name="Refrigerada" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

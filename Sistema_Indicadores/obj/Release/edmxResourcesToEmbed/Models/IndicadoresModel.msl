@@ -242,9 +242,37 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="SIPGProyeccion">
-      <EntityTypeMapping TypeName="SeasonSun1213Model2.SIPGProyeccion">
-        <MappingFragment StoreEntitySet="SIPGProyeccion">
+    <EntitySetMapping Name="Seguimiento_financ">
+      <EntityTypeMapping TypeName="SeasonSun1213Model2.Seguimiento_financ">
+        <MappingFragment StoreEntitySet="Seguimiento_financ">
+          <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
+          <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+          <ScalarProperty Name="Cod_Empresa" ColumnName="Cod_Empresa" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="Comentarios" ColumnName="Comentarios" />
+          <ScalarProperty Name="Cod_Campo" ColumnName="Cod_Campo" />
+          <ScalarProperty Name="Cod_Prod" ColumnName="Cod_Prod" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SIPGUsuarios">
+      <EntityTypeMapping TypeName="SeasonSun1213Model2.SIPGUsuarios">
+        <MappingFragment StoreEntitySet="SIPGUsuarios">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+          <ScalarProperty Name="IdRegion" ColumnName="IdRegion" />
+          <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="Completo" ColumnName="Completo" />
+          <ScalarProperty Name="Clave" ColumnName="Clave" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProdProyeccion">
+      <EntityTypeMapping TypeName="SeasonSun1213Model2.ProdProyeccion">
+        <MappingFragment StoreEntitySet="ProdProyeccion">
           <ScalarProperty Name="C26" ColumnName="26" />
           <ScalarProperty Name="C25" ColumnName="25" />
           <ScalarProperty Name="C24" ColumnName="24" />
@@ -298,17 +326,12 @@
           <ScalarProperty Name="C29" ColumnName="29" />
           <ScalarProperty Name="C28" ColumnName="28" />
           <ScalarProperty Name="C27" ColumnName="27" />
-          <ScalarProperty Name="Mes" ColumnName="Mes" />
-          <ScalarProperty Name="Semana" ColumnName="Semana" />
-          <ScalarProperty Name="Just_Estado" ColumnName="Just_Estado" />
-          <ScalarProperty Name="Acopio" ColumnName="Acopio" />
-          <ScalarProperty Name="Zona" ColumnName="Zona" />
           <ScalarProperty Name="Fecha" ColumnName="Fecha" />
           <ScalarProperty Name="Temporada" ColumnName="Temporada" />
           <ScalarProperty Name="TotalCajas" ColumnName="TotalCajas" />
           <ScalarProperty Name="RendxHa" ColumnName="RendxHa" />
           <ScalarProperty Name="RendxKg" ColumnName="RendxKg" />
-          <ScalarProperty Name="Fecha_podamediacaña" ColumnName="Fecha_podamediacaña" />
+          <ScalarProperty Name="Fecha_podamediacana" ColumnName="Fecha_podamediacana" />
           <ScalarProperty Name="Tipo_plantacion2" ColumnName="Tipo_plantacion2" />
           <ScalarProperty Name="Edad_planta" ColumnName="Edad_planta" />
           <ScalarProperty Name="Tesco" ColumnName="Tesco" />
@@ -328,46 +351,72 @@
           <ScalarProperty Name="Tipo_plantacion" ColumnName="Tipo_plantacion" />
           <ScalarProperty Name="Manejo" ColumnName="Manejo" />
           <ScalarProperty Name="Numplantas_xha" ColumnName="Numplantas_xha" />
-          <ScalarProperty Name="Producto" ColumnName="Producto" />
-          <ScalarProperty Name="Tipo" ColumnName="Tipo" />
           <ScalarProperty Name="Ha" ColumnName="Ha" />
           <ScalarProperty Name="Sector" ColumnName="Sector" />
           <ScalarProperty Name="Num_corte" ColumnName="Num_corte" />
-          <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
           <ScalarProperty Name="Cod_Campo" ColumnName="Cod_Campo" />
           <ScalarProperty Name="Cod_Prod" ColumnName="Cod_Prod" />
           <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
-          <ScalarProperty Name="Estado_M" ColumnName="Estado_M" />
-          <ScalarProperty Name="Estado" ColumnName="Estado" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Seguimiento_financ">
-      <EntityTypeMapping TypeName="SeasonSun1213Model2.Seguimiento_financ">
-        <MappingFragment StoreEntitySet="Seguimiento_financ">
+    <EntitySetMapping Name="UV_ProdRecepcion">
+      <EntityTypeMapping TypeName="SeasonSun1213Model2.UV_ProdRecepcion">
+        <MappingFragment StoreEntitySet="UV_ProdRecepcion">
+          <ScalarProperty Name="Refrigerada" ColumnName="Refrigerada" />
+          <ScalarProperty Name="Certificado" ColumnName="Certificado" />
+          <ScalarProperty Name="Organico" ColumnName="Organico" />
           <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
+          <ScalarProperty Name="REGION" ColumnName="REGION" />
+          <ScalarProperty Name="Agente" ColumnName="Agente" />
+          <ScalarProperty Name="Area" ColumnName="Area" />
+          <ScalarProperty Name="Zona" ColumnName="Zona" />
+          <ScalarProperty Name="Yearr" ColumnName="Yearr" />
+          <ScalarProperty Name="Mes" ColumnName="Mes" />
+          <ScalarProperty Name="Convertidas" ColumnName="Convertidas" />
+          <ScalarProperty Name="Mercado" ColumnName="Mercado" />
+          <ScalarProperty Name="DescEtiqueta" ColumnName="DescEtiqueta" />
+          <ScalarProperty Name="Empaque" ColumnName="Empaque" />
+          <ScalarProperty Name="CodEmpaque" ColumnName="CodEmpaque" />
+          <ScalarProperty Name="CodEstatus" ColumnName="CodEstatus" />
           <ScalarProperty Name="Estatus" ColumnName="Estatus" />
-          <ScalarProperty Name="Cod_Empresa" ColumnName="Cod_Empresa" />
-          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-          <ScalarProperty Name="Comentarios" ColumnName="Comentarios" />
+          <ScalarProperty Name="CodAcopio" ColumnName="CodAcopio" />
+          <ScalarProperty Name="Acopio" ColumnName="Acopio" />
+          <ScalarProperty Name="Chofer" ColumnName="Chofer" />
+          <ScalarProperty Name="CodChofer" ColumnName="CodChofer" />
+          <ScalarProperty Name="Grupo" ColumnName="Grupo" />
+          <ScalarProperty Name="CantidadEnvase" ColumnName="CantidadEnvase" />
+          <ScalarProperty Name="Cajas" ColumnName="Cajas" />
+          <ScalarProperty Name="Semana" ColumnName="Semana" />
+          <ScalarProperty Name="Temporada" ColumnName="Temporada" />
+          <ScalarProperty Name="Factor" ColumnName="Factor" />
+          <ScalarProperty Name="Hectareas" ColumnName="Hectareas" />
+          <ScalarProperty Name="DescCampo" ColumnName="DescCampo" />
           <ScalarProperty Name="Cod_Campo" ColumnName="Cod_Campo" />
-          <ScalarProperty Name="Cod_Prod" ColumnName="Cod_Prod" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SIPGUsuarios">
-      <EntityTypeMapping TypeName="SeasonSun1213Model2.SIPGUsuarios">
-        <MappingFragment StoreEntitySet="SIPGUsuarios">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Tipo" ColumnName="Tipo" />
-          <ScalarProperty Name="IdRegion" ColumnName="IdRegion" />
-          <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
-          <ScalarProperty Name="correo" ColumnName="correo" />
-          <ScalarProperty Name="Completo" ColumnName="Completo" />
-          <ScalarProperty Name="Clave" ColumnName="Clave" />
+          <ScalarProperty Name="Disponibles" ColumnName="Disponibles" />
+          <ScalarProperty Name="Reembalaje" ColumnName="Reembalaje" />
+          <ScalarProperty Name="Rechazo" ColumnName="Rechazo" />
+          <ScalarProperty Name="CajasRecibidas" ColumnName="CajasRecibidas" />
+          <ScalarProperty Name="Producto" ColumnName="Producto" />
+          <ScalarProperty Name="CodEtiqueta" ColumnName="CodEtiqueta" />
+          <ScalarProperty Name="DescEnvase" ColumnName="DescEnvase" />
+          <ScalarProperty Name="CodEnvase" ColumnName="CodEnvase" />
+          <ScalarProperty Name="DescClasificacion" ColumnName="DescClasificacion" />
+          <ScalarProperty Name="CodClasificacion" ColumnName="CodClasificacion" />
+          <ScalarProperty Name="DescTamano" ColumnName="DescTamano" />
+          <ScalarProperty Name="CodTamano" ColumnName="CodTamano" />
+          <ScalarProperty Name="DescVariedad" ColumnName="DescVariedad" />
+          <ScalarProperty Name="CodProducto" ColumnName="CodProducto" />
+          <ScalarProperty Name="DescProducto" ColumnName="DescProducto" />
+          <ScalarProperty Name="CodTipo" ColumnName="CodTipo" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Cod_prod" ColumnName="Cod_prod" />
+          <ScalarProperty Name="Hora" ColumnName="Hora" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="Ticket" ColumnName="Ticket" />
+          <ScalarProperty Name="FolioNota" ColumnName="FolioNota" />
+          <ScalarProperty Name="Empresa" ColumnName="Empresa" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -9,14 +9,17 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
     <_PublishTargetUrl>C:\Users\marholym\Desktop\sistema_indicadores</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
+    <File Include=".editorconfig">
+      <publishTime>02/17/2021 10:14:58</publishTime>
+    </File>
     <File Include="App_Browsers/qt.browser">
       <publishTime>01/14/2021 12:42:24</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.dll">
-      <publishTime>09/10/2013 17:29:20</publishTime>
+      <publishTime>10/09/2013 17:29:20</publishTime>
     </File>
     <File Include="bin/Antlr3.Runtime.pdb">
-      <publishTime>09/10/2013 17:29:20</publishTime>
+      <publishTime>10/09/2013 17:29:20</publishTime>
     </File>
     <File Include="bin/BouncyCastle.Crypto.dll">
       <publishTime>02/21/2020 16:24:54</publishTime>
@@ -31,10 +34,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>06/06/2017 22:59:22</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>06/07/2018 12:03:48</publishTime>
+      <publishTime>07/06/2018 12:03:48</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>06/07/2018 12:03:48</publishTime>
+      <publishTime>07/06/2018 12:03:48</publishTime>
     </File>
     <File Include="bin/EPPlus.dll">
       <publishTime>06/16/2019 10:54:30</publishTime>
@@ -43,7 +46,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>11/28/2018 13:00:46</publishTime>
     </File>
     <File Include="bin/es/System.Web.Helpers.resources.dll">
-      <publishTime>02/01/2018 12:21:06</publishTime>
+      <publishTime>01/02/2018 12:21:06</publishTime>
     </File>
     <File Include="bin/es/System.Web.Http.resources.dll">
       <publishTime>11/28/2018 13:01:14</publishTime>
@@ -52,37 +55,37 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>11/28/2018 13:03:04</publishTime>
     </File>
     <File Include="bin/es/System.Web.Mvc.resources.dll">
-      <publishTime>02/01/2018 12:16:42</publishTime>
+      <publishTime>01/02/2018 12:16:42</publishTime>
     </File>
     <File Include="bin/es/System.Web.Optimization.resources.dll">
-      <publishTime>02/11/2014 15:28:40</publishTime>
+      <publishTime>11/02/2014 15:28:40</publishTime>
     </File>
     <File Include="bin/es/System.Web.Razor.resources.dll">
-      <publishTime>02/01/2018 12:17:04</publishTime>
+      <publishTime>01/02/2018 12:17:04</publishTime>
     </File>
     <File Include="bin/es/System.Web.WebPages.Deployment.resources.dll">
-      <publishTime>02/01/2018 12:21:06</publishTime>
+      <publishTime>01/02/2018 12:21:06</publishTime>
     </File>
     <File Include="bin/es/System.Web.WebPages.Razor.resources.dll">
-      <publishTime>02/01/2018 12:21:06</publishTime>
+      <publishTime>01/02/2018 12:21:06</publishTime>
     </File>
     <File Include="bin/es/System.Web.WebPages.resources.dll">
-      <publishTime>02/01/2018 12:21:06</publishTime>
+      <publishTime>01/02/2018 12:21:06</publishTime>
     </File>
     <File Include="bin/ExcelDataReader.dll">
-      <publishTime>05/02/2019 04:39:52</publishTime>
+      <publishTime>02/05/2019 04:39:52</publishTime>
     </File>
     <File Include="bin/ExcelDataReader.pdb">
-      <publishTime>05/02/2019 04:39:52</publishTime>
+      <publishTime>02/05/2019 04:39:52</publishTime>
     </File>
     <File Include="bin/ExcelNumberFormat.dll">
       <publishTime>11/23/2017 09:21:44</publishTime>
     </File>
     <File Include="bin/FastMember.dll">
-      <publishTime>03/06/2018 05:29:48</publishTime>
+      <publishTime>06/03/2018 05:29:48</publishTime>
     </File>
     <File Include="bin/FirebaseAdmin.dll">
-      <publishTime>11/04/2020 19:08:06</publishTime>
+      <publishTime>04/11/2020 19:08:06</publishTime>
     </File>
     <File Include="bin/Google.Api.Gax.dll">
       <publishTime>09/24/2020 12:17:24</publishTime>
@@ -127,10 +130,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>06/28/2017 16:05:26</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNetCore.Http.Abstractions.dll">
-      <publishTime>11/12/2018 17:29:00</publishTime>
+      <publishTime>12/11/2018 17:29:00</publishTime>
     </File>
     <File Include="bin/Microsoft.AspNetCore.Http.Features.dll">
-      <publishTime>11/12/2018 17:28:58</publishTime>
+      <publishTime>12/11/2018 17:28:58</publishTime>
     </File>
     <File Include="bin/Microsoft.Bcl.AsyncInterfaces.dll">
       <publishTime>09/13/2019 02:28:52</publishTime>
@@ -139,13 +142,13 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>05/24/2018 14:38:22</publishTime>
     </File>
     <File Include="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll">
-      <publishTime>10/19/2020 18:48:00</publishTime>
+      <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/Microsoft.Extensions.Primitives.dll">
       <publishTime>11/11/2018 00:26:36</publishTime>
     </File>
     <File Include="bin/Microsoft.SqlServer.Types.dll">
-      <publishTime>12/10/2016 15:26:34</publishTime>
+      <publishTime>10/12/2016 15:26:34</publishTime>
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>07/25/2012 12:48:56</publishTime>
@@ -163,7 +166,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>01/10/2020 13:02:24</publishTime>
     </File>
     <File Include="bin/Models/CurvaModel.Context.cs">
-      <publishTime>01/25/2021 10:23:10</publishTime>
+      <publishTime>02/13/2021 09:44:53</publishTime>
     </File>
     <File Include="bin/Models/CurvaModel.cs">
       <publishTime>01/25/2021 10:23:17</publishTime>
@@ -259,7 +262,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>12/19/2020 08:47:24</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>11/09/2019 00:56:44</publishTime>
+      <publishTime>09/11/2019 00:56:44</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>05/24/2018 14:38:22</publishTime>
@@ -403,10 +406,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>01/17/2018 17:10:42</publishTime>
     </File>
     <File Include="bin/Sistema_Indicadores.dll">
-      <publishTime>02/11/2021 18:24:12</publishTime>
+      <publishTime>02/17/2021 19:16:53</publishTime>
     </File>
     <File Include="bin/Sistema_Indicadores.pdb">
-      <publishTime>02/11/2021 18:24:12</publishTime>
+      <publishTime>02/17/2021 19:16:53</publishTime>
     </File>
     <File Include="bin/SqlServerTypes/x64/msvcr120.dll">
       <publishTime>01/27/2021 17:04:24</publishTime>
@@ -532,7 +535,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>12/19/2020 08:47:24</publishTime>
     </File>
     <File Include="bin/System.IO.Packaging.dll">
-      <publishTime>06/11/2016 23:13:48</publishTime>
+      <publishTime>11/06/2016 23:13:48</publishTime>
     </File>
     <File Include="bin/System.IO.Pipes.dll">
       <publishTime>12/19/2020 08:47:24</publishTime>
@@ -718,34 +721,34 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>11/28/2018 12:58:44</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
-      <publishTime>02/01/2018 12:20:56</publishTime>
+      <publishTime>01/02/2018 12:20:56</publishTime>
     </File>
     <File Include="bin/System.Web.Http.Cors.dll">
       <publishTime>11/28/2018 13:01:26</publishTime>
     </File>
     <File Include="bin/System.Web.Http.dll">
-      <publishTime>11/28/2018 12:01:00</publishTime>
+      <publishTime>01/01/0001 00:00:00</publishTime>
     </File>
     <File Include="bin/System.Web.Http.WebHost.dll">
       <publishTime>11/28/2018 12:02:56</publishTime>
     </File>
     <File Include="bin/System.Web.Mvc.dll">
-      <publishTime>02/01/2018 12:16:32</publishTime>
+      <publishTime>01/02/2018 12:16:32</publishTime>
     </File>
     <File Include="bin/System.Web.Optimization.dll">
-      <publishTime>02/11/2014 15:26:04</publishTime>
+      <publishTime>11/02/2014 15:26:04</publishTime>
     </File>
     <File Include="bin/System.Web.Razor.dll">
-      <publishTime>02/01/2018 12:16:56</publishTime>
+      <publishTime>01/02/2018 12:16:56</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Deployment.dll">
-      <publishTime>02/01/2018 12:20:56</publishTime>
+      <publishTime>01/02/2018 12:20:56</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.dll">
-      <publishTime>02/01/2018 12:20:56</publishTime>
+      <publishTime>01/02/2018 12:20:56</publishTime>
     </File>
     <File Include="bin/System.Web.WebPages.Razor.dll">
-      <publishTime>02/01/2018 12:20:56</publishTime>
+      <publishTime>01/02/2018 12:20:56</publishTime>
     </File>
     <File Include="bin/System.Xml.ReaderWriter.dll">
       <publishTime>12/19/2020 08:47:24</publishTime>
@@ -793,7 +796,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>06/28/2019 12:21:52</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>07/02/2019 12:45:19</publishTime>
+      <publishTime>02/07/2019 12:45:19</publishTime>
     </File>
     <File Include="Content/vendor/bootstrap/js/bootstrap.bundle.js">
       <publishTime>11/12/2020 12:49:41</publishTime>
@@ -5932,7 +5935,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>06/28/2019 17:59:22</publishTime>
     </File>
     <File Include="css/Pruebas.css">
-      <publishTime>07/02/2019 12:42:22</publishTime>
+      <publishTime>02/07/2019 12:42:22</publishTime>
     </File>
     <File Include="css/sb-admin-2.css">
       <publishTime>04/12/2019 08:19:22</publishTime>
@@ -5985,6 +5988,9 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
     <File Include="Image/GIDDINGS_PRIMARY_STACKED_LOGO_DRIFT_RGB.png">
       <publishTime>06/28/2019 12:18:37</publishTime>
     </File>
+    <File Include="Image/GIDDINGS_SECONDARY_HORIZONTAL_LOGO_DRIFT_RGB.png">
+      <publishTime>06/09/2018 09:26:12</publishTime>
+    </File>
     <File Include="Image/icon_minus.png">
       <publishTime>06/22/2019 12:31:07</publishTime>
     </File>
@@ -5998,517 +6004,517 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>05/24/2019 16:45:59</publishTime>
     </File>
     <File Include="js/bootstrap.js">
-      <publishTime>11/12/2018 08:50:00</publishTime>
+      <publishTime>12/11/2018 08:50:00</publishTime>
     </File>
     <File Include="js/bootstrap.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/fullcalendar.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/fullcalendar2.7.js">
       <publishTime>11/12/2020 12:49:34</publishTime>
     </File>
     <File Include="js/Calendario/gcal.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/lib/moment.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/lib/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/locale-all.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ar-ma.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ar-sa.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ar-tn.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ar.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/bg.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ca.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/cs.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/da.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/de-at.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/de.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/el.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/en-au.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/en-ca.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/en-gb.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/en-ie.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/en-nz.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/es-do.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/es.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/eu.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/fa.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/fi.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/fr-ca.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/fr-ch.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/fr.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/gl.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/he.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/hi.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/hr.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/hu.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/id.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/is.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/it.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ja.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ko.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/lb.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/lt.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/lv.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/mk.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ms-my.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ms.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/nb.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/nl.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/nn.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/pl.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/pt-br.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/pt.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ro.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/ru.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/sk.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/sl.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/sr-cyrl.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/sr.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/sv.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/th.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/tr.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/uk.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/vi.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/zh-cn.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/Locale/zh-tw.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Calendario/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DataTables/dataTables.bootstrap.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DataTables/dataTables.bootstrap.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DataTables/dataTables.buttons.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DataTables/dataTables.buttons.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DataTables/jquery.dataTables.js">
       <publishTime>11/12/2020 12:49:27</publishTime>
     </File>
     <File Include="js/DataTables/jquery.dataTables.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DataTables/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/datepair.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/datepair.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/datepicker/bootstrap-datepicker.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/datepicker/bootstrap-datepicker.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/datepicker/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/jQuery-UI Datepicker/jquery-ui-1.10.4.custom.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/jQuery-UI Datepicker/jquery-ui.js">
       <publishTime>11/12/2020 12:49:30</publishTime>
     </File>
     <File Include="js/DatePair/jQuery-UI Datepicker/jquery-ui.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/jQuery-UI Datepicker/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/jquery.datepair.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/jquery.datepair.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/timepicker/jquery.timepicker.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/timepicker/jquery.timepicker.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/timepicker/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/DatePair/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/dist/validator.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/dist/validator.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/dist/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/flat-ui-pro.js">
       <publishTime>11/12/2020 12:49:35</publishTime>
     </File>
     <File Include="js/FormValidation/validator.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/FormValidation/validator.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/FormValidation/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/FuncionesInputs.js">
       <publishTime>11/12/2020 12:49:35</publishTime>
     </File>
     <File Include="js/InputMask/jquery.mask.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/InputMask/jquery.mask.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/InputMask/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Jquery/jquery-3.1.0.js">
       <publishTime>11/12/2020 12:49:33</publishTime>
     </File>
     <File Include="js/Jquery/jquery-3.1.0.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Jquery/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/jqueryContextMenu/jquery.contextMenu.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/jqueryContextMenu/jquery.contextMenu.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/jqueryContextMenu/jquery.ui.position.js">
       <publishTime>11/12/2020 12:49:28</publishTime>
     </File>
     <File Include="js/jqueryContextMenu/jquery.ui.position.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/jqueryContextMenu/vssver2.scc">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/modernizr-3.3.1.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/npm.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/ar.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/az.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/bg.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/ca.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/cs.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/da.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/de.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/el.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/en.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/et.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/!18n/eu.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/fa.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/fi.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/fr.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/gl.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/he.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/hi.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/hr.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/hu.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/id.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/is.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/it.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/ja.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/km.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/ko.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/lt.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/lv.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/mk.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/ms.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/nb.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/nl.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/pl.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/pt-BR.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/pt.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/ro.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/ru.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/sk.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/sr-Cyrl.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/sr.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/sv.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/th.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/tr.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/uk.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/vi.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/vssver2.scc">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/zh-CN.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/!18n/zh-TW.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Select2/select2.full.js">
       <publishTime>11/12/2020 12:49:23</publishTime>
     </File>
     <File Include="js/Select2/select2.full.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/select2.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/select2.min.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/Select2/vssver2.scc">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/site.js">
       <publishTime>08/27/2019 11:51:30</publishTime>
     </File>
     <File Include="js/Toastr/toastr.min.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/Toastr/vssver2.scc">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/toggleInput/bootstrap-toggle.js">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/toggleInput/vssver2.scc">
-      <publishTime>11/12/2018 08:50:04</publishTime>
+      <publishTime>12/11/2018 08:50:04</publishTime>
     </File>
     <File Include="js/validate.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="js/validator.js">
-      <publishTime>11/12/2018 08:50:02</publishTime>
+      <publishTime>12/11/2018 08:50:02</publishTime>
     </File>
     <File Include="Models/CurvaModel.edmx.diagram">
       <publishTime>01/25/2021 10:23:03</publishTime>
@@ -6517,13 +6523,13 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>01/10/2020 13:02:06</publishTime>
     </File>
     <File Include="Models/IndicadoresModel.edmx.diagram">
-      <publishTime>02/09/2021 17:34:19</publishTime>
+      <publishTime>02/16/2021 18:57:38</publishTime>
     </File>
     <File Include="Models/LoginModel.edmx.diagram">
       <publishTime>12/28/2019 09:33:42</publishTime>
     </File>
     <File Include="Models/MuestreoModel.edmx.diagram">
-      <publishTime>02/09/2021 17:52:44</publishTime>
+      <publishTime>02/13/2021 10:06:51</publishTime>
     </File>
     <File Include="Rotativa/help-wkhtmltoimage.txt">
       <publishTime>01/14/2021 12:42:23</publishTime>
@@ -6628,10 +6634,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>08/26/2019 12:11:37</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.unobtrusive.js">
-      <publishTime>07/01/2019 10:41:25</publishTime>
+      <publishTime>01/07/2019 10:41:25</publishTime>
     </File>
     <File Include="Scripts/jquery.validate.unobtrusive.min.js">
-      <publishTime>07/01/2019 10:41:25</publishTime>
+      <publishTime>01/07/2019 10:41:25</publishTime>
     </File>
     <File Include="Scripts/js/demo/chart-area-demo.js">
       <publishTime>02/07/2019 12:34:12</publishTime>
@@ -6730,7 +6736,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>11/24/2020 13:00:57</publishTime>
     </File>
     <File Include="Style/Login.css">
-      <publishTime>12/04/2020 10:33:51</publishTime>
+      <publishTime>04/12/2020 10:33:51</publishTime>
     </File>
     <File Include="Style/SolicitudF.css">
       <publishTime>03/14/2019 18:01:49</publishTime>
@@ -6760,7 +6766,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>02/02/2021 10:41:54</publishTime>
     </File>
     <File Include="Views/Indicadores/CurvaNueva.cshtml">
-      <publishTime>01/11/2021 12:29:12</publishTime>
+      <publishTime>02/13/2021 09:42:48</publishTime>
     </File>
     <File Include="Views/Indicadores/Produccion.cshtml">
       <publishTime>12/28/2020 13:41:14</publishTime>
@@ -6769,13 +6775,13 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>01/28/2021 10:03:54</publishTime>
     </File>
     <File Include="Views/Indicadores/ReporteVisitas.cshtml">
-      <publishTime>02/02/2021 17:55:19</publishTime>
+      <publishTime>02/16/2021 11:23:57</publishTime>
     </File>
     <File Include="Views/Indicadores/Seguimiento.cshtml">
-      <publishTime>02/11/2021 18:12:08</publishTime>
+      <publishTime>02/17/2021 19:22:34</publishTime>
     </File>
     <File Include="Views/Indicadores/Semanas.cshtml">
-      <publishTime>02/02/2021 10:42:52</publishTime>
+      <publishTime>02/13/2021 09:36:19</publishTime>
     </File>
     <File Include="Views/Indicadores/Visitas.cshtml">
       <publishTime>01/11/2021 17:20:19</publishTime>
@@ -6796,7 +6802,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>12/14/2020 12:04:56</publishTime>
     </File>
     <File Include="Views/Muestreo/Muestreo.cshtml">
-      <publishTime>12/10/2020 17:20:35</publishTime>
+      <publishTime>10/12/2020 17:20:35</publishTime>
     </File>
     <File Include="Views/Muestreo/Muestreos_Liberados.cshtml">
       <publishTime>02/08/2021 18:01:07</publishTime>
@@ -6814,7 +6820,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>12/28/2019 09:27:35</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>02/08/2021 11:03:02</publishTime>
+      <publishTime>02/13/2021 11:01:47</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>12/28/2019 09:27:35</publishTime>
@@ -6823,7 +6829,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>12/28/2019 09:27:35</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/09/2021 19:11:15</publishTime>
+      <publishTime>02/13/2021 10:26:22</publishTime>
     </File>
   </ItemGroup>
 </Project>

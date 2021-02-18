@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7cf31df545a14bec9e23e5ef9d7fde71" Name="Diagram1" ZoomLevel="88">
+      <Diagram DiagramId="7cf31df545a14bec9e23e5ef9d7fde71" Name="Diagram1" ZoomLevel="43">
         <EntityTypeShape EntityType="SeasonSun1213Model2.CatAcopios" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SeasonSun1213Model2.CatProductos" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SeasonSun1213Model2.CatSemanas" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
@@ -16,9 +16,10 @@
         <AssociationConnector Association="SeasonSun1213Model2.FK_ProdProductoresCat_ProdAgenteCat" ManuallyRouted="false" />
         <EntityTypeShape EntityType="SeasonSun1213Model2.SIPGComentarios" Width="1.5" PointX="12.375" PointY="3.75" />
         <EntityTypeShape EntityType="SeasonSun1213Model2.ProdVisitasCab" Width="1.5" PointX="12.375" PointY="6.75" />
-        <EntityTypeShape EntityType="SeasonSun1213Model2.SIPGProyeccion" Width="1.5" PointX="10.375" PointY="11.75" />
         <EntityTypeShape EntityType="SeasonSun1213Model2.Seguimiento_financ" Width="1.5" PointX="12.375" PointY="11.75" />
         <EntityTypeShape EntityType="SeasonSun1213Model2.SIPGUsuarios" Width="1.5" PointX="14.375" PointY="0.75" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.ProdProyeccion" Width="1.5" PointX="14.375" PointY="4.75" />
+        <EntityTypeShape EntityType="SeasonSun1213Model2.UV_ProdRecepcion" Width="1.5" PointX="10.375" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

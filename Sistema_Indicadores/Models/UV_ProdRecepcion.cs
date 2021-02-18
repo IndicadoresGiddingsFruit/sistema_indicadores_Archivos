@@ -33,7 +33,7 @@ namespace Sistema_Indicadores.Models
         public string DescEnvase { get; set; }
         public short CodEtiqueta { get; set; }
         public string Producto { get; set; }
-        public short CajasRecibidas { get; set; }
+        public Nullable<short> CajasRecibidas { get; set; }
         public short Rechazo { get; set; }
         public short Reembalaje { get; set; }
         public short Disponibles { get; set; }
@@ -44,6 +44,7 @@ namespace Sistema_Indicadores.Models
         public string Temporada { get; set; }
         public Nullable<byte> Semana { get; set; }
         public Nullable<short> Cajas { get; set; }
+        public Nullable<short> CantidadEnvase { get; set; }
         public string Grupo { get; set; }
         public Nullable<short> CodChofer { get; set; }
         public string Chofer { get; set; }
@@ -65,7 +66,6 @@ namespace Sistema_Indicadores.Models
         public Nullable<short> IdAgen { get; set; }
         public Nullable<bool> Organico { get; set; }
         public int Certificado { get; set; }
-        public Nullable<short> CantidadEnvase { get; set; }
         public string Refrigerada { get; set; }
     }
 }

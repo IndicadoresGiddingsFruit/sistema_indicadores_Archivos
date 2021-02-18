@@ -46,7 +46,7 @@ namespace Sistema_Indicadores.Controllers
         //public JsonResult GetSectoresList(string Cod_Prod, short Cod_Campo)
         //{
         //    bd.Configuration.ProxyCreationEnabled = false;
-        //    List<SIPGProyeccion> ListSectores = bdI.SIPGProyeccion.Where(x => x.Cod_Prod == Cod_Prod && x.Cod_Campo == Cod_Campo).ToList();
+        //    List<ProdProyeccion> ListSectores = bdI.ProdProyeccion.Where(x => x.Cod_Prod == Cod_Prod && x.Cod_Campo == Cod_Campo).ToList();
         //    return Json(ListSectores, JsonRequestBehavior.AllowGet);
         //}
         public JsonResult GetDataProyeccionList(int Id_Proyeccion)
@@ -54,9 +54,9 @@ namespace Sistema_Indicadores.Controllers
             //short idagen = (short)Session["IdAgen"];
             //bd.Configuration.ProxyCreationEnabled = false;
             //var temporada = bdI.CatSemanas.Where(x => DateTime.Now >= x.Inicio && DateTime.Now <= x.Fin).FirstOrDefault();             
-            //var max_fecha = bdI.SIPGProyeccion.Max(x => x.Fecha);
-            //List<SIPGProyeccion> ListSectores = bdI.SIPGProyeccion.Where(x=> x.IdAgen == idagen && x.Cod_Prod == Cod_Prod && x.Cod_Campo == Cod_Campo && x.Temporada==temporada.Temporada && x.Fecha == max_fecha).ToList();
-            List<SIPGProyeccion> ListSectores = bdI.SIPGProyeccion.Where(x => x.Id == Id_Proyeccion).ToList();
+            //var max_fecha = bdI.ProdProyeccion.Max(x => x.Fecha);
+            //List<ProdProyeccion> ListSectores = bdI.ProdProyeccion.Where(x=> x.IdAgen == idagen && x.Cod_Prod == Cod_Prod && x.Cod_Campo == Cod_Campo && x.Temporada==temporada.Temporada && x.Fecha == max_fecha).ToList();
+            List<ProdProyeccion> ListSectores = bdI.ProdProyeccion.Where(x => x.Id == Id_Proyeccion).ToList();
             return Json(ListSectores, JsonRequestBehavior.AllowGet);
         }
 
@@ -64,7 +64,7 @@ namespace Sistema_Indicadores.Controllers
         {
             bd.Configuration.ProxyCreationEnabled = false;
             ClassCurva ListFechasxSector = bd.Database.SqlQuery<ClassCurva>("select isnull(Fecha_defoliacion,'') as Fecha_defoliacion, isnull(Fecha_corte1,'') as Fecha_corte1, isnull(Fecha_redefoliacion,'') as Fecha_redefoliacion, isnull(Fecha_corte2,'') as Fecha_corte2 " +
-                "from SipgProyeccion where Id=" + Id_Proyeccion + "").FirstOrDefault();
+                "from ProdProyeccion where Id=" + Id_Proyeccion + "").FirstOrDefault();
             return Json(ListFechasxSector, JsonRequestBehavior.AllowGet);
         }
 

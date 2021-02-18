@@ -35,9 +35,7 @@ namespace Sistema_Indicadores.Models
         public Nullable<short> IdAgenI { get; set; }
         public Nullable<short> IdAgen_Tarjeta { get; set; }
         public string Liberar_Tarjeta { get; set; }
-        public string Compras_Oportunidad { get; set; }
-
-
+    public string Compras_Oportunidad { get; set; }
         public virtual ProdAgenteCat ProdAgenteCat { get; set; }
         public virtual ProdAgenteCat ProdAgenteCat1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

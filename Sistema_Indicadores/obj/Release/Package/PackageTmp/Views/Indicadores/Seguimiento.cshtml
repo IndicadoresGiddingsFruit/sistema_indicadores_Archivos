@@ -81,22 +81,27 @@
             </div>
         </div>
     </div>
-
-    <div>
-        <a href="@Url.Action("Seguimiento", "Indicadores", new { datos = "A" })" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="float:left;margin:10px">Abiertos</a>
-        <a href="@Url.Action("Seguimiento", "Indicadores", new { datos = "C" })" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="float:left;margin:10px">Cerrados</a>
-        <a href="@Url.Action("Seguimiento", "Indicadores", new { datos = "T" })" class="d-none d-sm-inline-block btn btn-sm btn-light shadow-sm" style="float:left;margin:10px">Todos</a>
-    </div>
 }
 
 <div>
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-
             <div class="modal-body">
                 <div class="table-responsive table-condensed table-sm table-bordered tabla">
                     <table class="table table-hover" id="dataTableData" name="dataTableData">
                         <thead class="thead-light" style="font-size:x-small; text-align:center">
+                            <tr>
+                                @if (Session["Id"].ToString() == "391" || Session["Id"].ToString() == "188")
+                                {
+                                    <th colspan="5"></th>
+                                }
+                                else
+                                {
+                                    <th colspan="6"></th>
+                                }
+                                <th colspan="2">Cajas entregadas</th>
+                                <th></th>
+                            </tr>
                             <tr>
                                 <th style="display:none">
                                     Id
@@ -110,17 +115,26 @@
                                 <th colspan="2">
                                     Campo
                                 </th>
+                                @if (Session["Id"].ToString() == "391" || Session["Id"].ToString() == "188")
+                                {
+                                    <th>
+                                        Asesor
+                                    </th>
+                                }
+                                @if (Session["Id"].ToString() != "391")
+                                {
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        Comentarios
+                                    </th>
+                                }
                                 <th>
-                                    Asesor
+                                    sem 27-52
                                 </th>
                                 <th>
-                                    Status
-                                </th>
-                                <th>
-                                    Comentarios
-                                </th>
-                                <th>
-                                    Dias sin respuesta
+                                    sem 1-actual
                                 </th>
                                 <th>
 
@@ -143,81 +157,85 @@
                                     <td id="IdAgen" style="display:none">
                                         @Html.DisplayFor(modelItem => item.IdAgen)
                                     </td>
-                                    <td>@Html.DisplayFor(modelItem => item.Asesor)</td>
-                                    <td>
-                                        @* @Html.DropDownListFor(model => item.Estatus, new SelectList(" "), "--Seleccione--", new { @id = "Estatus", @class = "form-control form-control-sm" })*@
-                                        @if (item.Estatus == null && Session["Id"].ToString() != "391")
-                                        {
-                                            @Html.DropDownListFor(model => item.Estatus, new SelectListItem[]{
-                                       new SelectListItem() {Text = "--Seleccione--", Value=null},
-                                       new SelectListItem() {Text = "ATENCIÓN A PRODUCTORES", Value="A"},
-                                       new SelectListItem() {Text = "CIERRE DE MATERIAL", Value="M"},
-                                       new SelectListItem() {Text = "COBRANZA", Value="C"},
-                                       new SelectListItem() {Text = "PENDIENTE REVISIÓN", Value="R"},
-                                       new SelectListItem() { Text = "REVISA GERENCIA", Value = "G" },
-                                       new SelectListItem() { Text = "TERMINÓ TEMPORADA", Value = "T" },
-                                       new SelectListItem() { Text = "VA A ENTREGAR", Value = "E" },
-                                       new SelectListItem() { Text = "VA A PAGAR", Value = "P" }}, new { @id = "status", @class = "form-control form-control-sm" })
-                                        }
-                                        else
-                                        {
-                                            if (item.Estatus == "A")
+                                    @if (Session["Id"].ToString() == "391" || Session["Id"].ToString() == "188")
+                                    {
+                                        <td>@Html.DisplayFor(modelItem => item.Asesor)</td>
+                                    }
+                                    @if (Session["Id"].ToString() != "391")
+                                    {
+                                        <td>
+                                            @if (item.Estatus == null && Session["Id"].ToString() != "188")
                                             {
-                                                <h7>ATENCIÓN A PRODUCTORES</h7>
+                                                @Html.DropDownListFor(model => item.Estatus, new SelectListItem[]{
+                                               new SelectListItem() {Text = "--Seleccione--", Value=null},
+                                               new SelectListItem() {Text = "ATENCIÓN A PRODUCTORES", Value="A"},
+                                               new SelectListItem() {Text = "CIERRE DE MATERIAL", Value="M"},
+                                               new SelectListItem() {Text = "COBRANZA", Value="C"},
+                                               new SelectListItem() {Text = "PENDIENTE REVISIÓN", Value="R"},
+                                               new SelectListItem() { Text = "REVISA GERENCIA", Value = "G" },
+                                               new SelectListItem() { Text = "TERMINÓ TEMPORADA", Value = "T" },
+                                               new SelectListItem() { Text = "VA A ENTREGAR", Value = "E" },
+                                               new SelectListItem() { Text = "VA A PAGAR", Value = "P" }}, new { @id = "status", @class = "form-control form-control-sm" })
                                             }
-                                            else if (item.Estatus == "M")
-                                            {
-                                                <h7>CIERRE DE MATERIAL</h7>
-                                            }
-                                            else if (item.Estatus == "C")
-                                            {
-                                                <h7>COBRANZA</h7>
-                                            }
-                                            else if (item.Estatus == "R")
+                                            else if (item.Estatus == null)
                                             {
                                                 <h7>PENDIENTE REVISIÓN</h7>
                                             }
-                                            else if (item.Estatus == "G")
+                                            else
                                             {
-                                                <h7>REVISA GERENCIA</h7>
+                                                if (item.Estatus == "A")
+                                                {
+                                                    <h7>ATENCIÓN A PRODUCTORES</h7>
+                                                }
+                                                else if (item.Estatus == "M")
+                                                {
+                                                    <h7>CIERRE DE MATERIAL</h7>
+                                                }
+                                                else if (item.Estatus == "C")
+                                                {
+                                                    <h7>COBRANZA</h7>
+                                                }
+                                                else if (item.Estatus == "R")
+                                                {
+                                                    <h7>PENDIENTE REVISIÓN</h7>
+                                                }
+                                                else if (item.Estatus == "G")
+                                                {
+                                                    <h7>REVISA GERENCIA</h7>
+                                                }
+                                                else if (item.Estatus == "T")
+                                                {
+                                                    <h7>TERMINÓ TEMPORADA</h7>
+                                                }
+                                                else if (item.Estatus == "E")
+                                                {
+                                                    <h7>VA A ENTREGAR</h7>
+                                                }
+                                                else if (item.Estatus == "P")
+                                                {
+                                                    <h7>VA A PAGAR</h7>
+                                                }
                                             }
-                                            else if (item.Estatus == "T")
+                                        </td>
+                                        <td>
+                                            @if (item.Comentarios == null && Session["Id"].ToString() != "391" && Session["Id"].ToString() != "188")
                                             {
-                                                <h7>TERMINÓ TEMPORADA</h7>
+                                                @Html.TextBoxFor(model => item.Comentarios, new { @style = "text-transform: uppercase;", @class = "form-control form-control-sm", @autocomplete = "off", @id = "comentarios" })
                                             }
-                                            else if (item.Estatus == "E")
+                                            else
                                             {
-                                                <h7>VA A ENTREGAR</h7>
+                                                @Html.DisplayFor(modelItem => item.Comentarios,new { @style= "text-transform: uppercase;" })
                                             }
-                                            else if (item.Estatus == "P")
-                                            {
-                                                <h7>VA A PAGAR</h7>
-                                            }
-                                        }
+                                        </td>
+                                    }
+                                    <td>
+                                        @String.Format("{0:n0}", item.cjs1)
                                     </td>
                                     <td>
-                                        @if (item.Comentarios == null && Session["Id"].ToString() != "391")
-                                        {
-                                            @Html.TextBoxFor(model => item.Comentarios, new { @class = "form-control form-control-sm", @autocomplete = "off", @id = "comentarios" })
-                                        }
-                                        else
-                                        {
-                                            @Html.DisplayFor(modelItem => item.Comentarios)
-                                        }
+                                        @String.Format("{0:n0}", item.cjs2)
                                     </td>
                                     <td>
-                                        @if (item.Estatus == null && item.dias >0)
-                                        {
-                                            @Html.DisplayFor(modelItem => item.dias)
-                                            if (Session["Id"].ToString() == "391" && item.dias>0)
-                                            {
-                                                <br />
-                                                <a href="#" onclick="mailRow(this)">Reenviar</a>
-                                            }
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (Session["Id"].ToString() != "391" && item.Estatus == null)
+                                        @if (Session["Id"].ToString() != "391" && Session["Id"].ToString() != "188" && item.Estatus == null)
                                         {
                                             <a href="#" onclick="uptRow(this)" style="font-size: 10px; border-radius: 25px;" class="btn btn-primary btn-sm active"><i class="fas fa-check-circle"></i></a>
                                         }
@@ -237,16 +255,85 @@
             {
                 <div class="modal-footer">
                     <input id="btnMail" type="submit" value="Enviar" class="btn-sm btn-light shadow-lg" style="font-weight:bold" />
-                    @* <button type="submit" id="fhgfh" class="btn-sm btn-light shadow-lg"><i class="fas fa-envelope-square"></i> Enviar</button>*@
                 </div>
             }
         </div>
     </div>
 </div>
 
+@if (Session["Id"].ToString() == "391")
+{
+    <div>
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-lg" type="submit" id="btnA">Abierto</button>
+                    <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" id="btnC">Cerrados</button>
+                    <button class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-lg" type="submit" id="btnT">Todo</button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive table-condensed table-sm table-bordered tabla">
+                        <table class="table table-hover" id="dataTableReport" name="dataTableReport">
+                            <thead class="thead-light" style="font-size:x-small; text-align:center">
+                                <tr>
+                                    <th colspan="8"></th>
+                                    <th colspan="2">Cajas entregadas</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th style="display:none">
+                                        Id
+                                    </th>
+                                    <th>
+                                        Codigo
+                                    </th>
+                                    <th>
+                                        Productor
+                                    </th>
+                                    <th colspan="2">
+                                        Campo
+                                    </th>
+                                    <th>
+                                        Asesor
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        Comentarios
+                                    </th>
+                                    <th>
+                                        Fecha
+                                    </th>
+                                    <th>
+                                        sem 27-52
+                                    </th>
+                                    <th>
+                                        sem 1-actual
+                                    </th>
+                                    <th>
+                                        Dias sin respuesta
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
 <script type="text/javascript">
-    var codigo_C, txt, status, id;    
+    var codigo_C, txt, status, id, filtro = "T";
+
+
+    $(document).ready(function () {
+        tabla(filtro);
+    });
 
     $("#Cod_Prod").change(function () {
         var cod_prod = $("#Cod_Prod").val();
@@ -399,7 +486,7 @@
     }
 
     function mailRow(currElement) {
-        $("#dataTableData tr").click(function () {
+        $("#dataTableReport tr").click(function () {
             $(this).find("#Id").each(function () {
                 send_mail($(this).html(), 1);
             });
@@ -407,28 +494,47 @@
     }
 
     function send_mail(id) {
-        var data = new Array();        
+
+        var data = new Array();
+        var tabla = new Array();
 
         if (id == 0) {
             $("#dataTableData tbody tr").each(function () {
-                var row = $(this);       
+                var row = $(this);
                 var ids = {};
+
                 ids.Id = row.find("#Id").html();
                 ids.IdAgen = row.find("#IdAgen").html();
                 data.push(ids);
+            });
+
+            $("#dataTableData tbody tr").each(function () {
+                var row = $(this);
+                var ids = {};
+                ids.Cod_Prod = row.find("td")[1].innerHTML;
+                ids.Productor = row.find("td")[2].innerHTML;
+                ids.Campo = row.find("td")[3].innerHTML;
+                ids.IdAgen = row.find("td")[4].innerHTML;
+                tabla.push(ids);
             });
         }
         else {
             var ids = {};
             ids.Id = id;
             data.push(ids);
-        }     
-       
-        //console.log(data);
+        }
+
+        var datos = {
+            ids: data,
+            tabla: tabla
+        }
+
+        console.log(datos);
+
         jQuery.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(data),
+            data: JSON.stringify(datos),
             url: siteURL + "Indicadores/Seguimiento_sendMail",
             success: function (data) {
                 alert('Datos enviados correctamente');
@@ -444,6 +550,109 @@
     $('#btnMail').click(function () {
         send_mail(0);
     });
+
+    //filtros
+    $('#btnA').click(function () {
+        filtro = "A";
+        if (typeof filtro != 'undefined') {
+            tabla(filtro);
+            vaciar();
+        }
+    });
+
+    $('#btnC').click(function () {
+        filtro = "C";
+        if (typeof filtro != 'undefined') {
+            tabla(filtro);
+            vaciar();
+        }
+    });
+
+    $('#btnT').click(function () {
+        filtro = "T";
+        if (typeof filtro != 'undefined') {
+            tabla(filtro);
+            vaciar();
+        }
+    });
+
+    function vaciar() {
+        $('#dataTableReport tr:not(:first-child)').remove();
+    }
+
+    function tabla(filtro) {
+        $.getJSON(siteURL + "Indicadores/SeguimientoList?datos=" + filtro, function (data) {
+            if (data.length > 0) {
+                $.each(data, function (idx, opt) {
+                    var f, dias, btnvisible, status;
+                    var Fecha = new Date(parseInt(opt.Fecha.slice(6, -2)));
+                    var date_Fecha = new Date(Fecha);
+                    var year_Fecha = date_Fecha.getFullYear();
+                    var month_Fecha_ = date_Fecha.getMonth() + 1;
+                    var day_Fecha = date_Fecha.getDate();
+                    var Fecha_formatted = year_Fecha + "-" + month_Fecha_ + "-" + day_Fecha;
+                    if (Fecha_formatted == '1899-12-31') {
+                        f = "";
+                    }
+                    else {
+                        f = Fecha_formatted;
+                    }
+
+                    Id = opt.Id;
+
+                    if (opt.dias > 0) {
+                        dias = opt.dias;
+                        btnvisible = 'display:button';
+                    }
+                    else {
+                        dias = "";
+                        btnvisible = 'display:none';
+                    }
+
+                    if (opt.Estatus == '') {
+                        status = '';
+                    }
+                    if (opt.Estatus == 'A') {
+                        status = 'ATENCIÓN A PRODUCTORES';
+                    }
+                    else if (opt.Estatus == 'M') {
+                        status = 'CIERRE DE MATERIAL';
+                    }
+                    else if (opt.Estatus == 'C') {
+                        status = 'COBRANZA';
+                    }
+                    else if (opt.Estatus == 'R') {
+                        status = 'PENDIENTE REVISIÓN';
+                    }
+                    else if (opt.Estatus == 'G') {
+                        status = 'REVISA GERENCIA';
+                    }
+                    else if (opt.Estatus == 'T') {
+                        status = 'TERMINÓ TEMPORADA';
+                    }
+                    else if (opt.Estatus == 'E') {
+                        status = 'VA A ENTREGAR';
+                    }
+                    else if (opt.Estatus == 'P') {
+                        status = 'VA A PAGAR';
+                    }
+
+                    $('#dataTableReport').append('<tr><td style="display:none" id="Id">' + opt.Id + '</td><td>' +
+                        opt.Cod_Prod + '</td><td>' +
+                        opt.Productor + '</td><td>' +
+                        opt.Cod_Campo + ' - ' + opt.Campo + '</td><td>' +
+                        '<td style="display:none" id="IdAgen">' + opt.IdAgen + '</td>' +
+                        '<td>' + opt.Asesor + '</td>' +
+                        '<td>' + status + '</td>' +
+                        '<td>' + opt.Comentarios + '</td>' +
+                        '<td>' + f + '</td>' +
+                        '<td>' + opt.cjs1 + '</td>' +
+                        '<td>' + opt.cjs2 + '</td>' +
+                        '<td>' + dias + '<br /><a style="' + btnvisible + '" href="#" onclick="mailRow(this)">Reenviar</a></td></tr>');
+                });
+            }
+        }, 'json');
+    }
 </script>
 
 

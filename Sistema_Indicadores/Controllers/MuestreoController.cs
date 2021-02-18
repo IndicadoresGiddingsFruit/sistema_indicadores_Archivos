@@ -132,6 +132,10 @@ namespace Sistema_Indicadores.Controllers
                             correo.CC.Add(correo_i);
                             correo.CC.Add(correo_p);
                             correo.CC.Add("marco.velazquez@giddingsfruit.mx");
+                            if (Session["IdAgen"].ToString() == "218")
+                            {
+                                correo.CC.Add("mayra.ramirez@giddingsfruit.mx");
+                            }
                         }
 
                         if ((short)Session["IdAgen"] == 204)
@@ -809,32 +813,32 @@ namespace Sistema_Indicadores.Controllers
                 }
                 if (Sector != 0 && Fecha_ejecucion != "")
                 {
-                    //item.Fecha_ejecucion = Convert.ToDateTime(Fecha_ejecucion);
-                    //item.IdAgenI = (short)Session["IdAgen"];
+                    item.Fecha_ejecucion = Convert.ToDateTime(Fecha_ejecucion);
+                    item.IdAgenI = (short)Session["IdAgen"];
 
-                    //var valida_sector = bd.ProdMuestreoSector.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod && x.Cod_Campo == item.Cod_Campo && x.Sector == Sector);
-                    //if (valida_sector == null)
-                    //{
-                    //    ProdMuestreoSector.Cod_Prod = item.Cod_Prod;
-                    //    ProdMuestreoSector.Cod_Campo = item.Cod_Campo;
-                    //    ProdMuestreoSector.Sector = Sector;
-                    //    bd.ProdMuestreoSector.Add(ProdMuestreoSector);
-                    //}
-                    //bd.SaveChanges();
+                    var valida_sector = bd.ProdMuestreoSector.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod && x.Cod_Campo == item.Cod_Campo && x.Sector == Sector);
+                    if (valida_sector == null)
+                    {
+                        ProdMuestreoSector.Cod_Prod = item.Cod_Prod;
+                        ProdMuestreoSector.Cod_Campo = item.Cod_Campo;
+                        ProdMuestreoSector.Sector = Sector;
+                        bd.ProdMuestreoSector.Add(ProdMuestreoSector);
+                    }
+                    bd.SaveChanges();
 
-                    //var IdMuestreoSector = ProdMuestreoSector.id;
-                    //var prodMuestreoObj = bd.ProdMuestreo.SingleOrDefault(x => x.Id == IdMuestreo);
-                    //if (prodMuestreoObj != null)
-                    //{
-                    //    prodMuestreoObj.IdSector = IdMuestreoSector;
-                    //    bd.SaveChanges();
-                    //}
+                    var IdMuestreoSector = ProdMuestreoSector.id;
+                    var prodMuestreoObj = bd.ProdMuestreo.SingleOrDefault(x => x.Id == IdMuestreo);
+                    if (prodMuestreoObj != null)
+                    {
+                        prodMuestreoObj.IdSector = IdMuestreoSector;
+                        bd.SaveChanges();
+                    }
 
-                    string title, body;
-                    title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
-                    body = "Fecha de muestreo agregada: " + Fecha_ejecucion;
+                    //string title, body;
+                    //title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
+                    //body = "Fecha de muestreo agregada: " + Fecha_ejecucion;
 
-                    notificaciones.SendNotificationJSON(title, body);
+                    //notificaciones.SendNotificationJSON(title, body);
                 }
                 if (Sector != 0)
                 {
@@ -1121,9 +1125,12 @@ namespace Sistema_Indicadores.Controllers
 
                         MailMessage correo = new MailMessage();
                         correo.From = new MailAddress("indicadores.giddingsfruit@gmail.com", "Indicadores GiddingsFruit");
-                        correo.To.Add(Session["Correo"].ToString());//correo_c
+                        correo.To.Add(Session["Correo"].ToString());//correo_c                        
                         correo.CC.Add(correo_p);
                         correo.CC.Add(correo_i);
+                        if (Session["IdAgen"].ToString() == "218") {
+                            correo.CC.Add("mayra.ramirez@giddingsfruit.mx");
+                        }
                         correo.Subject = "Calidad de fruta evaluada: " + item.Cod_Prod;
                         correo.Body += "Evaluado por: " + Session["Nombre"].ToString() + " <br/>";
                         correo.Body += " <br/>";
@@ -1233,6 +1240,10 @@ namespace Sistema_Indicadores.Controllers
                     mailMessage.To.Add(Session["Correo"].ToString());
                     mailMessage.CC.Add(correo);
                     mailMessage.CC.Add("oscar.castillo@giddingsfruit.mx");
+                    if (Session["IdAgen"].ToString() == "218")
+                    {
+                        mailMessage.CC.Add("mayra.ramirez@giddingsfruit.mx");
+                    }
                     mailMessage.Subject = "Reasignación de código: " + item.Cod_Prod;
                     mailMessage.Body += "El productor: " + item.Cod_Prod + " - " + productor + " con campo: " + item.Cod_Campo + " - " + campo.Descripcion + " ha sido reasignado a " + agente + " por " + Session["Nombre"].ToString() + " <br/>";
                     //mailMessage.Body += " <br/>";

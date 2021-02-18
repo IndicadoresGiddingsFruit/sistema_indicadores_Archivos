@@ -62,7 +62,7 @@ namespace Sistema_Indicadores.Clases
         public string Tesco { get; set; }
         public string Edad_planta { get; set; }
         public string Tipo_plantacion2 { get; set; }
-        public string Fecha_podamediacaña { get; set; }
+        public string Fecha_podamediacana { get; set; }
         public string Temporada { get; set; }
         public string Zona { get; set; }
         public string Acopio { get; set; }

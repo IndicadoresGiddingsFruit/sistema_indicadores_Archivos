@@ -18,5 +18,7 @@ namespace Sistema_Indicadores.Clases
         public string Campo { get; set; }
         public DateTime? Fecha { get; set; }
         public int? dias { get; set; }
+        public double? cjs1 { get; set; }
+        public double? cjs2 { get; set; }
     }
 }

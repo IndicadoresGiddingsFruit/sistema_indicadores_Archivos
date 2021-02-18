@@ -143,10 +143,11 @@ namespace Sistema_Indicadores.Controllers
                         {
                             return RedirectToAction("Zarzamora", "EstimacionBerries");
                         }
-                        else if (userDetails.Id == 391)
+                        //oscar
+                        else if (userDetails.Id == 391 || userDetails.Id == 188 || userDetails.Id == 44)
                         {
                             return RedirectToAction("Seguimiento", "Indicadores");
-                        }
+                        }                      
                         //activos curva
                         else if (userDetails.Id == 121)
                         {
