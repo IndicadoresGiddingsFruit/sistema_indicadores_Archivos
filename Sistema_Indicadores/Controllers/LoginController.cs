@@ -144,7 +144,7 @@ namespace Sistema_Indicadores.Controllers
                             return RedirectToAction("Zarzamora", "EstimacionBerries");
                         }
                         //oscar
-                        else if (userDetails.Id == 391 || userDetails.Id == 188 || userDetails.Id == 44)
+                        else if (userDetails.Id == 391 || userDetails.Id == 188 || userDetails.Id == 44 || userDetails.Id == 394)
                         {
                             return RedirectToAction("Seguimiento", "Indicadores");
                         }                      

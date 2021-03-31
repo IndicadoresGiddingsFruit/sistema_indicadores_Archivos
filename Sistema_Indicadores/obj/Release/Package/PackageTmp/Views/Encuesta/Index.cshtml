@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "Encuesta";
+}
+
+<div class="col-sm-12 table-responsive">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="text-primary">¡Bienvenido a Encuestas 360!</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col font-weight-bold text-secondary">
+                        <div class="panel-group" id="accordion">
+                            <div class="panel panel-default" style="width:100%">
+                                <div id="collapseOne" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <i style="float:left; padding:5px" class="fas fa-running text-primary"></i>
+                                        <input type="text" class="form-control form-control-sm" placeholder="Nombre de la encuesta" id="Localidad" name="Localidad" Style="float:left" autocomplete="off" />
+                                        <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" style="float:left;margin:0 5px 0 5px" type="submit" id="btnCreateE" name="btnCreateE">Crear encuesta</button>
+                                    </div>
+                                </div>
+                                <div class="panel-heading" style="float:left">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="btn btn-primary">
+                                            <i class="fas fa-plus"></i> Nueva encuesta
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col text-primary">
+                        <div class="panel-group" id="accordion2">
+                            <div class="panel panel-default" style="width:100%">
+                                <div class="panel-heading" style="float:left">
+                                    <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                                        Encuestas creadas
+                                        <i class="fas fa-caret-down"></i>
+                                    </a>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <h5>lol</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ModalAddQ" style="display:none;" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col font-weight-bold text-secondary">
+                            <div class="panel-group" id="addquestion">
+                                <div class="panel panel-default">
+                                    @*<div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#addquestion" href="#collapseQ" class="btn btn-info">
+                                                    Añadir pregunta
+                                                </a>
+                                            </h4>
+                                        </div>*@
+                                    @*<div id="collapseQ" class="panel-collapse collapse in">*@
+                                    <div class="panel-body">
+                                        <div class="row" style="width:50%; padding:10px; float:left">
+                                            <div class="tab-content">
+                                                <div role="tabpanel" class="tab-pane active" id="basic">
+                                                    <div class="question-group-divider">
+                                                        <div class="question-group ">
+                                                            <div class="question-heading">Selección múltiple</div>
+                                                            <ul class="question-list">
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link" id="btnSUna">
+                                                                        <span class="svg svg-multiple-one">
+                                                                            <i class="fas fa-ellipsis-v"></i>
+                                                                        </span>
+                                                                        Seleccionar una
+                                                                    </a>
+                                                                </li>
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link" id="btnVarias">
+                                                                        <span class="svg svg-multiple-choice">
+                                                                            <i class="fas fa-ellipsis-v"></i>
+                                                                        </span>
+                                                                        Seleccionar varias
+                                                                    </a>
+                                                                </li>
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-dropdown-menu">
+                                                                            <i class="far fa-caret-square-down"></i>
+                                                                        </span>
+                                                                        Menú desplegable
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="question-group ">
+                                                            <div class="question-heading">Clasificación gráfica</div>
+                                                            <ul class="question-list">
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-star-rating"><i class="fas fa-star-half-alt"></i></span>
+                                                                        Puntuación por estrellas
+                                                                    </a>
+                                                                </li>
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-smiley-rating">
+                                                                            <i class="far fa-smile"></i>
+                                                                        </span>
+                                                                        Cara sonriente - Puntuación
+                                                                    </a>
+                                                                </li>
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-thumbs-up">
+                                                                            <i class="fas fa-thumbs-up"></i>
+                                                                        </span>
+                                                                        Pulgares arriba/abajo
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-slider">
+                                                                            <i class="fas fa-sliders-h"></i>
+                                                                        </span>
+                                                                        Barra de deslizamiento de texto
+                                                                    </a>
+                                                                </li>
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-multipoint-scale">
+                                                                            <i class="fas fa-ellipsis-h"></i>
+                                                                        </span>
+                                                                        Numérico deslizante
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div class="question-group ">
+                                                            <div class="question-heading">Ordenando</div>
+                                                            <ul class="question-list">
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-rank-order">
+                                                                            <i class="fas fa-bars"></i>
+                                                                        </span>
+                                                                        Orden de rango
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="question-group-divider">
+                                                        <div class="question-group ">
+                                                            <div class="question-heading">Texto</div>
+                                                            <ul class="question-list">
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-comment-box">
+                                                                            <i class="fas fa-envelope-open-text"></i>
+                                                                        </span>
+                                                                        Caja de comentarios
+                                                                    </a>
+                                                                </li>
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-single-rowtext">
+                                                                            <i class="fas fa-file-alt"></i>
+                                                                        </span>
+                                                                        Texto de una sola fila
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+                                                        <div class="question-group ">
+                                                            <div class="question-heading">Basic Matrix</div>
+                                                            <ul class="question-list">
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-multiple-choice">
+                                                                            <i class="fas fa-ellipsis-v"></i>
+                                                                        </span>
+                                                                        Escalas de varios puntos
+                                                                    </a>
+                                                                </li>
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-multiple-choice">
+                                                                            <i class="fas fa-ellipsis-v"></i>
+                                                                        </span>
+                                                                        Selección múltiple
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
+                                                        </div>
+                                                        <div class="question-group ">
+                                                            <div class="question-heading">Otras</div><ul class="question-list">
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-date-time">
+                                                                            <i class="fas fa-clock"></i>
+                                                                        </span>
+                                                                        Fecha / Hora
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class=" question-item">
+                                                                    <a href="javascript:void(0)" class="question-link">
+                                                                        <span class="svg svg-calendar">
+                                                                            <i class="fas fa-calendar-alt"></i>
+                                                                        </span>
+                                                                        Calendario
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="width:50%; float:left">
+                                            <div class="tab-content" style="border: 1px solid black; padding: 20px; width:100%; background-color:antiquewhite">
+                                                <input type="text" class="form-control form-control-sm" placeholder="Texto de la pregunta" id="pregunta" name="pregunta" autocomplete="off" />
+
+                                                <div class="row text-secondary" style="padding:10px">
+
+                                                    <div style="padding:2px; float:left">
+                                                        <input type="checkbox" id="checkItem" name="valores[]" value="" />
+                                                    </div>
+
+                                                    <div style="width:100%;  float:left">
+                                                        <input type="text" class="form-control form-control-sm" placeholder="Opción 1" id="pregunta" name="pregunta" autocomplete="off" />
+                                                    </div>
+
+                                                    <div style="padding:2px">
+                                                        <input type="checkbox" id="checkItem" name="valores[]" value="" style="padding:2px" />
+                                                    </div>
+
+                                                    <input type="text" class="form-control form-control-sm" placeholder="Opción 2" id="pregunta" name="pregunta" autocomplete="off" />
+
+                                                    <a href="javascript:void(0)" style="border-radius: 15px;padding:6px"><i class="fas fa-plus-circle"></i> Añadir opción</a>
+
+                                                </div>
+
+
+
+                                                <button class="d-none d-sm-inline-block btn btn-sm btn-success shadow-lg" type="submit" id="btnAddQ" name="btnAddQ">Agregar</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/Jquery/jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+    $('#btnCreateE').click(function () {
+        $("#ModalAddQ").modal('show');
+    });
+
+</script>

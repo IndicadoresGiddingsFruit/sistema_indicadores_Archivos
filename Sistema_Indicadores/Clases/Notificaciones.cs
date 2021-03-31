@@ -1,12 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Web;
-using System.Web.Script.Serialization;
 
 namespace Sistema_Indicadores.Clases
 {
@@ -16,14 +11,14 @@ namespace Sistema_Indicadores.Clases
         {
             try
             {
-            string SERVER_API_KEY = "AIzaSyANuakkocCPEoISIJG7DID6StVrEu3Dm80";
-            string SENDER_ID = "47398042328";
-            string deviceId = "bda93f56ce507588";
+            string SERVER_API_KEY = "AAAAY2aWkGc:APA91bHgEAnne-u36oGBahpXis_gz9Tkfq3_32vnG77U6eIJ8dO8vQiCJN4ABB7qBj6BN54pW1AEiWbFombmHfVepzf0tBUkgCF6BLhwE-Lu7_TDxm1Q77KnSPDv0n9TPaaBuhs8EjRU";
+            string SENDER_ID = "426922905703";
+            string deviceId = "dYuGlDPxTfWjPJSJIVYCOv:APA91bEslGjiEyRnrTmj6ogUwLCkJ5cNM8HpD5VXKz9AENXPM4WSH-eTITq-bb3hSnpL58dklc6aTTtZoRosAtk-PCsUSRAIL-bokh1k_dfBdIUMEsH2vTBzgyRtDSWpK9K9wB_xej6q";
 
                 WebRequest tRequest;
                 tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
                 tRequest.Method = "post";
-                tRequest.ContentType = " application/json";
+                tRequest.ContentType = "application/json";
 
                 tRequest.Headers.Add(string.Format("Authorization: key={0}", SERVER_API_KEY));
                 tRequest.Headers.Add(string.Format("Sender: id={0}", SENDER_ID));
@@ -33,8 +28,8 @@ namespace Sistema_Indicadores.Clases
                     notification = new
                     {
                         title,
-                        body,
-                        icon = "/Image/GIDDINGS_PRIMARY_STACKED_LOGO_DRIFT_RGB.png"//,
+                        body
+                        //icon = "/Image/GIDDINGS_PRIMARY_STACKED_LOGO_DRIFT_RGB.png"//,
                         //click_action,
                         //sound = "mySound"
                     },

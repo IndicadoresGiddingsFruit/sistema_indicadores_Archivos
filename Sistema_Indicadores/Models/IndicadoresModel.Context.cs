@@ -12,6 +12,8 @@ namespace Sistema_Indicadores.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class SeasonSun1213Entities16 : DbContext
     {
@@ -39,5 +41,27 @@ namespace Sistema_Indicadores.Models
         public virtual DbSet<SIPGUsuarios> SIPGUsuarios { get; set; }
         public virtual DbSet<ProdProyeccion> ProdProyeccion { get; set; }
         public virtual DbSet<UV_ProdRecepcion> UV_ProdRecepcion { get; set; }
+    
+        [DbFunction("SeasonSun1213Entities16", "fnRptSaldosFinanciamiento")]
+        public virtual IQueryable<fnRptSaldosFinanciamiento_Result> fnRptSaldosFinanciamiento(Nullable<System.DateTime> fechaIni, Nullable<System.DateTime> fechaFin, Nullable<System.DateTime> fecFinanciamiento, Nullable<short> semana)
+        {
+            var fechaIniParameter = fechaIni.HasValue ?
+                new ObjectParameter("FechaIni", fechaIni) :
+                new ObjectParameter("FechaIni", typeof(System.DateTime));
+    
+            var fechaFinParameter = fechaFin.HasValue ?
+                new ObjectParameter("FechaFin", fechaFin) :
+                new ObjectParameter("FechaFin", typeof(System.DateTime));
+    
+            var fecFinanciamientoParameter = fecFinanciamiento.HasValue ?
+                new ObjectParameter("FecFinanciamiento", fecFinanciamiento) :
+                new ObjectParameter("FecFinanciamiento", typeof(System.DateTime));
+    
+            var semanaParameter = semana.HasValue ?
+                new ObjectParameter("Semana", semana) :
+                new ObjectParameter("Semana", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<fnRptSaldosFinanciamiento_Result>("[SeasonSun1213Entities16].[fnRptSaldosFinanciamiento](@FechaIni, @FechaFin, @FecFinanciamiento, @Semana)", fechaIniParameter, fechaFinParameter, fecFinanciamientoParameter, semanaParameter);
+        }
     }
 }

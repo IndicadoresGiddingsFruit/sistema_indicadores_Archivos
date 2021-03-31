@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Sistema_Indicadores.Controllers
@@ -18,7 +19,7 @@ namespace Sistema_Indicadores.Controllers
         ProdMuestreoSector ProdMuestreoSector = new ProdMuestreoSector();
         Notificaciones notificaciones = new Notificaciones();
 
-        string correo_p = "", correo_c = "", correo_i = "", compras_oportunidad = "", subject = "", body_email = "";
+        string correo_p = "", correo_c = "", correo_i = "", compras_oportunidad = "", title="", body="", calidad="";
 
         public ActionResult Muestreo()
         {
@@ -74,6 +75,11 @@ namespace Sistema_Indicadores.Controllers
                     bd.ProdMuestreo.Add(ProdMuestreo);
                     bd.SaveChanges();
 
+
+                    title = "Nuevo muestreo solicitado";  
+                    body = "Código: " + model.Cod_Prod + " campo: " + model.Cod_Campo;
+                    notificaciones.SendNotificationJSON(title, body);
+
                     var campo = bd.ProdCamposCat.FirstOrDefault(m => m.Cod_Prod == model.Cod_Prod && m.Cod_Campo == model.Cod_Campo);
                     var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgen && m.Tipo == "P");
                     var email_c = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgenC && m.Tipo == "C");
@@ -124,7 +130,7 @@ namespace Sistema_Indicadores.Controllers
                         {
                             correo.To.Add(Session["Correo"].ToString());
                             correo.CC.Add(correo_c);
-                            correo.CC.Add(correo_p);                            
+                            correo.CC.Add(correo_p);
                         }
                         else if (Session["Tipo"].ToString() == "C")
                         {
@@ -142,7 +148,7 @@ namespace Sistema_Indicadores.Controllers
                         {
                             correo.CC.Add("julio.morales@giddingsfruit.mx");
                         }
-                        
+
                         correo.CC.Add("oscar.castillo@giddingsfruit.mx");
 
                         correo.Subject = "Nuevo Muestreo: " + campo.Cod_Prod;
@@ -191,15 +197,6 @@ namespace Sistema_Indicadores.Controllers
             return View();
         }
 
-        public void email()
-        {
-            try { }
-            catch (Exception e)
-            {
-                e.ToString();
-            }
-        }
-
         //Buscar
         public ActionResult SetSolicitud(string BuscarCod_Prod = "", short agente = 0, string status = "", string pendientes = "")
         {
@@ -241,25 +238,24 @@ namespace Sistema_Indicadores.Controllers
 
                 if (Session["IdAgen"].ToString() == "205" && pendientes == "")
                 {
-
                     item = (from m in (from m in bd.ProdAnalisis_Residuo
                                        group m by new
                                        {
                                            Cod_Empresa = m.Cod_Empresa,
                                            Cod_Prod = m.Cod_Prod,
                                            Cod_Campo = m.Cod_Campo,
-                                           IdSector = m.IdSector
+                                           //IdSector = m.IdSector
                                        } into x
                                        select new
                                        {
                                            Cod_Empresa = x.Key.Cod_Empresa,
                                            Cod_Prod = x.Key.Cod_Prod,
                                            Cod_Campo = x.Key.Cod_Campo,
-                                           IdSector = x.Key.IdSector,
+                                           //IdSector = x.Key.IdSector,
                                            Fecha = x.Max(m => m.Fecha)
                                        }) 
 
-                            join an in bd.ProdAnalisis_Residuo on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.IdSector, m.Fecha } equals new { an.Cod_Empresa, an.Cod_Prod, an.Cod_Campo, an.IdSector, an.Fecha } into AnalisisR
+                            join an in bd.ProdAnalisis_Residuo on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { an.Cod_Empresa, an.Cod_Prod, an.Cod_Campo, an.Fecha } into AnalisisR
                             from an in AnalisisR.DefaultIfEmpty()
 
                             join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into MuestreoCam
@@ -268,7 +264,7 @@ namespace Sistema_Indicadores.Controllers
                             join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into MuestreoProd
                             from prod in MuestreoProd.DefaultIfEmpty()
 
-                            join s in bd.ProdMuestreoSector on m.IdSector equals s.id into MuestreoSc
+                            join s in bd.ProdMuestreoSector on an.IdSector equals s.id into MuestreoSc
                             from ms in MuestreoSc.DefaultIfEmpty()
 
                             join r in bd.ProdMuestreo on an.Id_Muestreo equals r.Id into MuestreoAn
@@ -289,7 +285,7 @@ namespace Sistema_Indicadores.Controllers
                             join l in bd.CatLocalidades on mcam.CodLocalidad equals l.CodLocalidad into MuestreoLoc
                             from loc in MuestreoLoc.DefaultIfEmpty()
 
-                            where an.Estatus != "L" 
+                           where an.Estatus != "L" 
 
                             group m by new
                             {
@@ -834,11 +830,10 @@ namespace Sistema_Indicadores.Controllers
                         bd.SaveChanges();
                     }
 
-                    //string title, body;
-                    //title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
-                    //body = "Fecha de muestreo agregada: " + Fecha_ejecucion;
+                    title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
+                    body = "Fecha de muestreo agregada: " + Fecha_ejecucion;
+                    notificaciones.SendNotificationJSON(title, body);
 
-                    //notificaciones.SendNotificationJSON(title, body);
                 }
                 if (Sector != 0)
                 {
@@ -1071,115 +1066,210 @@ namespace Sistema_Indicadores.Controllers
 
         //Calidad fruta
         [HttpPost]
-        public ActionResult SetSolicitudCF(ProdMuestreo model, string estatus, string incidencia = "", string propuesta = "")
+        public ActionResult SetSolicitudCF(ProdMuestreo model, string estatus="", string incidencia = "", string propuesta = "")
         {
             if (Session["Nombre"] != null)
             {
                 ViewData["Nombre"] = Session["Nombre"].ToString();
-            }
-            if (model.Id > 0)
-            {
-                ProdCalidadMuestreo ProdCalidadMuestreo = new ProdCalidadMuestreo();
-                ProdCalidadMuestreo.Estatus = estatus;
-                ProdCalidadMuestreo.Fecha = DateTime.Now;
-                if (incidencia != "")
-                {
-                    ProdCalidadMuestreo.Incidencia = incidencia;
-                    if (propuesta != "")
-                    {
-                        ProdCalidadMuestreo.Propuesta = propuesta;
-                    }
-                }
-                ProdCalidadMuestreo.IdAgen = (short)Session["IdAgen"];
-                ProdCalidadMuestreo.Id_Muestreo = model.Id;
-                bd.ProdCalidadMuestreo.Add(ProdCalidadMuestreo);
-                bd.SaveChanges();
 
-                var item = bd.ProdMuestreo.Where(x => x.Id == model.Id).First();
-                if (estatus != null)
+                if (model.Id > 0)
                 {
-                    if (estatus == "1" || estatus == "2")
+                    ProdCalidadMuestreo ProdCalidadMuestreo = new ProdCalidadMuestreo();
+                    ProdCalidadMuestreo.Estatus = estatus;
+                    ProdCalidadMuestreo.Fecha = DateTime.Now;
+                    if (incidencia != "")
                     {
-                        item.Tarjeta = "S";
+                        ProdCalidadMuestreo.Incidencia = incidencia;
+                        if (propuesta != "")
+                        {
+                            ProdCalidadMuestreo.Propuesta = propuesta;
+                        }
                     }
-                    if (estatus == "3")
-                    {
-                        item.Tarjeta = "N";
-                    }
+                    ProdCalidadMuestreo.IdAgen = (short)Session["IdAgen"];
+                    ProdCalidadMuestreo.Id_Muestreo = model.Id;
+                    bd.ProdCalidadMuestreo.Add(ProdCalidadMuestreo);
                     bd.SaveChanges();
 
-                    var analisis = bd.ProdAnalisis_Residuo.FirstOrDefault(x => x.Id_Muestreo == model.Id);
-
-                    try
+                    var item = bd.ProdMuestreo.Where(x => x.Id == model.Id).First();
+                    if (estatus != "")
                     {
-                        string correo_p, correo_c, correo_i;
-
-                        var campo = bd.ProdCamposCat.FirstOrDefault(m => m.Cod_Prod == item.Cod_Prod && m.Cod_Campo == item.Cod_Campo);
-                        var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgen);
-                        correo_p = email_p.correo;
-                        var email_c = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgenC);
-                        correo_c = email_c.correo;
-                        var email_i = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgenI);
-                        correo_i = email_i.correo;
-                        var prod = bd.ProdProductoresCat.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod);
-
-                        MailMessage correo = new MailMessage();
-                        correo.From = new MailAddress("indicadores.giddingsfruit@gmail.com", "Indicadores GiddingsFruit");
-                        correo.To.Add(Session["Correo"].ToString());//correo_c                        
-                        correo.CC.Add(correo_p);
-                        correo.CC.Add(correo_i);
-                        if (Session["IdAgen"].ToString() == "218") {
-                            correo.CC.Add("mayra.ramirez@giddingsfruit.mx");
-                        }
-                        correo.Subject = "Calidad de fruta evaluada: " + item.Cod_Prod;
-                        correo.Body += "Evaluado por: " + Session["Nombre"].ToString() + " <br/>";
-                        correo.Body += " <br/>";
-                        correo.Body += "Productor: " + item.Cod_Prod + " - " + prod.Nombre + " <br/>";
-                        correo.Body += " <br/>";
-                        correo.Body += "Campo: " + item.Cod_Campo + " - " + campo.Descripcion + " <br/>";
-                        correo.Body += " <br/>";
                         if (estatus == "1")
                         {
-                            correo.Body += "Estatus: APTA <br/>";
-                            correo.Body += " <br/>";
-                            if (analisis != null)
+                            item.Tarjeta = "S";
+                            calidad = "APTA";
+                        }
+                        else if (estatus == "2")
+                        {
+                            item.Tarjeta = "N";
+                            calidad = "APTA CON CONDICIONES";
+                        }
+                        else if (estatus == "3")
+                        {
+                            item.Tarjeta = "N";
+                            calidad = "PENDIENTE";
+                        }
+                        bd.SaveChanges();
+
+                        var analisis = bd.ProdAnalisis_Residuo.FirstOrDefault(x => x.Id_Muestreo == model.Id);
+
+                        title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
+                        body = "Calidad evaluada: estatus " + calidad;
+
+                        notificaciones.SendNotificationJSON(title, body);
+
+                        try
+                        {
+                            string correo_p, correo_c, correo_i;
+
+                            var campo = bd.ProdCamposCat.FirstOrDefault(m => m.Cod_Prod == item.Cod_Prod && m.Cod_Campo == item.Cod_Campo);
+                            var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgen);
+                            correo_p = email_p.correo;
+                            var email_c = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgenC);
+                            correo_c = email_c.correo;
+                            var email_i = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgenI);
+                            correo_i = email_i.correo;
+                            var prod = bd.ProdProductoresCat.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod);
+
+                            MailMessage correo = new MailMessage();
+                            correo.From = new MailAddress("indicadores.giddingsfruit@gmail.com", "Indicadores GiddingsFruit");
+                            correo.To.Add(Session["Correo"].ToString());//correo_c                        
+                            correo.CC.Add(correo_p);
+                            correo.CC.Add(correo_i);
+                            if (Session["IdAgen"].ToString() == "218")
                             {
+                                correo.CC.Add("mayra.ramirez@giddingsfruit.mx");
+                            }
+                            correo.Subject = "Calidad de fruta evaluada: " + item.Cod_Prod;
+                            correo.Body += "Evaluado por: " + Session["Nombre"].ToString() + " <br/>";
+                            correo.Body += " <br/>";
+                            correo.Body += "Productor: " + item.Cod_Prod + " - " + prod.Nombre + " <br/>";
+                            correo.Body += " <br/>";
+                            correo.Body += "Campo: " + item.Cod_Campo + " - " + campo.Descripcion + " <br/>";
+                            correo.Body += " <br/>";
+                            if (estatus == "1")
+                            {
+                                correo.Body += "Estatus: APTA <br/>";
+                                correo.Body += " <br/>";
+                                if (analisis != null)
+                                {
+                                    if (analisis.Estatus == "L")
+                                    {
+                                        correo.Body += "Entregar tarjeta <br/>";
+                                        correo.Body += " <br/>";
+                                    }
+                                }
+                            }
+                            else if (estatus == "2")
+                            {
+                                correo.Body += "Estatus: APTA CON CONDICIONES<br/>";
+                                correo.Body += " <br/>";
                                 if (analisis.Estatus == "L")
                                 {
                                     correo.Body += "Entregar tarjeta <br/>";
                                     correo.Body += " <br/>";
                                 }
                             }
-                        }
-                        else if (estatus == "2")
-                        {
-                            correo.Body += "Estatus: APTA CON CONDICIONES<br/>";
-                            correo.Body += " <br/>";
-                            if (analisis.Estatus == "L")
+                            else if (estatus == "3")
                             {
-                                correo.Body += "Entregar tarjeta <br/>";
+                                correo.Body += "Estatus: PENDIENTE <br/>";
+                                correo.Body += " <br/>";
+                                correo.Body += "No entregar tarjeta <br/>";
                                 correo.Body += " <br/>";
                             }
-                        }
-                        else if (estatus == "3")
-                        {
-                            correo.Body += "Estatus: PENDIENTE <br/>";
-                            correo.Body += " <br/>";
-                            correo.Body += "No entregar tarjeta <br/>";
-                            correo.Body += " <br/>";
-                        }
-                        if (incidencia != "")
-                        {
-                            correo.Body += "Incidencia: " + incidencia + " <br/>";
-                            correo.Body += " <br/>";
-                            if (propuesta != "")
+                            if (incidencia != "")
                             {
-                                correo.Body += "Propuesta: " + propuesta + " <br/>";
+                                correo.Body += "Incidencia: " + incidencia + " <br/>";
                                 correo.Body += " <br/>";
+                                if (propuesta != "")
+                                {
+                                    correo.Body += "Propuesta: " + propuesta + " <br/>";
+                                    correo.Body += " <br/>";
+                                }
                             }
+                            correo.IsBodyHtml = true;
+                            correo.Priority = MailPriority.Normal;
+
+                            string sSmtpServer = "";
+                            sSmtpServer = "smtp.gmail.com";
+
+                            SmtpClient a = new SmtpClient();
+                            a.Host = sSmtpServer;
+                            a.Port = 587;//25
+                            a.EnableSsl = true;
+                            a.UseDefaultCredentials = false;// true;
+                            a.Credentials = new System.Net.NetworkCredential("indicadores.giddingsfruit@gmail.com", "indicadores2019");
+                            a.Send(correo);
                         }
-                        correo.IsBodyHtml = true;
-                        correo.Priority = MailPriority.Normal;
+                        catch (Exception e) { e.ToString(); }
+                    }
+                }
+
+                return RedirectToAction("SetSolicitud", "Muestreo");
+            }
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
+        }
+
+        //Re-asignar a otro ing
+        [HttpPost]
+        public ActionResult SetReasignarIng(ProdMuestreo model, short idAgen)
+        {
+            if (Session["Nombre"] != null)
+            {
+                ViewData["Nombre"] = Session["Nombre"].ToString();
+
+                if (model.Id > 0)
+                {
+                    string correo, productor, agente;
+
+                    var item = bd.ProdMuestreo.Where(x => x.Id == model.Id).First();
+                    var campo = bd.ProdCamposCat.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod && x.Cod_Campo == item.Cod_Campo);
+                    var user = bd.SIPGUsuarios.FirstOrDefault(x => x.IdAgen == idAgen);
+                    correo = user.correo;
+                    agente = user.Completo;
+
+                    var prod = bd.ProdProductoresCat.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod);
+                    productor = prod.Nombre;
+
+                    if (Session["Tipo"].ToString() == "P")
+                    {
+                        campo.IdAgen = idAgen;
+                    }
+                    else if (Session["Tipo"].ToString() == "C")
+                    {
+                        campo.IdAgenC = idAgen;
+                    }
+                    else if (Session["Tipo"].ToString() == "I")
+                    {
+                        campo.IdAgenI = idAgen;
+                    }
+                    bd.SaveChanges();
+
+                    title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
+                    body = "Reasignación de código por: " + Session["Nombre"].ToString();
+
+                    notificaciones.SendNotificationJSON(title, body);
+
+                    try
+                    {
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.From = new MailAddress("indicadores.giddingsfruit@gmail.com", "Indicadores GiddingsFruit");
+                        mailMessage.To.Add(Session["Correo"].ToString());
+                        mailMessage.CC.Add(correo);
+                        mailMessage.CC.Add("oscar.castillo@giddingsfruit.mx");
+                        if (Session["IdAgen"].ToString() == "218")
+                        {
+                            mailMessage.CC.Add("mayra.ramirez@giddingsfruit.mx");
+                        }
+                        mailMessage.Subject = "Reasignación de código: " + item.Cod_Prod;
+                        mailMessage.Body += "El productor: " + item.Cod_Prod + " - " + productor + " con campo: " + item.Cod_Campo + " - " + campo.Descripcion + " ha sido reasignado a " + agente + " por " + Session["Nombre"].ToString() + " <br/>";
+                        //mailMessage.Body += " <br/>";
+                        //mailMessage.Body += "Tiene solicitud de muestreo pendiente!<br/>";
+                        //mailMessage.Body += " <br/>";
+                        mailMessage.IsBodyHtml = true;
+                        mailMessage.Priority = MailPriority.Normal;
 
                         string sSmtpServer = "";
                         sSmtpServer = "smtp.gmail.com";
@@ -1190,85 +1280,19 @@ namespace Sistema_Indicadores.Controllers
                         a.EnableSsl = true;
                         a.UseDefaultCredentials = false;// true;
                         a.Credentials = new System.Net.NetworkCredential("indicadores.giddingsfruit@gmail.com", "indicadores2019");
-                        a.Send(correo);
+                        a.Send(mailMessage);
                     }
-                    catch (Exception e) { e.ToString(); }
-                }
-            }
-            return RedirectToAction("SetSolicitud", "Muestreo");
-        }
-
-        //Re-asignar a otro ing
-        [HttpPost]
-        public ActionResult SetReasignarIng(ProdMuestreo model, short idAgen)
-        {
-            if (Session["Nombre"] != null)
-            {
-                ViewData["Nombre"] = Session["Nombre"].ToString();
-            }
-            if (model.Id > 0)
-            {
-                string correo, productor, agente;
-
-                var item = bd.ProdMuestreo.Where(x => x.Id == model.Id).First();
-                var campo = bd.ProdCamposCat.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod && x.Cod_Campo == item.Cod_Campo);
-                var user = bd.SIPGUsuarios.FirstOrDefault(x => x.IdAgen == idAgen);
-                correo = user.correo;
-                agente = user.Completo;
-
-                var prod = bd.ProdProductoresCat.FirstOrDefault(x => x.Cod_Prod == item.Cod_Prod);
-                productor = prod.Nombre;
-
-                if (Session["Tipo"].ToString() == "P")
-                {
-                    campo.IdAgen = idAgen;
-                }
-                else if (Session["Tipo"].ToString() == "C")
-                {
-                    campo.IdAgenC = idAgen;
-                }
-                else if (Session["Tipo"].ToString() == "I")
-                {
-                    campo.IdAgenI = idAgen;
-                }
-                bd.SaveChanges();
-
-                try
-                {
-                    MailMessage mailMessage = new MailMessage();
-                    mailMessage.From = new MailAddress("indicadores.giddingsfruit@gmail.com", "Indicadores GiddingsFruit");
-                    mailMessage.To.Add(Session["Correo"].ToString());
-                    mailMessage.CC.Add(correo);
-                    mailMessage.CC.Add("oscar.castillo@giddingsfruit.mx");
-                    if (Session["IdAgen"].ToString() == "218")
+                    catch (Exception e)
                     {
-                        mailMessage.CC.Add("mayra.ramirez@giddingsfruit.mx");
+                        e.ToString();
                     }
-                    mailMessage.Subject = "Reasignación de código: " + item.Cod_Prod;
-                    mailMessage.Body += "El productor: " + item.Cod_Prod + " - " + productor + " con campo: " + item.Cod_Campo + " - " + campo.Descripcion + " ha sido reasignado a " + agente + " por " + Session["Nombre"].ToString() + " <br/>";
-                    //mailMessage.Body += " <br/>";
-                    //mailMessage.Body += "Tiene solicitud de muestreo pendiente!<br/>";
-                    //mailMessage.Body += " <br/>";
-                    mailMessage.IsBodyHtml = true;
-                    mailMessage.Priority = MailPriority.Normal;
-
-                    string sSmtpServer = "";
-                    sSmtpServer = "smtp.gmail.com";
-
-                    SmtpClient a = new SmtpClient();
-                    a.Host = sSmtpServer;
-                    a.Port = 587;//25
-                    a.EnableSsl = true;
-                    a.UseDefaultCredentials = false;// true;
-                    a.Credentials = new System.Net.NetworkCredential("indicadores.giddingsfruit@gmail.com", "indicadores2019");
-                    a.Send(mailMessage);
                 }
-                catch (Exception e)
-                {
-                    e.ToString();
-                }
+                return RedirectToAction("SetSolicitud", "Muestreo");
             }
-            return RedirectToAction("SetSolicitud", "Muestreo");
+            else
+            {
+                return RedirectToAction("Index", "Login");
+            }
         }
 
         public ActionResult Nuevo_Analisis_Residuo(ProdAnalisis_Residuo model)
@@ -1473,7 +1497,19 @@ namespace Sistema_Indicadores.Controllers
                         var muestreo = bd.ProdMuestreo.FirstOrDefault(m => m.Cod_Prod == Cod_Prod && m.Cod_Campo == Cod_Campo);
 
                         int idsector = 0;
-                        var modeloExistente = bd.ProdAnalisis_Residuo.FirstOrDefault(m => m.Cod_Prod == Cod_Prod && m.Cod_Campo == Cod_Campo && m.Estatus == Estatus && m.Num_analisis== Num_analisis);
+                        DateTime f_entrega=DateTime.Now, f_envio= DateTime.Now;
+                        if (Fecha_entrega != "")
+                        {
+                            f_entrega = Convert.ToDateTime(Fecha_entrega);
+                        }
+                       
+                        if (Fecha_envio != "")
+                        {
+                            f_envio = Convert.ToDateTime(Fecha_envio);
+                        }
+                        
+
+                        var modeloExistente = bd.ProdAnalisis_Residuo.FirstOrDefault(m => m.Cod_Prod == Cod_Prod && m.Cod_Campo == Cod_Campo && m.Fecha_entrega ==f_entrega && m.Fecha_envio== f_envio && m.Estatus==Estatus && m.Num_analisis==Num_analisis);
                         
                         if (modeloExistente == null)
                         {
@@ -1485,8 +1521,22 @@ namespace Sistema_Indicadores.Controllers
                             ProdAnalisis_Residuo.Cod_Prod = Cod_Prod;
                             ProdAnalisis_Residuo.Cod_Campo = Cod_Campo;
                             ProdAnalisis_Residuo.CodZona = CodZona;
-                            ProdAnalisis_Residuo.Fecha_envio = Convert.ToDateTime(Fecha_envio); ;
-                            ProdAnalisis_Residuo.Fecha_entrega = Convert.ToDateTime(Fecha_entrega); ;
+
+                            if (Fecha_entrega != "")
+                            {
+                                ProdAnalisis_Residuo.Fecha_entrega = f_entrega;
+                            }
+                            else {
+                                ProdAnalisis_Residuo.Fecha_entrega = null;
+                            }
+                            if (Fecha_envio != "")
+                            {
+                                ProdAnalisis_Residuo.Fecha_envio = f_envio;
+                            }
+                            else {
+                                ProdAnalisis_Residuo.Fecha_envio = null;
+                            }                          
+                            
                             ProdAnalisis_Residuo.Estatus = Estatus;
                             ProdAnalisis_Residuo.Num_analisis = Num_analisis;
                             ProdAnalisis_Residuo.Laboratorio = Laboratorio;
@@ -1541,12 +1591,33 @@ namespace Sistema_Indicadores.Controllers
                             TempData["sms"] = "Datos guardados con éxito";
                             ViewBag.sms = TempData["sms"].ToString();
 
-                            if (CodZona == "LS")
+                            try
                             {
-                                try
-                                {
-                                    string estatus = "", correo_p, correo_c, correo_i;
+                                string analisis = "";
 
+                                if (Estatus == "R")
+                                {
+                                    analisis = "CON RESIDUOS";
+                                }
+                                else if (Estatus == "P")
+                                {
+                                    analisis = "EN PROCESO";
+                                }
+                                else if (Estatus == "F")
+                                {
+                                    analisis = "FUERA DEL LIMITE";
+                                }
+                                else if (Estatus == "L")
+                                {
+                                    analisis = "LIBERADO";
+                                }
+
+                                title = "Código: " + Cod_Prod + " campo: " + Cod_Campo;
+                                body = "Análisis: " + analisis;
+                                notificaciones.SendNotificationJSON(title, body);
+
+                                if (CodZona == "LS")
+                                {
                                     var campo = bd.ProdCamposCat.FirstOrDefault(m => m.Cod_Prod == Cod_Prod && m.Cod_Campo == Cod_Campo);
                                     var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgen);
                                     correo_p = email_p.correo;
@@ -1555,23 +1626,6 @@ namespace Sistema_Indicadores.Controllers
                                     var email_i = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == campo.IdAgenI);
                                     correo_i = email_i.correo;
                                     var prod = bd.ProdProductoresCat.FirstOrDefault(x => x.Cod_Prod == Cod_Prod);
-
-                                    if (Estatus == "R")
-                                    {
-                                        estatus = "Estatus: CON RESIDUOS";
-                                    }
-                                    else if (Estatus == "P")
-                                    {
-                                        estatus = "Estatus: EN PROCESO";
-                                    }
-                                    else if (Estatus == "F")
-                                    {
-                                        estatus = "Estatus: FUERA DEL LIMITE";
-                                    }
-                                    else if (Estatus == "L")
-                                    {
-                                        estatus = "Estatus: LIBERADO";
-                                    }
 
                                     MailMessage correo = new MailMessage();
                                     correo.From = new MailAddress("indicadores.giddingsfruit@gmail.com", "Indicadores GiddingsFruit");
@@ -1582,7 +1636,7 @@ namespace Sistema_Indicadores.Controllers
                                     {
                                         correo.CC.Add(correo_i);
                                     }
-                                    correo.Subject = "Analisis de residuos: " + campo.Cod_Prod + " - " + estatus;
+                                    correo.Subject = "Analisis de residuos: " + campo.Cod_Prod + " - " + analisis;
                                     correo.Body += "Productor: " + campo.Cod_Prod + " - " + prod.Nombre + " <br/>";
                                     correo.Body += " <br/>";
                                     correo.Body += "Campo: " + campo.Cod_Campo + " - " + campo.Descripcion + " <br/>";
@@ -1591,7 +1645,7 @@ namespace Sistema_Indicadores.Controllers
                                     correo.Body += " <br/>";
                                     correo.Body += "Fecha de entrega: " + Fecha_entrega + "<br/>";
                                     correo.Body += " <br/>";
-                                    correo.Body += estatus + "<br/>";
+                                    correo.Body += "Estatus: " + analisis + "<br/>";
                                     correo.Body += " <br/>";
                                     if (muestreo.Tarjeta != null)
                                     {
@@ -1637,11 +1691,12 @@ namespace Sistema_Indicadores.Controllers
                                     a.Credentials = new System.Net.NetworkCredential("indicadores.giddingsfruit@gmail.com", "indicadores2019");
                                     a.Send(correo);
                                 }
-                                catch (Exception e)
-                                {
-                                    e.ToString();
-                                }
                             }
+                            catch (Exception e)
+                            {
+                                e.ToString();
+                            }
+                            
                         }
                         else
                         {
@@ -1657,14 +1712,8 @@ namespace Sistema_Indicadores.Controllers
             }
 
             ClassMuestreo resultados = bd.Database.SqlQuery<ClassMuestreo>("select S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo, isnull(STUFF((SELECT ',' + cast(Sector as varchar) as SectorList FROM ProdMuestreoSector " +
-                "where cod_prod='" + Cod_Prod + "' and Cod_Campo=" + Cod_Campo + " FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, ''),0) as SectorList, " +
-                "T.Descripcion as Tipo, Pr.Descripcion as Producto, A.Folio, A.CodZona, isnull(A.Num_analisis, 0) as Num_analisis " +
-                "from ProdMuestreoSector S " +
-                "Left Join ProdAnalisis_Residuo A on S.id = A.IdSector " +
-                "Left Join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo " +
-                "Left Join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
-                "Left Join CatTiposProd T on C.Tipo = T.Tipo " +
-                "Left Join CatProductos Pr on C.Tipo = Pr.Tipo and C.Producto = Pr.Producto " +
+                "where cod_prod = '"+Cod_Prod+"' and Cod_Campo = "+Cod_Campo+" FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 1, ''),0) as SectorList, T.Descripcion as Tipo, Pr.Descripcion as Producto, A.Folio, A.CodZona, isnull(A.Num_analisis, 0) + 1 as Num_analisis " +
+                "from ProdMuestreoSector S left join (SELECT Cod_Prod, Cod_Campo, IdSector, MAX(Fecha)AS Fecha FROM ProdAnalisis_Residuo GROUP BY Cod_Prod, Cod_Campo, IdSector)M on S.id = M.IdSector Left Join ProdAnalisis_Residuo A ON M.Cod_Prod = A.Cod_Prod AND M.Cod_Campo = A.Cod_Campo AND M.IdSector = A.IdSector AND M.Fecha = A.Fecha Left Join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod AND S.Cod_Campo = C.Cod_Campo Left Join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod Left Join CatTiposProd T on C.Tipo = T.Tipo Left Join CatProductos Pr on C.Tipo = Pr.Tipo and C.Producto = Pr.Producto " +
                 "where S.Cod_Prod = '" + Cod_Prod + "' and S.Cod_Campo = " + Cod_Campo + "").First();
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
@@ -1730,7 +1779,8 @@ namespace Sistema_Indicadores.Controllers
                                Comentarios = r.Comentarios,
                                IdAgen = mcam.IdAgen,
                                IdAgenC = (short?)(int)mcam.IdAgenC,
-                               IdAgenI = mcam.IdAgenI
+                               IdAgenI = mcam.IdAgenI,
+                               Fecha=r.Fecha
                            };
                 }
                 else
@@ -1767,7 +1817,8 @@ namespace Sistema_Indicadores.Controllers
                                Laboratorio = r.Laboratorio,
                                LiberacionUSA = (DateTime)r.LiberacionUSA,
                                LiberacionEU = (DateTime)r.LiberacionEU,
-                               Comentarios = r.Comentarios
+                               Comentarios = r.Comentarios,
+                               Fecha=r.Fecha
                            };
                 }
 
@@ -1806,7 +1857,7 @@ namespace Sistema_Indicadores.Controllers
                 if (estatus != "")
                 {
                     resultados = bd.Database.SqlQuery<ClassMuestreo>("select R.Cod_Prod, R.Cod_Campo, ISNULL(S.Sector,0) as Sector, P.Nombre as Productor, T.Descripcion as Tipo, V.Descripcion as Producto, isnull(L.DescZona,'') as Zona, R.Fecha_envio, R.Fecha_entrega, " +
-                    "R.Estatus, R.Num_analisis, R.Laboratorio, isnull(R.LiberacionUSA,''), R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios " +
+                    "R.Estatus, R.Num_analisis, R.Laboratorio, isnull(R.LiberacionUSA,''), R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios,R.Fecha " +
                     "FROM ProdAnalisis_Residuo R " +
                     "LEFT JOIN ProdMuestreoSector S ON R.IdSector = S.Id " +
                     "Left Join ProdProductoresCat P on R.Cod_Prod = P.Cod_Prod " +
@@ -1821,7 +1872,7 @@ namespace Sistema_Indicadores.Controllers
                 else if (c_zona != "")
                 {
                     resultados = bd.Database.SqlQuery<ClassMuestreo>("select R.Cod_Prod, R.Cod_Campo, ISNULL(S.Sector,0) as Sector, P.Nombre as Productor, T.Descripcion as Tipo, V.Descripcion as Producto, isnull(L.DescZona,'') as Zona, R.Fecha_envio, R.Fecha_entrega, " +
-                     "R.Estatus, R.Num_analisis, R.Laboratorio, R.LiberacionUSA, R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios " +
+                     "R.Estatus, R.Num_analisis, R.Laboratorio, R.LiberacionUSA, R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios,R.Fecha " +
                      "FROM ProdAnalisis_Residuo R " +
                      "LEFT JOIN ProdMuestreoSector S ON R.IdSector = S.Id " +
                      "Left Join ProdProductoresCat P on R.Cod_Prod = P.Cod_Prod " +
@@ -1836,7 +1887,7 @@ namespace Sistema_Indicadores.Controllers
                 else if (cod_prod != "")
                 {
                     resultados = bd.Database.SqlQuery<ClassMuestreo>("select R.Cod_Prod, R.Cod_Campo, ISNULL(S.Sector,0) as Sector, P.Nombre as Productor, T.Descripcion as Tipo, V.Descripcion as Producto, isnull(L.DescZona,'') as Zona, R.Fecha_envio, R.Fecha_entrega, " +
-                        "R.Estatus, R.Num_analisis, R.Laboratorio, R.LiberacionUSA, R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios " +
+                        "R.Estatus, R.Num_analisis, R.Laboratorio, R.LiberacionUSA, R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios,R.Fecha " +
                         "FROM ProdAnalisis_Residuo R " +
                         "LEFT JOIN ProdMuestreoSector S ON R.IdSector = S.Id " +
                         "Left Join ProdProductoresCat P on R.Cod_Prod = P.Cod_Prod " +
@@ -1851,7 +1902,7 @@ namespace Sistema_Indicadores.Controllers
                 else
                 {
                     resultados = bd.Database.SqlQuery<ClassMuestreo>("select R.Cod_Prod, R.Cod_Campo, ISNULL(S.Sector,0) as Sector, P.Nombre as Productor, T.Descripcion as Tipo, V.Descripcion as Producto, isnull(L.DescZona,'') as Zona, R.Fecha_envio, R.Fecha_entrega, " +
-                        "R.Estatus, R.Num_analisis, R.Laboratorio, R.LiberacionUSA, R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios " +
+                        "R.Estatus, R.Num_analisis, R.Laboratorio, R.LiberacionUSA, R.LiberacionEU, UPPER(isnull(R.Comentarios, '')) as Comentarios,R.Fecha " +
                         "FROM ProdAnalisis_Residuo R " +
                         "LEFT JOIN ProdMuestreoSector S ON R.IdSector = S.Id " +
                         "Left Join ProdProductoresCat P on R.Cod_Prod = P.Cod_Prod " +
@@ -2502,6 +2553,10 @@ namespace Sistema_Indicadores.Controllers
                     item.Estatus = "L";
                     bd.SaveChanges();
 
+                    title = "Código: " + item.Cod_Prod + " campo: " + item.Cod_Campo;
+                    body = "Ha cambiado de Fuera de Limite a Liberado";
+                    notificaciones.SendNotificationJSON(title, body);
+
                     try
                     {
                         string estatus = "", correo_p, correo_c, correo_i;
@@ -2543,7 +2598,7 @@ namespace Sistema_Indicadores.Controllers
                         correo.CC.Add(correo_p);
                         correo.CC.Add(correo_c);
                         correo.CC.Add(correo_i);
-                        
+
                         correo.Subject = "Analisis liberado: " + campo.Cod_Prod + " - " + estatus;
                         correo.Body += "El codigo: " + campo.Cod_Prod + " - " + prod.Nombre + " <br/>";
                         correo.Body += " <br/>";

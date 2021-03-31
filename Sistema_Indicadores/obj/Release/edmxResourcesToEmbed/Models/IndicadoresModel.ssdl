@@ -316,6 +316,8 @@
     <Property Name="Estatus" Type="nchar" MaxLength="1" />
     <Property Name="Comentarios" Type="varchar" MaxLength="200" />
     <Property Name="Fecha" Type="datetime" />
+    <Property Name="AP" Type="nchar" MaxLength="1" />
+    <Property Name="Fecha_Up" Type="datetime" />
   </EntityType>
   <EntityType Name="SIPGComentarios">
     <Key>
@@ -443,6 +445,29 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="fnRptSaldosFinanciamiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FechaIni" Type="datetime" Mode="In" />
+    <Parameter Name="FechaFin" Type="datetime" Mode="In" />
+    <Parameter Name="FecFinanciamiento" Type="datetime" Mode="In" />
+    <Parameter Name="Semana" Type="smallint" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="Cod_prod" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Financ" Type="money" Nullable="false" />
+          <Property Name="Pagos" Type="money" />
+          <Property Name="Intereses" Type="money" Nullable="false" />
+          <Property Name="Saldo" Type="money" />
+          <Property Name="Cajas" Type="int" Nullable="false" />
+          <Property Name="Agroquimico" Type="money" Nullable="false" />
+          <Property Name="DescAgq" Type="money" Nullable="false" />
+          <Property Name="SaldoAGQ" Type="money" />
+          <Property Name="SaldoTemp" Type="money" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
   <EntityContainer Name="SeasonSun1213Model2StoreContainer">
     <EntitySet Name="CatAcopios" EntityType="Self.CatAcopios" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CatProductos" EntityType="Self.CatProductos" Schema="dbo" store:Type="Tables" />

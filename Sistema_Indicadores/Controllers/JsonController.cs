@@ -153,5 +153,21 @@ namespace Sistema_Indicadores.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetAsesorList(string Cod_Prod = "", int Cod_Campo = 0)
+        {
+            bd.Configuration.ProxyCreationEnabled = false;
+            ProdCamposCat campo = bd.ProdCamposCat.Where(x => x.Cod_Prod == Cod_Prod && x.Cod_Campo == Cod_Campo).FirstOrDefault();
+            ProdAgenteCat asesor = bd.ProdAgenteCat.Where(x => x.IdAgen == campo.IdAgen).FirstOrDefault();
+            return Json(asesor, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetSeguimientoF(string Cod_Prod)
+        {
+            bd.Configuration.ProxyCreationEnabled = false;
+            Seguimiento_financ cod_prod = bdI.Seguimiento_financ.Where(x => x.Cod_Prod == Cod_Prod).FirstOrDefault();
+            return Json(cod_prod, JsonRequestBehavior.AllowGet);
+        }
+
+
     }
 }

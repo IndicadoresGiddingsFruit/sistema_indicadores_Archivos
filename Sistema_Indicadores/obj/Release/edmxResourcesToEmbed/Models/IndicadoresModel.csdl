@@ -241,6 +241,12 @@
     <EntitySet Name="SIPGUsuarios" EntityType="SeasonSun1213Model2.SIPGUsuarios" />
     <EntitySet Name="ProdProyeccion" EntityType="SeasonSun1213Model2.ProdProyeccion" />
     <EntitySet Name="UV_ProdRecepcion" EntityType="SeasonSun1213Model2.UV_ProdRecepcion" />
+    <FunctionImport Name="fnRptSaldosFinanciamiento" IsComposable="true" ReturnType="Collection(SeasonSun1213Model2.fnRptSaldosFinanciamiento_Result)">
+      <Parameter Name="FechaIni" Mode="In" Type="DateTime" />
+      <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
+      <Parameter Name="FecFinanciamiento" Mode="In" Type="DateTime" />
+      <Parameter Name="Semana" Mode="In" Type="Int16" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="SIPGComentarios">
     <Key>
@@ -281,6 +287,8 @@
     <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
     <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
     <Property Name="IdAgen" Type="Int16" />
+    <Property Name="AP" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+    <Property Name="Fecha_Up" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="SIPGUsuarios">
     <Key>
@@ -463,4 +471,17 @@
     <Property Name="Certificado" Type="Int32" Nullable="false" />
     <Property Name="Refrigerada" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
   </EntityType>
+  <ComplexType Name="fnRptSaldosFinanciamiento_Result">
+    <Property Type="String" Name="Cod_prod" Nullable="false" MaxLength="5" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="200" />
+    <Property Type="Decimal" Name="Financ" Nullable="false" Precision="19" Scale="4" />
+    <Property Type="Decimal" Name="Pagos" Nullable="true" Precision="19" Scale="4" />
+    <Property Type="Decimal" Name="Intereses" Nullable="false" Precision="19" Scale="4" />
+    <Property Type="Decimal" Name="Saldo" Nullable="true" Precision="19" Scale="4" />
+    <Property Type="Int32" Name="Cajas" Nullable="false" />
+    <Property Type="Decimal" Name="Agroquimico" Nullable="false" Precision="19" Scale="4" />
+    <Property Type="Decimal" Name="DescAgq" Nullable="false" Precision="19" Scale="4" />
+    <Property Type="Decimal" Name="SaldoAGQ" Nullable="true" Precision="19" Scale="4" />
+    <Property Type="Decimal" Name="SaldoTemp" Nullable="true" Precision="19" Scale="4" />
+  </ComplexType>
 </Schema>

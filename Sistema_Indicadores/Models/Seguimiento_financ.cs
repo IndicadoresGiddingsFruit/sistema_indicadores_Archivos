@@ -22,5 +22,7 @@ namespace Sistema_Indicadores.Models
         public short Cod_Empresa { get; set; }
         public string Estatus { get; set; }
         public Nullable<short> IdAgen { get; set; }
+        public string AP { get; set; }
+        public Nullable<System.DateTime> Fecha_Up { get; set; }
     }
 }

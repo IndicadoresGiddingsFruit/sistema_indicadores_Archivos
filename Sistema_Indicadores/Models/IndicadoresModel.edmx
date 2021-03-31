@@ -321,6 +321,8 @@
           <Property Name="Estatus" Type="nchar" MaxLength="1" />
           <Property Name="Comentarios" Type="varchar" MaxLength="200" />
           <Property Name="Fecha" Type="datetime" />
+          <Property Name="AP" Type="nchar" MaxLength="1" />
+          <Property Name="Fecha_Up" Type="datetime" />
         </EntityType>
         <EntityType Name="SIPGComentarios">
           <Key>
@@ -448,6 +450,29 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fnRptSaldosFinanciamiento" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FechaIni" Type="datetime" Mode="In" />
+          <Parameter Name="FechaFin" Type="datetime" Mode="In" />
+          <Parameter Name="FecFinanciamiento" Type="datetime" Mode="In" />
+          <Parameter Name="Semana" Type="smallint" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Cod_prod" Type="varchar" MaxLength="5" Nullable="false" />
+                <Property Name="Nombre" Type="varchar" MaxLength="200" Nullable="false" />
+                <Property Name="Financ" Type="money" Nullable="false" />
+                <Property Name="Pagos" Type="money" />
+                <Property Name="Intereses" Type="money" Nullable="false" />
+                <Property Name="Saldo" Type="money" />
+                <Property Name="Cajas" Type="int" Nullable="false" />
+                <Property Name="Agroquimico" Type="money" Nullable="false" />
+                <Property Name="DescAgq" Type="money" Nullable="false" />
+                <Property Name="SaldoAGQ" Type="money" />
+                <Property Name="SaldoTemp" Type="money" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
         <EntityContainer Name="SeasonSun1213Model2StoreContainer">
           <EntitySet Name="CatAcopios" EntityType="Self.CatAcopios" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CatProductos" EntityType="Self.CatProductos" Schema="dbo" store:Type="Tables" />
@@ -769,6 +794,12 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <EntitySet Name="SIPGUsuarios" EntityType="SeasonSun1213Model2.SIPGUsuarios" />
           <EntitySet Name="ProdProyeccion" EntityType="SeasonSun1213Model2.ProdProyeccion" />
           <EntitySet Name="UV_ProdRecepcion" EntityType="SeasonSun1213Model2.UV_ProdRecepcion" />
+          <FunctionImport Name="fnRptSaldosFinanciamiento" IsComposable="true" ReturnType="Collection(SeasonSun1213Model2.fnRptSaldosFinanciamiento_Result)">
+            <Parameter Name="FechaIni" Mode="In" Type="DateTime" />
+            <Parameter Name="FechaFin" Mode="In" Type="DateTime" />
+            <Parameter Name="FecFinanciamiento" Mode="In" Type="DateTime" />
+            <Parameter Name="Semana" Mode="In" Type="Int16" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="SIPGComentarios">
           <Key>
@@ -809,6 +840,8 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
           <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Name="IdAgen" Type="Int16" />
+          <Property Name="AP" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="Fecha_Up" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="SIPGUsuarios">
           <Key>
@@ -991,6 +1024,19 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <Property Name="Certificado" Type="Int32" Nullable="false" />
           <Property Name="Refrigerada" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
         </EntityType>
+        <ComplexType Name="fnRptSaldosFinanciamiento_Result">
+          <Property Type="String" Name="Cod_prod" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="200" />
+          <Property Type="Decimal" Name="Financ" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="Pagos" Nullable="true" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="Intereses" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="Saldo" Nullable="true" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="Cajas" Nullable="false" />
+          <Property Type="Decimal" Name="Agroquimico" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="DescAgq" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="SaldoAGQ" Nullable="true" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="SaldoTemp" Nullable="true" Precision="19" Scale="4" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1241,6 +1287,8 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <EntitySetMapping Name="Seguimiento_financ">
             <EntityTypeMapping TypeName="SeasonSun1213Model2.Seguimiento_financ">
               <MappingFragment StoreEntitySet="Seguimiento_financ">
+                <ScalarProperty Name="Fecha_Up" ColumnName="Fecha_Up" />
+                <ScalarProperty Name="AP" ColumnName="AP" />
                 <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
                 <ScalarProperty Name="Estatus" ColumnName="Estatus" />
                 <ScalarProperty Name="Cod_Empresa" ColumnName="Cod_Empresa" />
@@ -1416,6 +1464,23 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="fnRptSaldosFinanciamiento" FunctionName="SeasonSun1213Model2.Store.fnRptSaldosFinanciamiento">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SeasonSun1213Model2.fnRptSaldosFinanciamiento_Result">
+                <ScalarProperty Name="Cod_prod" ColumnName="Cod_prod" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Financ" ColumnName="Financ" />
+                <ScalarProperty Name="Pagos" ColumnName="Pagos" />
+                <ScalarProperty Name="Intereses" ColumnName="Intereses" />
+                <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+                <ScalarProperty Name="Cajas" ColumnName="Cajas" />
+                <ScalarProperty Name="Agroquimico" ColumnName="Agroquimico" />
+                <ScalarProperty Name="DescAgq" ColumnName="DescAgq" />
+                <ScalarProperty Name="SaldoAGQ" ColumnName="SaldoAGQ" />
+                <ScalarProperty Name="SaldoTemp" ColumnName="SaldoTemp" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
