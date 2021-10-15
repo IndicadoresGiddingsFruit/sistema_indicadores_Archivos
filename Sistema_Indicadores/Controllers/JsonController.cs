@@ -42,6 +42,14 @@ namespace Sistema_Indicadores.Controllers
             return Json(ListCampos, JsonRequestBehavior.AllowGet);
         }
 
+        //Lista de asesores
+        public JsonResult GetAsesorPList(string Cod_Prod)
+        {
+            bd.Configuration.ProxyCreationEnabled = false;
+            var ListAgentesP = (from c in bd.ProdCamposCat join a in bd.ProdAgenteCat on c.IdAgen equals a.IdAgen where c.Cod_Prod==Cod_Prod select new { IdAgen = a.IdAgen, Nombre = a.Nombre }).Distinct().ToList();
+            return Json(ListAgentesP, JsonRequestBehavior.AllowGet);
+        }
+
         //Lista de sectores
         //public JsonResult GetSectoresList(string Cod_Prod, short Cod_Campo)
         //{
@@ -167,7 +175,6 @@ namespace Sistema_Indicadores.Controllers
             Seguimiento_financ cod_prod = bdI.Seguimiento_financ.Where(x => x.Cod_Prod == Cod_Prod).FirstOrDefault();
             return Json(cod_prod, JsonRequestBehavior.AllowGet);
         }
-
 
     }
 }

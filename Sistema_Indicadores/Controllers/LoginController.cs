@@ -132,21 +132,22 @@ namespace Sistema_Indicadores.Controllers
                         return View("Index", userModel);
                     }
                     else
-                    {
+                    { 
                         Session["IdAgen"] = userDetails.IdAgen;
                         Session["Tipo"] = userDetails.Tipo;
                         Session["Nombre"] = userDetails.Completo;
                         Session["Correo"] = userDetails.correo;
                         Session["Id"] = userDetails.Id;
+                        Session["IdRegion"] = userDetails.IdRegion;
 
                         if (userDetails.Id == 117)
                         {
                             return RedirectToAction("Zarzamora", "EstimacionBerries");
                         }
                         //oscar
-                        else if (userDetails.Id == 391 || userDetails.Id == 188 || userDetails.Id == 44 || userDetails.Id == 394)
+                        else if (userDetails.Id == 391 || userDetails.Id == 394)
                         {
-                            return RedirectToAction("Seguimiento", "Indicadores");
+                            return RedirectToAction("Index", "Login", false); //return RedirectToAction("Seguimiento", "Indicadores");
                         }                      
                         //activos curva
                         else if (userDetails.Id == 121)
@@ -160,9 +161,9 @@ namespace Sistema_Indicadores.Controllers
                         }
                         else
                         {
-                            if (userDetails.Tipo == "P" && userDetails.IdAgen != 1 && userDetails.IdAgen != 5)
+                            if (userDetails.Tipo == "P")
                             {
-                                return RedirectToAction("Seguimiento", "Indicadores");
+                                return RedirectToAction("Muestreo", "Muestreo");
                             }
                             else
                             {

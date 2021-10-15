@@ -45,11 +45,11 @@
                                         Productor
                                     </th>
                                     <th>
-                                        Campo
+                                        Asesor
                                     </th>
-                                    <th>
+                                    @*<th>
 
-                                    </th>
+                                        </th>*@
                                     <th>
 
                                     </th>
@@ -64,20 +64,21 @@
                                         <input type="text" style="width:100%" class="form-control form-control-sm" id="nombreProductor" name="nombreProductor" readonly="">
                                     </td>
                                     <td>
-                                        @Html.DropDownList("Cod_Campo", new SelectList(" "), "--Seleccione un campo--", new { @id = "Cod_Campo", @class = "form-control form-control-sm" })
+                                        @*@Html.DropDownList("Cod_Campo", new SelectList(" "), "--Seleccione un campo--", new { @id = "Cod_Campo", @class = "form-control form-control-sm" })*@
+                                        @Html.DropDownList("IdAgenP", new SelectList(" "), "--Seleccione el asesor zonal--", new { @id = "IdAgenP", @class = "form-control form-control-sm" })
                                     </td>
-                                    <td>
-                                        <input type="text" class="form-control form-control-sm" id="DescCampo" name="DescCampo" readonly="" />
-                                    </td>
+                                    @*<td>
+                                            <input type="text" class="form-control form-control-sm" id="DescCampo" name="DescCampo" readonly="" />
+                                        </td>*@
                                     <td>
                                         <button type="submit" id="btnAdd" style="border-radius: 15px;padding:2px 6px 2px 6px" class="btn-sm btn-primary shadow-lg"><i class="fas fa-plus"></i></button>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="5">
-                                        <input type="text" class="form-control form-control-sm" id="asesor" name="asesor" readonly="" />
-                                    </td>
-                                </tr>
+                                @*<tr>
+                                        <td colspan="5">
+                                            <input type="text" class="form-control form-control-sm" id="asesor" name="asesor" readonly="" />
+                                        </td>
+                                    </tr>*@
                             </tbody>
                         </table>
                     </div>
@@ -99,17 +100,16 @@
                             <tr>
                                 @if (Session["Id"].ToString() == "394")
                                 {
-                                    <th colspan="6"></th>
+                                    <th colspan="5"></th>
                                 }
                                 else if (Session["Id"].ToString() == "391" || Session["Id"].ToString() == "188" || Session["Id"].ToString() == "44")
                                 {
-                                    <th colspan="8"></th>
+                                    <th colspan="6"></th>
                                 }
                                 else
                                 {
-                                    <th colspan="7"></th>
+                                    <th colspan="5"></th>
                                 }
-
                                 <th colspan="2">Cajas entregadas</th>
                                 @if (Session["Id"].ToString() == "391")
                                 {
@@ -119,7 +119,6 @@
                                 {
                                     <th></th>
                                 }
-
                             </tr>
                             <tr>
                                 <th style="display:none">
@@ -131,27 +130,18 @@
                                 <th>
                                     Productor
                                 </th>
-                                @if (Session["Id"].ToString() != "394")
-                                {
-                                    <th colspan="2">
-                                        Campo
-                                    </th>
-                                }
-
                                 @if (Session["Id"].ToString() == "391" || Session["Id"].ToString() == "188" || Session["Id"].ToString() == "44" || Session["Id"].ToString() == "394")
                                 {
                                     <th>
                                         Asesor
                                     </th>
                                 }
-
                                 <th>
                                     Status
                                 </th>
                                 <th>
                                     Comentarios
                                 </th>
-
                                 <th>
                                     Deuda $
                                 </th>
@@ -162,9 +152,8 @@
                                     semana 1-actual
                                 </th>
                                 @*<th>
-                                        Ultima semana de entrega
-                                    </th>*@
-
+                                    Ultima semana de entrega
+                                 </th>*@
                                 <th colspan="2">
                                 </th>
                             </tr>
@@ -172,147 +161,137 @@
                         <tbody>
                             @foreach (var item in Model)
                             {
-                            <tr>
-                                <td id="Id" style="display:none" class="row_data" col_name="Id">
-                                    @Html.DisplayFor(modelItem => item.Id)
-                                </td>
-                                <td>@Html.DisplayFor(modelItem => item.Cod_Prod)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Productor)</td>
-                                @if (Session["Id"].ToString() != "394")
-                                {
-                                    <td colspan="2">
-                                        @Html.DisplayFor(modelItem => item.Cod_Campo)
-                                        @Html.DisplayFor(modelItem => item.Campo)
+                                <tr>
+                                    <td id="Id" style="display:none" class="row_data" col_name="Id">
+                                        @Html.DisplayFor(modelItem => item.Id)
                                     </td>
-                                }
-                                <td id="IdAgen" style="display:none">
-                                    @Html.DisplayFor(modelItem => item.IdAgen)
-                                </td>
-                                @if (Session["Id"].ToString() == "391" || Session["Id"].ToString() == "188" || Session["Id"].ToString() == "44" || Session["Id"].ToString() == "394")
-                                {
-                                    <td>@Html.DisplayFor(modelItem => item.Asesor)</td>
-                                }
-                                <td id="statushide" style="display:none">
-                                    @Html.DropDownListFor(model => item.Estatus, new SelectListItem[]{
-                                        new SelectListItem() {Text = "--Seleccione--", Value=null},
-                                        new SelectListItem() {Text = "ATENCIÓN A PRODUCTORES", Value="A"},
-                                        new SelectListItem() {Text = "CIERRE DE MATERIAL", Value="M"},
-                                        new SelectListItem() {Text = "COBRANZA", Value="C"},
-                                        new SelectListItem() {Text = "PENDIENTE REVISIÓN", Value="R"},
-                                        new SelectListItem() { Text = "SALDADO", Value = "S" },
-                                        new SelectListItem() { Text = "TERMINÓ TEMPORADA", Value = "T" },
-                                        new SelectListItem() { Text = "VA A ENTREGAR", Value = "E" },
-                                        new SelectListItem() { Text = "VA A PAGAR", Value = "P" }}, new { @id = "", @class = "form-control form-control-sm status1" });
-                                </td>
-                                <td id="res_status">
-                                    @if (item.Estatus == null && Session["Id"].ToString() != "188" && Session["Id"].ToString() != "44")
+                                    <td>@Html.DisplayFor(modelItem => item.Cod_Prod)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Productor)</td>
+
+                                    <td id="IdAgen" style="display:none">
+                                        @Html.DisplayFor(modelItem => item.IdAgen)
+                                    </td>
+                                    @if (Session["Id"].ToString() == "391" || Session["Id"].ToString() == "188" || Session["Id"].ToString() == "44" || Session["Id"].ToString() == "394")
                                     {
+                                        <td>@Html.DisplayFor(modelItem => item.Asesor)</td>
+                                    }
+                                    <td id="statushide" style="display:none">
                                         @Html.DropDownListFor(model => item.Estatus, new SelectListItem[]{
-                                       new SelectListItem() {Text = "--Seleccione--", Value=null},
-                                       new SelectListItem() {Text = "ATENCIÓN A PRODUCTORES", Value="A"},
-                                       new SelectListItem() {Text = "CIERRE DE MATERIAL", Value="M"},
-                                       new SelectListItem() {Text = "COBRANZA", Value="C"},
-                                       new SelectListItem() {Text = "PENDIENTE REVISIÓN", Value="R"},
-                                       new SelectListItem() { Text = "SALDADO", Value = "S" },
-                                       new SelectListItem() { Text = "TERMINÓ TEMPORADA", Value = "T" },
-                                       new SelectListItem() { Text = "VA A ENTREGAR", Value = "E" },
-                                       new SelectListItem() { Text = "VA A PAGAR", Value = "P" }}, new { @id = "status", @class = "form-control form-control-sm" });
-                                    }
-                                    else if (item.Estatus == null)
-                                    {
-                                        <h7>PENDIENTE REVISION</h7>
-                                    }
-                                    else if (item.Estatus != null)
-                                    {
-                                        if (item.Estatus == "A")
+                                            new SelectListItem() {Text = "--Seleccione--", Value=null},
+                                            new SelectListItem() {Text = "ATENCIÓN A PRODUCTORES", Value="A"},
+                                            new SelectListItem() {Text = "CIERRE DE MATERIAL", Value="M"},
+                                            new SelectListItem() {Text = "COBRANZA", Value="C"},
+                                            new SelectListItem() {Text = "PENDIENTE REVISIÓN", Value="R"},
+                                            new SelectListItem() { Text = "SALDADO", Value = "S" },
+                                            new SelectListItem() { Text = "TERMINÓ TEMPORADA", Value = "T" },
+                                            new SelectListItem() { Text = "VA A ENTREGAR", Value = "E" },
+                                            new SelectListItem() { Text = "VA A PAGAR", Value = "P" }}, new { @id = "", @class = "form-control form-control-sm status1" });
+                                    </td>
+                                    <td id="res_status">
+                                        @if (item.Estatus == null && Session["Id"].ToString() != "188" && Session["Id"].ToString() != "44")
                                         {
-                                            <h7>ATENCION A PRODUCTORES</h7>
+                                            @Html.DropDownListFor(model => item.Estatus, new SelectListItem[]{
+                                           new SelectListItem() {Text = "--Seleccione--", Value=null},
+                                           new SelectListItem() {Text = "ATENCIÓN A PRODUCTORES", Value="A"},
+                                           new SelectListItem() {Text = "CIERRE DE MATERIAL", Value="M"},
+                                           new SelectListItem() {Text = "COBRANZA", Value="C"},
+                                           new SelectListItem() {Text = "PENDIENTE REVISIÓN", Value="R"},
+                                           new SelectListItem() { Text = "SALDADO", Value = "S" },
+                                           new SelectListItem() { Text = "TERMINÓ TEMPORADA", Value = "T" },
+                                           new SelectListItem() { Text = "VA A ENTREGAR", Value = "E" },
+                                           new SelectListItem() { Text = "VA A PAGAR", Value = "P" }}, new { @id = "status", @class = "form-control form-control-sm" });
                                         }
-                                        else if (item.Estatus == "M")
-                                        {
-                                            <h7>CIERRE DE MATERIAL</h7>
-                                        }
-                                        else if (item.Estatus == "C")
-                                        {
-                                            <h7>COBRANZA</h7>
-                                        }
-                                        else if (item.Estatus == "R")
+                                        else if (item.Estatus == null)
                                         {
                                             <h7>PENDIENTE REVISION</h7>
                                         }
-                                        else if (item.Estatus == "G")
+                                        else if (item.Estatus != null)
                                         {
-                                            <h7>REVISA GERENCIA</h7>
+                                            if (item.Estatus == "A")
+                                            {
+                                                <h7>ATENCION A PRODUCTORES</h7>
+                                            }
+                                            else if (item.Estatus == "M")
+                                            {
+                                                <h7>CIERRE DE MATERIAL</h7>
+                                            }
+                                            else if (item.Estatus == "C")
+                                            {
+                                                <h7>COBRANZA</h7>
+                                            }
+                                            else if (item.Estatus == "R")
+                                            {
+                                                <h7>PENDIENTE REVISION</h7>
+                                            }
+                                            else if (item.Estatus == "G")
+                                            {
+                                                <h7>REVISA GERENCIA</h7>
+                                            }
+                                            else if (item.Estatus == "S")
+                                            {
+                                                <h7>SALDADO</h7>
+                                            }
+                                            else if (item.Estatus == "T")
+                                            {
+                                                <h7>TERMINO TEMPORADA</h7>
+                                            }
+                                            else if (item.Estatus == "E")
+                                            {
+                                                <h7>VA A ENTREGAR</h7>
+                                            }
+                                            else if (item.Estatus == "P")
+                                            {
+                                                <h7>VA A PAGAR</h7>
+                                            }
                                         }
-                                        else if (item.Estatus == "S")
+                                    </td>
+                                    <td class="row_data" col_name="coments">
+                                        @if (item.Comentarios == null && Session["Id"].ToString() != "188" && Session["Id"].ToString() != "44")
                                         {
-                                            <h7>SALDADO</h7>
+                                            @Html.TextBoxFor(model => item.Comentarios, new { @style = "text-transform: uppercase;", @class = "form-control form-control-sm", @autocomplete = "off", @id = "comentarios" })
                                         }
-                                        else if (item.Estatus == "T")
+                                        else
                                         {
-                                            <h7>TERMINO TEMPORADA</h7>
+                                            @Html.DisplayFor(modelItem => item.Comentarios, new { @style = "text-transform: uppercase;" })
                                         }
-                                        else if (item.Estatus == "E")
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:n0}", item.SaldoFinal)
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:n0}", item.caja1)
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:n0}", item.caja2)
+                                    </td>
+                                    @*<td>
+                                       @Html.DisplayFor(modelItem => item.Semana)
+                                    </td>*@
+
+                                    @*@if (Session["Id"].ToString() != "188" && Session["Id"].ToString() != "44")
+                                    {*@
+                                        @if (item.Estatus == null)
                                         {
-                                            <h7>VA A ENTREGAR</h7>
+                                            <td>
+                                                <a href="#" onclick="uptRow(this)" style="font-size: 10px; border-radius: 25px;">Agregar</a>
+                                            </td>
                                         }
-                                        else if (item.Estatus == "P")
+                                        else
                                         {
-                                            <h7>VA A PAGAR</h7>
+                                            <td>
+                                                <a href="#" style="font-size: 10px; border-radius: 25px;" class="btn_edit">Editar</a>
+                                                <a href="#" style="font-size: 10px; border-radius: 25px; display:none" class="btn_save">Guardar</a>
+                                                <a href="#" style="font-size: 10px; border-radius: 25px; display:none" class="btn_cancel">Cancelar</a>
+                                            </td>
                                         }
-                                    }
-                                </td>
-                                <td class="row_data" col_name="coments">
-                                    @if (item.Comentarios == null && Session["Id"].ToString() != "188" && Session["Id"].ToString() != "44")
-                                    {
-                                        @Html.TextBoxFor(model => item.Comentarios, new { @style = "text-transform: uppercase;", @class = "form-control form-control-sm", @autocomplete = "off", @id = "comentarios" })
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayFor(modelItem => item.Comentarios, new { @style = "text-transform: uppercase;" })
-                                    }
-                                </td>
-
-                                <td>
-                                    @String.Format("{0:n0}", item.SaldoFinal)
-                                </td>
-                                <td>
-                                    @String.Format("{0:n0}", item.caja1)
-                                </td>
-                                <td>
-                                    @String.Format("{0:n0}", item.caja2)
-                                </td>
-                                @*<td>
-            @Html.DisplayFor(modelItem => item.Semana)
-        </td>*@
-
-                                @if (Session["Id"].ToString() != "188" && Session["Id"].ToString() != "44")
-                                {
-                                    if (item.Estatus == null)
-                                    {
-                                        <td>
-                                            <a href="#" onclick="uptRow(this)" style="font-size: 10px; border-radius: 25px;">Guardar</a>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            <a href="#" style="font-size: 10px; border-radius: 25px;" class="btn_edit">Editar</a>
-
-                                            <a href="#" style="font-size: 10px; border-radius: 25px; display:none" class="btn_save">Guardar</a>
-                                            <a href="#" style="font-size: 10px; border-radius: 25px; display:none" class="btn_cancel">Cancelar</a>
-                                        </td>
-
-                                    }
-                                    if (Session["Id"].ToString() == "391")
-                                    {
-                                        <td>
-                                            <a href="#" onclick="delRow(this)" style="font-size:12px;padding:2px 6px 2px 6px" class="btn_del">Borrar</a>
-                                        </td>
-                                    }
-                                }
-
-                            </tr>
+                                        @if (Session["Id"].ToString() == "391")
+                                        {
+                                            <td>
+                                                <a href="#" onclick="delRow(this)" style="font-size:12px;padding:2px 6px 2px 6px" class="btn_del">Borrar</a>
+                                            </td>
+                                        }
+                                    @*}*@
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -332,7 +311,7 @@
 @if (Session["Id"].ToString() == "391")
 {
     <div>
-        <div class="modal-dialog modal-xl" role="document">
+        <div  role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-lg" type="submit" id="btnA">Abierto</button>
@@ -344,11 +323,11 @@
                     <div class="table-responsive table-condensed table-sm table-bordered tabla">
                         <table class="table table-hover" id="dataTableReport" name="dataTableReport">
                             <thead class="thead-light" style="font-size:x-small; text-align:center">
-                                <tr>
-                                    <th colspan="9"></th>
+                                @*<tr>
+                                    <th colspan="8"></th>
                                     <th colspan="3">Cajas entregadas</th>
                                     <th colspan="2"></th>
-                                </tr>
+                                </tr>*@
                                 <tr>
                                     <th style="display:none">
                                         Id
@@ -359,9 +338,9 @@
                                     <th>
                                         Productor
                                     </th>
-                                    <th colspan="2">
+                                    @*<th colspan="2">
                                         Campo
-                                    </th>
+                                    </th>*@
                                     <th style="display:none">
                                         IdAgen
                                     </th>
@@ -437,11 +416,25 @@
         else {
             limpiar();
             nombre_productor();
-            descripcion_campos();
-            nombre_asesor();
+            //descripcion_campos();
+            //nombre_asesor();
             GetSeguimientoF();
+            asesores();
         }
     });
+
+    function asesores() {
+        $.getJSON(siteURL + "Json/GetAsesorPList?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
+            var select = $("#IdAgenP");
+            select.empty();
+            $.each(result, function (index, itemData) {
+                select.append($('<option/>', {
+                    value: itemData.IdAgen,
+                    text: itemData.Nombre //Descripcion
+                }));
+            });
+        });
+    }
 
     $('#Cod_Campo').change(function () {
         nom_campo();
@@ -453,8 +446,8 @@
         $('#DescCampo').val('');
         $('#activo').text('');
         $('#duplicado').text('');
-        $('#asesor').text('');
-        nom_campo();
+        //$('#asesor').text('');
+        //nom_campo();
     }
 
     function descripcion_campos() {
@@ -470,27 +463,27 @@
         });
     }
 
-    function nom_campo() {
-        codigo_C = $('#Cod_Campo').val();
-        if (codigo_C.length == 0) {
-            codigo_C = 1;
-        }
-        $.getJSON(siteURL + "Json/DescCampo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
-            var select = $("#DescCampo");
-            select.val(result.Descripcion);
+    //function nom_campo() {
+    //    codigo_C = $('#Cod_Campo').val();
+    //    if (codigo_C.length == 0) {
+    //        codigo_C = 1;
+    //    }
+    //    $.getJSON(siteURL + "Json/DescCampo?Cod_Prod=" + $("#Cod_Prod").val() + "&Cod_Campo=" + codigo_C, function (result) {
+    //        var select = $("#DescCampo");
+    //        select.val(result.Descripcion);
 
-            if (result.Activo == 'N') {
-                txt = "Campo inactivo!";
-                $('#activo').text(txt);
-                $('#activo').show();
-            }
-            else {
-                txt = "";
-                $('#activo').text(txt);
-                $('#activo').hide();
-            }
-        });
-    }
+    //        if (result.Activo == 'N') {
+    //            txt = "Campo inactivo!";
+    //            $('#activo').text(txt);
+    //            $('#activo').show();
+    //        }
+    //        else {
+    //            txt = "";
+    //            $('#activo').text(txt);
+    //            $('#activo').hide();
+    //        }
+    //    });
+    //}
 
     function nombre_productor() {
         $.getJSON(siteURL + "Json/GetProductor?Cod_Prod=" + $("#Cod_Prod").val(), function (result) {
@@ -528,7 +521,7 @@
     $('#btnAdd').click(function () {
         var data = {
             Cod_Prod: $("#Cod_Prod").val(),
-            Cod_Campo: $("#Cod_Campo").val()
+            IdAgen: $("#IdAgenP").val()
         };
 
         jQuery.ajax({
@@ -699,15 +692,17 @@
                 var y = {};
                 y.Cod_Prod = row.find("td")[1].innerHTML;
                 y.Productor = row.find("td")[2].innerHTML;
-                y.Campo = row.find("td")[3].innerHTML;
-                y.IdAgen = row.find("td")[4].innerHTML;
-                y.estatus = row.find("td")[7].innerHTML;
-                y.comentarios = row.find("td")[8].innerHTML;
-                y.caja1 = row.find("td")[10].innerHTML;
-                y.caja2 = row.find("td")[11].innerHTML;
+                //y.Campo = row.find("td")[3].innerHTML;
+                y.IdAgen = row.find("td")[3].innerHTML;
+                y.estatus = row.find("td")[6].innerHTML;
+                y.comentarios = row.find("td")[7].innerHTML;
+                y.caja1 = row.find("td")[9].innerHTML;
+                y.caja2 = row.find("td")[10].innerHTML;
                 tabla.push(y);
             });
         }
+
+        //Reenviar correo
         if (estatus == "R") {
 
             $("#dataTableReport tbody tr").each(function () {
@@ -864,10 +859,10 @@
                         status = 'VA A PAGAR';
                     }
 
-                    $('#dataTableReport').append('<tr><td style="display:none" id="Id">' + opt.Id + '</td><td>' +
-                        opt.Cod_Prod + '</td><td>' +
-                        opt.Productor + '</td><td>' +
-                        opt.Cod_Campo + ' - ' + opt.Campo + '</td><td>' +
+                    $('#dataTableReport').append('<tr><td style="display:none" id="Id">' + opt.Id + '</td>' +
+                        '<td>' + opt.Cod_Prod + '</td>' +
+                        '<td>' + opt.Productor + '</td>' +
+                        //'<td>' + opt.Cod_Campo + ' - ' + opt.Campo + '</td>' +
                         '<td style="display:none" id="IdAgen">' + opt.IdAgen + '</td>' +
                         '<td>' + opt.Asesor + '</td>' +
                         '<td>' + status + '</td>' +

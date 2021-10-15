@@ -67,5 +67,6 @@ namespace Sistema_Indicadores.Models
         public Nullable<bool> Organico { get; set; }
         public int Certificado { get; set; }
         public string Refrigerada { get; set; }
+        public Nullable<double> Kgs { get; set; }
     }
 }

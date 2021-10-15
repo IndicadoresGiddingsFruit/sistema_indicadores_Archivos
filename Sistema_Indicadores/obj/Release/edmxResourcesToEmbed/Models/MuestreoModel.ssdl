@@ -86,6 +86,8 @@
     <Property Name="LiberacionEU" Type="datetime" />
     <Property Name="IdSector" Type="int" />
     <Property Name="Folio" Type="varchar" MaxLength="20" />
+    <Property Name="Temporada" Type="char" MaxLength="4" />
+    <Property Name="Traza" Type="char" MaxLength="1" />
   </EntityType>
   <EntityType Name="ProdCalidadMuestreo">
     <Key>
@@ -93,8 +95,8 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Estatus" Type="char" MaxLength="1" />
-    <Property Name="Incidencia" Type="varchar" MaxLength="50" />
-    <Property Name="Propuesta" Type="varchar" MaxLength="200" />
+    <Property Name="Incidencia" Type="varchar(max)" />
+    <Property Name="Propuesta" Type="varchar(max)" />
     <Property Name="Fecha" Type="datetime" />
     <Property Name="IdAgen" Type="smallint" />
     <Property Name="Id_Muestreo" Type="int" />
@@ -159,6 +161,7 @@
     <Property Name="IdAgenI" Type="smallint" />
     <Property Name="IdAgen_Tarjeta" Type="smallint" />
     <Property Name="Liberar_Tarjeta" Type="varchar" MaxLength="100" />
+    <Property Name="Temporada" Type="char" MaxLength="4" />
   </EntityType>
   <EntityType Name="ProdMuestreoSector">
     <Key>
@@ -274,6 +277,7 @@
     <Property Name="IdRegion" Type="smallint" />
     <Property Name="Tipo" Type="nchar" MaxLength="1" />
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_empleado" Type="int" />
   </EntityType>
   <Association Name="FK__ProdAnali__IdSec__78D8AF65">
     <End Role="ProdMuestreoSector" Type="Self.ProdMuestreoSector" Multiplicity="0..1" />

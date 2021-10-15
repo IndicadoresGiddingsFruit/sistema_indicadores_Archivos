@@ -22,5 +22,6 @@ namespace Sistema_Indicadores.Models
         public Nullable<short> IdRegion { get; set; }
         public string Tipo { get; set; }
         public int Id { get; set; }
+        public Nullable<int> id_empleado { get; set; }
     }
 }

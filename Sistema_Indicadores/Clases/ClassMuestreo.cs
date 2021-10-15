@@ -39,6 +39,7 @@ namespace Sistema_Indicadores.Clases
         public int? Num_analisis { get; set; }
         public string Laboratorio { get; set; }
         public string Comentarios { get; set; }
+        public string Trazas { get; set; }
         public Int16? IdAgen { get; set; }
         public Int16? IdAgenC { get; set; }
         public Int16? IdAgenI { get; set; }

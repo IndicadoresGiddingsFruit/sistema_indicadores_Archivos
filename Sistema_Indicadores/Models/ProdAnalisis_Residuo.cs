@@ -32,6 +32,8 @@ namespace Sistema_Indicadores.Models
         public Nullable<int> IdSector { get; set; }
         public short Cod_Empresa { get; set; }
         public string Folio { get; set; }
+        public string Temporada { get; set; }
+        public string Traza { get; set; }
     
         public virtual ProdMuestreoSector ProdMuestreoSector { get; set; }
     }

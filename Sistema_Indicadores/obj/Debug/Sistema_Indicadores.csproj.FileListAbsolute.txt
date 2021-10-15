@@ -208,7 +208,6 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Syste
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Helpers.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Http.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Http.WebHost.dll
-C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Mvc.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Optimization.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Razor.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.WebPages.Deployment.dll
@@ -218,7 +217,6 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\WebGr
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ClosedXML.pdb
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ClosedXML.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\DocumentFormat.OpenXml.xml
-C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\EntityFramework.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\EntityFramework.SqlServer.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\EPPlus.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ExcelDataReader.pdb
@@ -253,7 +251,6 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Syste
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Http.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Http.WebHost.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Helpers.xml
-C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Mvc.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Optimization.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.Razor.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Web.WebPages.xml
@@ -263,11 +260,19 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Antlr
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\System.Diagnostics.DiagnosticSource.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Microsoft.AspNet.TelemetryCorrelation.xml
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\de\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\fr\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\it\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ja\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ko\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\ru\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\zh-Hans\EntityFramework.resources.dll
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\zh-Hant\EntityFramework.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Net.Http.Formatting.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Http.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Http.WebHost.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Helpers.resources.dll
-C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Mvc.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Optimization.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.Razor.resources.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\bin\es\System.Web.WebPages.resources.dll
@@ -277,3 +282,4 @@ C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\obj\Debug
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\obj\Debug\Sistema_Indicadores.csproj.CopyComplete
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\obj\Debug\Sistema_Indicadores.dll
 C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\obj\Debug\Sistema_Indicadores.pdb
+C:\Users\marholym\source\repos\Sistema_Indicadores\Sistema_Indicadores\obj\Debug\Sistema_Indicadores.csprojAssemblyReference.cache

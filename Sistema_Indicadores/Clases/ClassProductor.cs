@@ -27,5 +27,6 @@ namespace Sistema_Indicadores.Clases
         public decimal? SaldoFinal { get; set; }
         public string Deuda { get; set; }
         public byte? Semana { get; set; }
+        public string Enviado { get; set; }
     }
 }

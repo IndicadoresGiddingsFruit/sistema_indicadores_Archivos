@@ -90,6 +90,8 @@
     <NavigationProperty Name="ProdMuestreoSector" Relationship="Self.FK__ProdAnali__IdSec__78D8AF65" FromRole="ProdAnalisis_Residuo" ToRole="ProdMuestreoSector" />
     <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
     <Property Name="Folio" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+    <Property Name="Traza" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="ProdCalidadMuestreo">
     <Key>
@@ -97,8 +99,8 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-    <Property Name="Incidencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Propuesta" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Incidencia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Propuesta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="Fecha" Type="DateTime" Precision="3" />
     <Property Name="IdAgen" Type="Int16" />
     <Property Name="Id_Muestreo" Type="Int32" />
@@ -174,6 +176,7 @@
     <NavigationProperty Name="ProdCamposCat1" Relationship="Self.FK_Cod_Prov" FromRole="ProdMuestreo" ToRole="ProdCamposCat" />
     <NavigationProperty Name="ProdMuestreoSector" Relationship="Self.FK__ProdMuest__IdSec__2D8181CE" FromRole="ProdMuestreo" ToRole="ProdMuestreoSector" />
     <NavigationProperty Name="ProdProductoresCat" Relationship="Self.FK_Cod_Prod" FromRole="ProdMuestreo" ToRole="ProdProductoresCat" />
+    <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
   </EntityType>
   <EntityType Name="ProdMuestreoSector">
     <Key>
@@ -282,6 +285,7 @@
     <Property Name="IdRegion" Type="Int16" />
     <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_empleado" Type="Int32" />
   </EntityType>
   <Association Name="FK_IdAgen">
     <End Role="ProdAgenteCat" Type="Self.ProdAgenteCat" Multiplicity="0..1" />

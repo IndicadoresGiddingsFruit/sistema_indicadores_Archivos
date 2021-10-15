@@ -281,14 +281,15 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" />
     <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
-    <Property Name="Comentarios" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Cod_Campo" Type="Int16" />
+    <Property Name="Comentarios" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
     <Property Name="Fecha" Type="DateTime" Precision="3" />
     <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
     <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
     <Property Name="IdAgen" Type="Int16" />
     <Property Name="AP" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
     <Property Name="Fecha_Up" Type="DateTime" Precision="3" />
+    <Property Name="Enviado" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
   </EntityType>
   <EntityType Name="SIPGUsuarios">
     <Key>
@@ -302,6 +303,7 @@
     <Property Name="IdRegion" Type="Int16" />
     <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_empleado" Type="Int32" />
   </EntityType>
   <EntityType Name="ProdProyeccion">
     <Key>
@@ -392,6 +394,8 @@
     <Property Name="C24" Type="Double" />
     <Property Name="C25" Type="Double" />
     <Property Name="C26" Type="Double" />
+    <Property Name="NoSemanas1" Type="Int32" />
+    <Property Name="NoSemanas2" Type="Int32" />
   </EntityType>
   <EntityType Name="UV_ProdRecepcion">
     <Key>
@@ -470,6 +474,7 @@
     <Property Name="Organico" Type="Boolean" />
     <Property Name="Certificado" Type="Int32" Nullable="false" />
     <Property Name="Refrigerada" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="Kgs" Type="Double" />
   </EntityType>
   <ComplexType Name="fnRptSaldosFinanciamiento_Result">
     <Property Type="String" Name="Cod_prod" Nullable="false" MaxLength="5" />

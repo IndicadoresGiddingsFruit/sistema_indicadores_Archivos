@@ -91,6 +91,8 @@
           <Property Name="LiberacionEU" Type="datetime" />
           <Property Name="IdSector" Type="int" />
           <Property Name="Folio" Type="varchar" MaxLength="20" />
+          <Property Name="Temporada" Type="char" MaxLength="4" />
+          <Property Name="Traza" Type="char" MaxLength="1" />
         </EntityType>
         <EntityType Name="ProdCalidadMuestreo">
           <Key>
@@ -98,8 +100,8 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Estatus" Type="char" MaxLength="1" />
-          <Property Name="Incidencia" Type="varchar" MaxLength="50" />
-          <Property Name="Propuesta" Type="varchar" MaxLength="200" />
+          <Property Name="Incidencia" Type="varchar(max)" />
+          <Property Name="Propuesta" Type="varchar(max)" />
           <Property Name="Fecha" Type="datetime" />
           <Property Name="IdAgen" Type="smallint" />
           <Property Name="Id_Muestreo" Type="int" />
@@ -164,6 +166,7 @@
           <Property Name="IdAgenI" Type="smallint" />
           <Property Name="IdAgen_Tarjeta" Type="smallint" />
           <Property Name="Liberar_Tarjeta" Type="varchar" MaxLength="100" />
+          <Property Name="Temporada" Type="char" MaxLength="4" />
         </EntityType>
         <EntityType Name="ProdMuestreoSector">
           <Key>
@@ -279,6 +282,7 @@
           <Property Name="IdRegion" Type="smallint" />
           <Property Name="Tipo" Type="nchar" MaxLength="1" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_empleado" Type="int" />
         </EntityType>
         <Association Name="FK__ProdAnali__IdSec__78D8AF65">
           <End Role="ProdMuestreoSector" Type="Self.ProdMuestreoSector" Multiplicity="0..1" />
@@ -540,6 +544,8 @@
           <NavigationProperty Name="ProdMuestreoSector" Relationship="Self.FK__ProdAnali__IdSec__78D8AF65" FromRole="ProdAnalisis_Residuo" ToRole="ProdMuestreoSector" />
           <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
           <Property Name="Folio" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="Traza" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="ProdCalidadMuestreo">
           <Key>
@@ -547,8 +553,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
-          <Property Name="Incidencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Propuesta" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Incidencia" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Propuesta" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Fecha" Type="DateTime" Precision="3" />
           <Property Name="IdAgen" Type="Int16" />
           <Property Name="Id_Muestreo" Type="Int32" />
@@ -624,6 +630,7 @@
           <NavigationProperty Name="ProdCamposCat1" Relationship="Self.FK_Cod_Prov" FromRole="ProdMuestreo" ToRole="ProdCamposCat" />
           <NavigationProperty Name="ProdMuestreoSector" Relationship="Self.FK__ProdMuest__IdSec__2D8181CE" FromRole="ProdMuestreo" ToRole="ProdMuestreoSector" />
           <NavigationProperty Name="ProdProductoresCat" Relationship="Self.FK_Cod_Prod" FromRole="ProdMuestreo" ToRole="ProdProductoresCat" />
+          <Property Name="Temporada" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
         </EntityType>
         <EntityType Name="ProdMuestreoSector">
           <Key>
@@ -732,6 +739,7 @@
           <Property Name="IdRegion" Type="Int16" />
           <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_empleado" Type="Int32" />
         </EntityType>
         <Association Name="FK_IdAgen">
           <End Role="ProdAgenteCat" Type="Self.ProdAgenteCat" Multiplicity="0..1" />
@@ -1003,6 +1011,8 @@
           <EntitySetMapping Name="ProdAnalisis_Residuo">
             <EntityTypeMapping TypeName="SeasonSun1213Model1.ProdAnalisis_Residuo">
               <MappingFragment StoreEntitySet="ProdAnalisis_Residuo">
+                <ScalarProperty Name="Traza" ColumnName="Traza" />
+                <ScalarProperty Name="Temporada" ColumnName="Temporada" />
                 <ScalarProperty Name="Folio" ColumnName="Folio" />
                 <ScalarProperty Name="Cod_Empresa" ColumnName="Cod_Empresa" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -1080,6 +1090,7 @@
           <EntitySetMapping Name="ProdMuestreo">
             <EntityTypeMapping TypeName="SeasonSun1213Model1.ProdMuestreo">
               <MappingFragment StoreEntitySet="ProdMuestreo">
+                <ScalarProperty Name="Temporada" ColumnName="Temporada" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Cod_Empresa" ColumnName="Cod_Empresa" />
                 <ScalarProperty Name="Cod_Prod" ColumnName="Cod_Prod" />
@@ -1194,6 +1205,7 @@
           <EntitySetMapping Name="SIPGUsuarios">
             <EntityTypeMapping TypeName="SeasonSun1213Model1.SIPGUsuarios">
               <MappingFragment StoreEntitySet="SIPGUsuarios">
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Clave" ColumnName="Clave" />
                 <ScalarProperty Name="Completo" ColumnName="Completo" />

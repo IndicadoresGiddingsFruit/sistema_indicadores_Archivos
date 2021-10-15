@@ -223,8 +223,10 @@
           <Property Name="Fecha_redefoliacion" Type="date" />
           <Property Name="Fecha_corte2" Type="date" />
           <Property Name="Sem1" Type="int" />
+          <Property Name="NoSemanas1" Type="int" />
           <Property Name="Plantacion" Type="varchar" MaxLength="20" />
           <Property Name="Sem2" Type="int" />
+          <Property Name="NoSemanas2" Type="int" />
           <Property Name="Caja1" Type="float" />
           <Property Name="Caja2" Type="float" />
           <Property Name="Estructura" Type="varchar" MaxLength="20" />
@@ -316,13 +318,14 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Cod_Empresa" Type="smallint" Nullable="false" />
           <Property Name="Cod_Prod" Type="varchar" MaxLength="5" Nullable="false" />
-          <Property Name="Cod_Campo" Type="smallint" Nullable="false" />
+          <Property Name="Cod_Campo" Type="smallint" />
           <Property Name="IdAgen" Type="smallint" />
           <Property Name="Estatus" Type="nchar" MaxLength="1" />
-          <Property Name="Comentarios" Type="varchar" MaxLength="200" />
+          <Property Name="Comentarios" Type="varchar" MaxLength="300" />
           <Property Name="Fecha" Type="datetime" />
           <Property Name="AP" Type="nchar" MaxLength="1" />
           <Property Name="Fecha_Up" Type="datetime" />
+          <Property Name="Enviado" Type="nchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="SIPGComentarios">
           <Key>
@@ -346,6 +349,7 @@
           <Property Name="IdRegion" Type="smallint" />
           <Property Name="Tipo" Type="nchar" MaxLength="1" />
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_empleado" Type="int" />
         </EntityType>
         <EntityType Name="SIPGVisitas">
           <Key>
@@ -427,6 +431,7 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <Property Name="DescEtiqueta" Type="char" MaxLength="40" />
           <Property Name="Mercado" Type="varchar" MaxLength="11" Nullable="false" />
           <Property Name="Convertidas" Type="float" />
+          <Property Name="Kgs" Type="float" />
           <Property Name="Mes" Type="char" MaxLength="2" />
           <Property Name="Yearr" Type="char" MaxLength="2" />
           <Property Name="Zona" Type="char" MaxLength="30" />
@@ -532,6 +537,7 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
     [UV_ProdRecepcion].[DescEtiqueta] AS [DescEtiqueta], 
     [UV_ProdRecepcion].[Mercado] AS [Mercado], 
     [UV_ProdRecepcion].[Convertidas] AS [Convertidas], 
+    [UV_ProdRecepcion].[Kgs] AS [Kgs], 
     [UV_ProdRecepcion].[Mes] AS [Mes], 
     [UV_ProdRecepcion].[Yearr] AS [Yearr], 
     [UV_ProdRecepcion].[Zona] AS [Zona], 
@@ -834,14 +840,15 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Cod_Prod" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Cod_Campo" Type="Int16" Nullable="false" />
-          <Property Name="Comentarios" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Cod_Campo" Type="Int16" />
+          <Property Name="Comentarios" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
           <Property Name="Fecha" Type="DateTime" Precision="3" />
           <Property Name="Cod_Empresa" Type="Int16" Nullable="false" />
           <Property Name="Estatus" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Name="IdAgen" Type="Int16" />
           <Property Name="AP" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Name="Fecha_Up" Type="DateTime" Precision="3" />
+          <Property Name="Enviado" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="SIPGUsuarios">
           <Key>
@@ -855,6 +862,7 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <Property Name="IdRegion" Type="Int16" />
           <Property Name="Tipo" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_empleado" Type="Int32" />
         </EntityType>
         <EntityType Name="ProdProyeccion">
           <Key>
@@ -945,6 +953,8 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <Property Name="C24" Type="Double" />
           <Property Name="C25" Type="Double" />
           <Property Name="C26" Type="Double" />
+          <Property Name="NoSemanas1" Type="Int32" />
+          <Property Name="NoSemanas2" Type="Int32" />
         </EntityType>
         <EntityType Name="UV_ProdRecepcion">
           <Key>
@@ -1023,6 +1033,7 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <Property Name="Organico" Type="Boolean" />
           <Property Name="Certificado" Type="Int32" Nullable="false" />
           <Property Name="Refrigerada" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Kgs" Type="Double" />
         </EntityType>
         <ComplexType Name="fnRptSaldosFinanciamiento_Result">
           <Property Type="String" Name="Cod_prod" Nullable="false" MaxLength="5" />
@@ -1287,6 +1298,7 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <EntitySetMapping Name="Seguimiento_financ">
             <EntityTypeMapping TypeName="SeasonSun1213Model2.Seguimiento_financ">
               <MappingFragment StoreEntitySet="Seguimiento_financ">
+                <ScalarProperty Name="Enviado" ColumnName="Enviado" />
                 <ScalarProperty Name="Fecha_Up" ColumnName="Fecha_Up" />
                 <ScalarProperty Name="AP" ColumnName="AP" />
                 <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
@@ -1303,6 +1315,7 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <EntitySetMapping Name="SIPGUsuarios">
             <EntityTypeMapping TypeName="SeasonSun1213Model2.SIPGUsuarios">
               <MappingFragment StoreEntitySet="SIPGUsuarios">
+                <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
                 <ScalarProperty Name="IdRegion" ColumnName="IdRegion" />
@@ -1317,6 +1330,8 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <EntitySetMapping Name="ProdProyeccion">
             <EntityTypeMapping TypeName="SeasonSun1213Model2.ProdProyeccion">
               <MappingFragment StoreEntitySet="ProdProyeccion">
+                <ScalarProperty Name="NoSemanas2" ColumnName="NoSemanas2" />
+                <ScalarProperty Name="NoSemanas1" ColumnName="NoSemanas1" />
                 <ScalarProperty Name="C26" ColumnName="26" />
                 <ScalarProperty Name="C25" ColumnName="25" />
                 <ScalarProperty Name="C24" ColumnName="24" />
@@ -1408,6 +1423,7 @@ advertencia 6002: La tabla o vista 'SeasonSun1213.dbo.UV_ProdRecepcion' no tiene
           <EntitySetMapping Name="UV_ProdRecepcion">
             <EntityTypeMapping TypeName="SeasonSun1213Model2.UV_ProdRecepcion">
               <MappingFragment StoreEntitySet="UV_ProdRecepcion">
+                <ScalarProperty Name="Kgs" ColumnName="Kgs" />
                 <ScalarProperty Name="Refrigerada" ColumnName="Refrigerada" />
                 <ScalarProperty Name="Certificado" ColumnName="Certificado" />
                 <ScalarProperty Name="Organico" ColumnName="Organico" />

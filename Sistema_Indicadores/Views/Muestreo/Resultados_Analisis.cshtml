@@ -4,7 +4,7 @@
     ViewBag.Title = "Resultados_Analisis";
 }
 
-<h6>ANALISIS DE RESIDUOS DE PLAGUICIDAS TEMPORADA 2020-2021</h6>
+<h6>ANALISIS DE RESIDUOS DE PLAGUICIDAS TEMPORADA 2021-2022</h6>
 <div class="row">
     <div class="col-sm-12 table-responsive">
         @using (Html.BeginForm("Resultados_Analisis", "Muestreo", FormMethod.Get))
@@ -67,6 +67,7 @@
                         <th>Lab</th>
                         <th>LiberacionUSA</th>
                         <th>LiberacionEU</th>
+                        <th>Trazas</th>
                         <th>Comentarios</th>
                         <th>Fecha</th>
                     </tr>
@@ -135,6 +136,14 @@
                         <td>
                             @(String.Format("{0:dd/MM/yyyy}", item.LiberacionEU))
                         </td>
+                        @if (item.Trazas == "1")
+                        {
+                            <td> SI </td>
+                        }
+                        else
+                        {
+                            <td> NO </td>
+                        }
                         <td>
                             @Html.DisplayFor(modelItem => item.Comentarios)
                         </td>
@@ -148,21 +157,7 @@
             else
             {
                 <tr>
-                    <td>No se encontró ningún dato</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
-                    <td> &nbsp;</td>
+                    <td colspan="17">No se encontró ningún dato</td>
                 </tr>
             }
         </table>
@@ -242,7 +237,7 @@
                     status_style = 'background-color:#9BFC6E';
                 }
 
-                $('#dataTableResultadosA').append('<tr><td>' + opt.Cod_Prod + '</td><td>' + opt.Cod_Campo + '</td><td>' + opt.Sector + '</td><td>' + opt.Productor + '</td><td>' + opt.Tipo + '</td><td>' + opt.Producto + '</td><td>' + opt.Zona + '</td><td>' + Fecha_envio.toLocaleDateString("es-ES", options) + '</td><td>' + Fecha_entrega.toLocaleDateString("es-ES", options) + '</td><td style="' + status_style + '">' + status + '</td><td>' + opt.Num_analisis + '</td><td>' + opt.Laboratorio + '</td><td>' + LiberacionUSA.toLocaleDateString("es-ES", options) + '</td><td>' + LiberacionEU.toLocaleDateString("es-ES", options) + '</td><td>' + opt.Comentarios + '</td><td>' + Fecha.toLocaleDateString("es-ES", options) + '</td></tr>');
+                $('#dataTableResultadosA').append('<tr><td>' + opt.Cod_Prod + '</td><td>' + opt.Cod_Campo + '</td><td>' + opt.Sector + '</td><td>' + opt.Productor + '</td><td>' + opt.Tipo + '</td><td>' + opt.Producto + '</td><td>' + opt.Zona + '</td><td>' + Fecha_envio.toLocaleDateString("es-ES", options) + '</td><td>' + Fecha_entrega.toLocaleDateString("es-ES", options) + '</td><td style="' + status_style + '">' + status + '</td><td>' + opt.Num_analisis + '</td><td>' + opt.Laboratorio + '</td><td>' + LiberacionUSA.toLocaleDateString("es-ES", options) + '</td><td>' + LiberacionEU.toLocaleDateString("es-ES", options) + '</td><td>' + opt.Trazas + '</td><td>' + opt.Comentarios + '</td><td>' + Fecha.toLocaleDateString("es-ES", options) + '</td></tr>');
             });
         }, 'json');
     }

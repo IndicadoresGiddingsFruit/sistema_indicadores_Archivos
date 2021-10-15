@@ -245,6 +245,7 @@
     <EntitySetMapping Name="Seguimiento_financ">
       <EntityTypeMapping TypeName="SeasonSun1213Model2.Seguimiento_financ">
         <MappingFragment StoreEntitySet="Seguimiento_financ">
+          <ScalarProperty Name="Enviado" ColumnName="Enviado" />
           <ScalarProperty Name="Fecha_Up" ColumnName="Fecha_Up" />
           <ScalarProperty Name="AP" ColumnName="AP" />
           <ScalarProperty Name="IdAgen" ColumnName="IdAgen" />
@@ -261,6 +262,7 @@
     <EntitySetMapping Name="SIPGUsuarios">
       <EntityTypeMapping TypeName="SeasonSun1213Model2.SIPGUsuarios">
         <MappingFragment StoreEntitySet="SIPGUsuarios">
+          <ScalarProperty Name="id_empleado" ColumnName="id_empleado" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Tipo" ColumnName="Tipo" />
           <ScalarProperty Name="IdRegion" ColumnName="IdRegion" />
@@ -275,6 +277,8 @@
     <EntitySetMapping Name="ProdProyeccion">
       <EntityTypeMapping TypeName="SeasonSun1213Model2.ProdProyeccion">
         <MappingFragment StoreEntitySet="ProdProyeccion">
+          <ScalarProperty Name="NoSemanas2" ColumnName="NoSemanas2" />
+          <ScalarProperty Name="NoSemanas1" ColumnName="NoSemanas1" />
           <ScalarProperty Name="C26" ColumnName="26" />
           <ScalarProperty Name="C25" ColumnName="25" />
           <ScalarProperty Name="C24" ColumnName="24" />
@@ -366,6 +370,7 @@
     <EntitySetMapping Name="UV_ProdRecepcion">
       <EntityTypeMapping TypeName="SeasonSun1213Model2.UV_ProdRecepcion">
         <MappingFragment StoreEntitySet="UV_ProdRecepcion">
+          <ScalarProperty Name="Kgs" ColumnName="Kgs" />
           <ScalarProperty Name="Refrigerada" ColumnName="Refrigerada" />
           <ScalarProperty Name="Certificado" ColumnName="Certificado" />
           <ScalarProperty Name="Organico" ColumnName="Organico" />

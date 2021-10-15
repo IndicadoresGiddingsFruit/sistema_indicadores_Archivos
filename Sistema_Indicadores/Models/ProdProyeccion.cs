@@ -99,5 +99,7 @@ namespace Sistema_Indicadores.Models
         public Nullable<double> C24 { get; set; }
         public Nullable<double> C25 { get; set; }
         public Nullable<double> C26 { get; set; }
+        public Nullable<int> NoSemanas1 { get; set; }
+        public Nullable<int> NoSemanas2 { get; set; }
     }
 }

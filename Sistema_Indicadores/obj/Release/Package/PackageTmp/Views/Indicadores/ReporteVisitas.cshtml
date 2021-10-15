@@ -137,8 +137,7 @@
         $.ajax({
             type: "POST",
             url: siteURL + "Indicadores/obtenerImagen?IdVisita=" + IdVisita,
-            success: function (data) {
-
+            success: function (data) { 
                 $("#img_visita").attr("src", data);
                 $("#ModalImagen").modal('show');
 

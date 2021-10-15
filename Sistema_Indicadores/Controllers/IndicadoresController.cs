@@ -2463,175 +2463,192 @@ namespace Sistema_Indicadores.Controllers
 
                 IQueryable<ClassProductor> item = null;
 
-                item = (from m in (from m in bd.Seguimiento_financ
-                                   group m by new
-                                   {
-                                       Cod_Empresa = m.Cod_Empresa,
-                                       Cod_Prod = m.Cod_Prod,
-                                       Cod_Campo = m.Cod_Campo
-                                   } into x
-                                   select new
-                                   {
-                                       Cod_Empresa = x.Key.Cod_Empresa,
-                                       Cod_Prod = x.Key.Cod_Prod,
-                                       Cod_Campo = x.Key.Cod_Campo,
-                                       Fecha = x.Max(m => m.Fecha)
-                                   })
+                //                item = (from m in (from m in bd.Seguimiento_financ
+                //                                   group m by new
+                //                                   {
+                //                                       Cod_Empresa = m.Cod_Empresa,
+                //                                       Cod_Prod = m.Cod_Prod,
+                //                                       IdAgen = m.IdAgen
+                //                                   } into x
+                //                                   select new
+                //                                   {
+                //                                       Cod_Empresa = x.Key.Cod_Empresa,
+                //                                       Cod_Prod = x.Key.Cod_Prod,
+                //                                       IdAgen = x.Key.IdAgen,
+                //                                       Fecha = x.Max(m => m.Fecha)
+                //                                   })
 
-                        join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.Cod_Campo, s.Fecha } into Sfinanc
-                        from s in Sfinanc.DefaultIfEmpty()
+                //                        join s in bd.Seguimiento_financ on new { m.Cod_Empresa, m.Cod_Prod, m.IdAgen, m.Fecha } equals new { s.Cod_Empresa, s.Cod_Prod, s.IdAgen, s.Fecha } into Sfinanc
+                //                        from s in Sfinanc.DefaultIfEmpty()
 
-                        join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.Cod_Campo } equals new { c.Cod_Empresa, c.Cod_Prod, c.Cod_Campo } into Campos
-                        from mcam in Campos.DefaultIfEmpty()
+                //                        join c in bd.ProdCamposCat on new { m.Cod_Empresa, m.Cod_Prod, m.IdAgen } 
+                //                                                    equals new { c.Cod_Empresa, c.Cod_Prod, c.IdAgen } into Campos
+                //                        from mcam in Campos.DefaultIfEmpty()
 
-                        join p in bd.ProdProductoresCat on mcam.Cod_Prod equals p.Cod_Prod into Prod
-                        from prod in Prod.DefaultIfEmpty()
+                //                        join p in bd.ProdProductoresCat on m.Cod_Prod equals p.Cod_Prod into Prod
+                //                        from prod in Prod.DefaultIfEmpty()
 
-                        join a in bd.ProdAgenteCat on mcam.IdAgen equals a.IdAgen into Agen
-                        from ageP in Agen.DefaultIfEmpty()
+                //                        join a in bd.ProdAgenteCat on m.IdAgen equals a.IdAgen into Agen
+                //                        from ageP in Agen.DefaultIfEmpty()
 
-                            //join p in (from p in bd.UV_ProdRecepcion where p.CodEstatus == "V" && p.Temporada == "2021"
-                            //             group p by new
-                            //             {
-                            //                 Cod_Prod = p.Cod_prod
-                            //             } into y
-                            //             select new
-                            //             {
-                            //                 Cod_Prod = y.Key.Cod_Prod,
-                            //                 Fecha = y.Max(p => p.Fecha)
-                            //             }) on new { m.Cod_Prod } equals new { p.Cod_Prod } into PRecepcion
-                            //from p in PRecepcion.DefaultIfEmpty()
+                //                            //join p in (from p in bd.UV_ProdRecepcion where p.CodEstatus == "V" && p.Temporada == "2021"
+                //                            //             group p by new
+                //                            //             {
+                //                            //                 Cod_Prod = p.Cod_prod
+                //                            //             } into y
+                //                            //             select new
+                //                            //             {
+                //                            //                 Cod_Prod = y.Key.Cod_Prod,
+                //                            //                 Fecha = y.Max(p => p.Fecha)
+                //                            //             }) on new { m.Cod_Prod } equals new { p.Cod_Prod } into PRecepcion
+                //                            //from p in PRecepcion.DefaultIfEmpty()
 
-                            //join r in bd.UV_ProdRecepcion on new { p.Fecha } equals new { r.Fecha } into PRecepcion2
-                            //from r in PRecepcion2.DefaultIfEmpty()                     
+                //                            //join r in bd.UV_ProdRecepcion on new { p.Fecha } equals new { r.Fecha } into PRecepcion2
+                //                            //from r in PRecepcion2.DefaultIfEmpty()                     
 
-                        group m by new
-                        {
-                            Id = s.Id,
-                            Cod_Prod = m.Cod_Prod,
-                            Productor = prod.Nombre,
-                            Cod_Campo = m.Cod_Campo,
-                            Campo = mcam.Descripcion,
-                            IdAgen = mcam.IdAgen,
-                            IdRegion = ageP.IdRegion,
-                            Asesor = ageP.Nombre,
-                            Estatus = s.Estatus,
-                            Comentarios = s.Comentarios,
-                            Fecha = m.Fecha,
-                            dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now),
-                            cjs1 = (from r in bd.UV_ProdRecepcion
-                                    where r.CodEstatus == "V"
-&& (r.Fecha >= new DateTime(2020, 07, 01) && r.Fecha <= new DateTime(2020, 12, 31))
-&& r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
-                                    select r.Convertidas).Sum(),
-                            cjs2 = (from r in bd.UV_ProdRecepcion
-                                    where r.CodEstatus == "V"
-&& (r.Fecha >= new DateTime(2021, 01, 01) && r.Fecha <= DateTime.Now)
-&& r.Cod_prod == m.Cod_Prod && r.Cod_Campo == m.Cod_Campo
-                                    select r.Convertidas).Sum(),
-                            IdAgenS = s.IdAgen,
-                            AP = s.AP,
-                            Fecha_Up = s.Fecha_Up,
-                            SaldoFinal = (from r in bd.fnRptSaldosFinanciamiento(DateTime.Now, DateTime.Now, DateTime.Now, 50)
-                                          where r.Cod_prod == m.Cod_Prod
-                                          select (r.Saldo + r.SaldoAGQ)).Sum()//,
-                            //Semana =r.Semana
+                //                        group m by new
+                //                        {
+                //                            Id = s.Id,
+                //                            Cod_Prod = m.Cod_Prod,
+                //                            Productor = prod.Nombre,
+                //                            //Cod_Campo = m.Cod_Campo,
+                //                            //Campo = mcam.Descripcion,
+                //                            IdAgen = m.IdAgen,
+                //                            IdRegion = ageP.IdRegion,
+                //                            Asesor = ageP.Nombre,
+                //                            Estatus = s.Estatus,
+                //                            Comentarios = s.Comentarios,
+                //                            Fecha = m.Fecha,
+                //                            dias = DbFunctions.DiffDays(m.Fecha, DateTime.Now),
+                //                            cjs1 = (from r in bd.UV_ProdRecepcion
+                //                                    where r.CodEstatus == "V"
+                //&& (r.Fecha >= new DateTime(2020, 07, 01) && r.Fecha <= new DateTime(2020, 12, 31))
+                //&& r.Cod_prod == m.Cod_Prod && r.Cod_Campo == mcam.Cod_Campo
+                //                                    select r.Convertidas).Sum(),
+                //                            cjs2 = (from r in bd.UV_ProdRecepcion
+                //                                    where r.CodEstatus == "V"
+                //&& (r.Fecha >= new DateTime(2021, 01, 01) && r.Fecha <= DateTime.Now)
+                //&& r.Cod_prod == m.Cod_Prod && r.Cod_Campo == mcam.Cod_Campo
+                //                                    select r.Convertidas).Sum(),
+                //                            IdAgenS = s.IdAgen,
+                //                            AP = s.AP,
+                //                            Fecha_Up = s.Fecha_Up,
+                //                            SaldoFinal = (from r in bd.fnRptSaldosFinanciamiento(DateTime.Now, DateTime.Now, DateTime.Now, 50)
+                //                                          where r.Cod_prod == m.Cod_Prod
+                //                                          select (r.Saldo + r.SaldoAGQ)).Sum(),
+                //                            Enviado=s.Enviado
+                //                            //Semana =r.Semana
 
 
-                        } into x
-                        select new ClassProductor()
-                        {
-                            Id = x.Key.Id,
-                            Cod_Prod = x.Key.Cod_Prod,
-                            Productor = x.Key.Productor,
-                            Cod_Campo = x.Key.Cod_Campo,
-                            Campo = x.Key.Campo,
-                            IdAgen = x.Key.IdAgen,
-                            IdRegion = x.Key.IdRegion,
-                            Asesor = x.Key.Asesor,
-                            Estatus = x.Key.Estatus,
-                            Comentarios = x.Key.Comentarios,
-                            Fecha = x.Key.Fecha,
-                            dias = x.Key.dias,
-                            caja1 = x.Key.cjs1,
-                            caja2 = x.Key.cjs2,
-                            IdAgenS = x.Key.IdAgenS,
-                            AP = x.Key.AP,
-                            Fecha_Up = x.Key.Fecha_Up,
-                            SaldoFinal = (decimal?)x.Key.SaldoFinal,
-                            //Semana=x.Key.Semana
-                        });
+                //                        } into x
+                //                        select new ClassProductor()
+                //                        {
+                //                            Id = x.Key.Id,
+                //                            Cod_Prod = x.Key.Cod_Prod,
+                //                            Productor = x.Key.Productor,
+                //                            //Cod_Campo = x.Key.Cod_Campo,
+                //                            //Campo = x.Key.Campo,
+                //                            IdAgen = x.Key.IdAgen,
+                //                            IdRegion = x.Key.IdRegion,
+                //                            Asesor = x.Key.Asesor,
+                //                            Estatus = x.Key.Estatus,
+                //                            Comentarios = x.Key.Comentarios,
+                //                            Fecha = x.Key.Fecha,
+                //                            dias = x.Key.dias,
+                //                            caja1 = x.Key.cjs1,
+                //                            caja2 = x.Key.cjs2,
+                //                            IdAgenS = x.Key.IdAgenS,
+                //                            AP = x.Key.AP,
+                //                            Fecha_Up = x.Key.Fecha_Up,
+                //                            SaldoFinal = (decimal?)x.Key.SaldoFinal,
+                //                            //Semana=x.Key.Semana
+                //                            Enviado = x.Key.Enviado
+                //                        });
 
-                if (Session["Id"].ToString() == "391")
-                {
-                    item = item.Where(x => x.IdAgenS == null).Distinct();
-                }
-                else if (Session["Id"].ToString() == "188")
-                {
-                    item = item.Where(x => x.AP == null && (x.IdRegion == 1 || x.IdRegion == 3 || x.IdRegion == 4 || x.IdRegion == 5)).Distinct();
-                }
-                else if (Session["Id"].ToString() == "44")
-                {
-                    item = item.Where(x => x.IdRegion == 2 && x.AP == null).Distinct();
-                }
-                else if (Session["Id"].ToString() == "394")
-                {
-                    item = item.Where(x => x.AP != null).Distinct();
-                }
-                else
-                {
-                    short agenteSesion = (short)Session["IdAgen"];
-                    item = item.Where(x => x.IdAgen == agenteSesion && x.AP == null).Distinct();
-                }
-                if (Session["Id"].ToString() != "391" && Session["Id"].ToString() != "394")
-                {
-                    if (item.Count() != 0)
-                    {
-                        return View(item.ToList());
-                    }
-                    else
-                    {
-                        return RedirectToAction("Visitas", "Indicadores");
-                    }
-                }
-                else
-                {
-                    return View(item.ToList());
-                }
+                //                if (Session["Id"].ToString() == "391")
+                //                {
+                //                    item = item.Where(x => x.Enviado == null).Distinct();
+                //                }
+                //                else if (Session["Id"].ToString() == "188")
+                //                {
+                //                    item = item.Where(x => x.AP == null && (x.IdRegion == 1 || x.IdRegion == 3 || x.IdRegion == 4 || x.IdRegion == 5) || x.IdAgen==197).Distinct();
+                //                }
+                //                else if (Session["Id"].ToString() == "44")
+                //                {
+                //                    item = item.Where(x => x.IdRegion == 2 && x.AP == null && x.IdAgen != 197).Distinct();
+                //                }
+                //                else if (Session["Id"].ToString() == "394")
+                //                {
+                //                    item = item.Where(x => x.AP != null).Distinct();
+                //                }
+                //                else
+                //                {
+                //                    short agenteSesion = (short)Session["IdAgen"];
+                //                    item = item.Where(x => x.IdAgen == agenteSesion && x.AP == null).Distinct();
+                //                }
+                //                if (Session["Id"].ToString() != "391" && Session["Id"].ToString() != "394")
+                //                {
+                //                    if (item.Count() != 0)
+                //                    {
+                //                        return View(item.ToList());
+                //                    }
+                //                    else
+                //                    {
+                //                        return RedirectToAction("Visitas", "Indicadores");
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    return View(item.ToList());
+                //                }
+                return View(item.ToList());
             }
-            else
-            {
-                return RedirectToAction("Index", "Login");
-            }
+           else
+            {               return RedirectToAction("Index", "Login");
+          }
         }
-        public JsonResult SeguimientoList(string datos = "A")
+        public JsonResult SeguimientoList(string datos = "")
         {
             List<ClassProductor> list = new List<ClassProductor>();
             if (Session["Id"].ToString() == "391")
             {
                 if (datos == "A")
                 {
-                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo, C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, isnull(S.Estatus, '') as Estatus,(case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,round(isnull(R.cjs1,0), 0) as caja1, round(isnull(R2.cjs2,0), 0) as caja2, CONVERT(varchar, CONVERT(money, round(isnull(F.SaldoFinal,0),0)), 1)as Deuda, isnull(SE.Semana,0) as Semana " +
-                              "From Seguimiento_financ S left join(select Cod_Prod, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(), GetDate(), GetDate(), 50) group by Cod_Prod)F on S.Cod_Prod = F.Cod_Prod left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod left join ProdAgenteCat A on C.IdAgen = A.IdAgen left join(Select sum(Convertidas) as cjs1, Cod_prod, Cod_Campo from UV_ProdRecepcion where CodEstatus = 'V' and " +
-                              "Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod, Cod_Campo)R on S.Cod_Prod = R.Cod_Prod and S.Cod_Campo = R.Cod_Campo left join(Select sum(Convertidas) as cjs2, Cod_prod, Cod_Campo from UV_ProdRecepcion where CodEstatus = 'V' and " +
-                              "Fecha between '2021-01-01' and getdate() group by Cod_prod, Cod_Campo)R2 on S.Cod_Prod = R2.Cod_Prod and S.Cod_Campo = R2.Cod_Campo left join(Select distinct S.Cod_Prod, R.Semana from(Select distinct Cod_Prod, max(Fecha) as Fecha from UV_ProdRecepcion where CodEstatus = 'V' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by Cod_Prod)S left join UV_ProdRecepcion R on S.Fecha = R.Fecha)SE on S.Cod_Prod = SE.Cod_Prod " +
-                              "where S.Estatus is null order by C.IdAgen, S.Cod_Prod, S.Cod_Campo").ToList();
+                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.IdAgen, A.Nombre as Asesor, isnull(S.Estatus, '') as Estatus,(case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,round(isnull(R.cjs1,0), 0) as caja1, round(isnull(R2.cjs2,0), 0) as caja2, CONVERT(varchar, CONVERT(money, round(isnull(F.SaldoFinal,0),0)), 1)as Deuda, isnull(SE.Semana,0) as Semana " +
+                        "From Seguimiento_financ S " +
+                        "left join(select Cod_Prod, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(), GetDate(), GetDate(), 50) group by Cod_Prod)F on S.Cod_Prod = F.Cod_Prod " +
+                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                        "left join ProdAgenteCat A on S.IdAgen = A.IdAgen " +
+                        "left join(Select sum(Convertidas) as cjs1, Cod_prod from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod)R on S.Cod_Prod = R.Cod_Prod " +
+                        "left join(Select sum(Convertidas) as cjs2, Cod_prod from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2021-01-01' and getdate() group by Cod_prod)R2 on S.Cod_Prod = R2.Cod_Prod " +
+                        "left join(Select distinct S.Cod_Prod, R.Semana from(Select distinct Cod_Prod, max(Fecha) as Fecha from UV_ProdRecepcion where CodEstatus = 'V' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by Cod_Prod)S " +
+                        "left join UV_ProdRecepcion R on S.Fecha = R.Fecha)SE on S.Cod_Prod = SE.Cod_Prod " +
+                        "where S.Estatus is null order by S.IdAgen, S.Cod_Prod").ToList();
                 }
                 else if (datos == "C")
                 {
-                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo, C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, isnull(S.Estatus, '') as Estatus,(case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,round(isnull(R.cjs1,0), 0) as caja1, round(isnull(R2.cjs2,0), 0) as caja2, CONVERT(varchar, CONVERT(money, round(isnull(F.SaldoFinal,0),0)), 1)as Deuda, isnull(SE.Semana,0) as Semana " +
-                           "From Seguimiento_financ S left join(select Cod_Prod, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(), GetDate(), GetDate(), 50) group by Cod_Prod)F on S.Cod_Prod = F.Cod_Prod left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod left join ProdAgenteCat A on C.IdAgen = A.IdAgen left join(Select sum(Convertidas) as cjs1, Cod_prod, Cod_Campo from UV_ProdRecepcion where CodEstatus = 'V' and " +
-                           "Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod, Cod_Campo)R on S.Cod_Prod = R.Cod_Prod and S.Cod_Campo = R.Cod_Campo left join(Select sum(Convertidas) as cjs2, Cod_prod, Cod_Campo from UV_ProdRecepcion where CodEstatus = 'V' and " +
-                           "Fecha between '2021-01-01' and getdate() group by Cod_prod, Cod_Campo)R2 on S.Cod_Prod = R2.Cod_Prod and S.Cod_Campo = R2.Cod_Campo left join(Select distinct S.Cod_Prod, R.Semana from(Select distinct Cod_Prod, max(Fecha) as Fecha from UV_ProdRecepcion where CodEstatus = 'V' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by Cod_Prod)S left join UV_ProdRecepcion R on S.Fecha = R.Fecha)SE on S.Cod_Prod = SE.Cod_Prod " +
-                           "where S.Estatus is not null order by C.IdAgen, S.Cod_Prod, S.Cod_Campo").ToList();
+                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.IdAgen, A.Nombre as Asesor, isnull(S.Estatus, '') as Estatus,(case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,round(isnull(R.cjs1,0), 0) as caja1, round(isnull(R2.cjs2,0), 0) as caja2, CONVERT(varchar, CONVERT(money, round(isnull(F.SaldoFinal,0),0)), 1)as Deuda, isnull(SE.Semana,0) as Semana " +
+                        "From Seguimiento_financ S " +
+                        "left join(select Cod_Prod, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(), GetDate(), GetDate(), 50) group by Cod_Prod)F on S.Cod_Prod = F.Cod_Prod " +
+                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                        "left join ProdAgenteCat A on S.IdAgen = A.IdAgen " +
+                        "left join(Select sum(Convertidas) as cjs1, Cod_prod from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod)R on S.Cod_Prod = R.Cod_Prod " +
+                        "left join(Select sum(Convertidas) as cjs2, Cod_prod from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2021-01-01' and getdate() group by Cod_prod)R2 on S.Cod_Prod = R2.Cod_Prod " +
+                        "left join(Select distinct S.Cod_Prod, R.Semana from(Select distinct Cod_Prod, max(Fecha) as Fecha from UV_ProdRecepcion where CodEstatus = 'V' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by Cod_Prod)S " +
+                        "left join UV_ProdRecepcion R on S.Fecha = R.Fecha)SE on S.Cod_Prod = SE.Cod_Prod " +
+                        "where S.Estatus is not null order by S.IdAgen, S.Cod_Prod").ToList();
                 }
                 else if (datos == "T")
                 {
-                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.Cod_Campo, C.Descripcion as Campo, A.IdAgen, A.Nombre as Asesor, isnull(S.Estatus, '') as Estatus,(case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,round(isnull(R.cjs1,0), 0) as caja1, round(isnull(R2.cjs2,0), 0) as caja2, CONVERT(varchar, CONVERT(money, round(isnull(F.SaldoFinal,0),0)), 1)as Deuda, isnull(SE.Semana,0) as Semana " +
-                        "From Seguimiento_financ S left join(select Cod_Prod, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(), GetDate(), GetDate(), 50) group by Cod_Prod)F on S.Cod_Prod = F.Cod_Prod left join ProdCamposCat C on S.Cod_Prod = C.Cod_Prod and S.Cod_Campo = C.Cod_Campo left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod left join ProdAgenteCat A on C.IdAgen = A.IdAgen left join(Select sum(Convertidas) as cjs1, Cod_prod, Cod_Campo from UV_ProdRecepcion where CodEstatus = 'V' and " +
-                        "Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod, Cod_Campo)R on S.Cod_Prod = R.Cod_Prod and S.Cod_Campo = R.Cod_Campo left join(Select sum(Convertidas) as cjs2, Cod_prod, Cod_Campo from UV_ProdRecepcion where CodEstatus = 'V' and " +
-                        "Fecha between '2021-01-01' and getdate() group by Cod_prod, Cod_Campo)R2 on S.Cod_Prod = R2.Cod_Prod and S.Cod_Campo = R2.Cod_Campo left join(Select distinct S.Cod_Prod, R.Semana from(Select distinct Cod_Prod, max(Fecha) as Fecha from UV_ProdRecepcion where CodEstatus = 'V' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by Cod_Prod)S left join UV_ProdRecepcion R on S.Fecha = R.Fecha)SE on S.Cod_Prod = SE.Cod_Prod " +
-                        "order by C.IdAgen, S.Cod_Prod, S.Cod_Campo").ToList();
+                    list = bd.Database.SqlQuery<ClassProductor>("Select S.Id, S.Cod_Prod, P.Nombre as Productor, S.IdAgen, A.Nombre as Asesor, isnull(S.Estatus, '') as Estatus,(case when S.Comentarios is null then '' else S.Comentarios end) as Comentarios, S.Fecha, (case when S.Estatus is null then DATEDIFF(day, S.Fecha, getdate()) else '' end) as dias,round(isnull(R.cjs1,0), 0) as caja1, round(isnull(R2.cjs2,0), 0) as caja2, CONVERT(varchar, CONVERT(money, round(isnull(F.SaldoFinal,0),0)), 1)as Deuda, isnull(SE.Semana,0) as Semana " +
+                        "From Seguimiento_financ S " +
+                        "left join(select Cod_Prod, (sum(Saldo) + sum(SaldoAGQ)) as SaldoFinal from dbo.fnRptSaldosFinanciamiento(GetDate(), GetDate(), GetDate(), 50) group by Cod_Prod)F on S.Cod_Prod = F.Cod_Prod " +
+                        "left join ProdProductoresCat P on S.Cod_Prod = P.Cod_Prod " +
+                        "left join ProdAgenteCat A on S.IdAgen = A.IdAgen " +
+                        "left join(Select sum(Convertidas) as cjs1, Cod_prod from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2020-07-01' and '2020-12-31' group by Cod_prod)R on S.Cod_Prod = R.Cod_Prod " +
+                        "left join(Select sum(Convertidas) as cjs2, Cod_prod from UV_ProdRecepcion where CodEstatus = 'V' and Fecha between '2021-01-01' and getdate() group by Cod_prod)R2 on S.Cod_Prod = R2.Cod_Prod " +
+                        "left join(Select distinct S.Cod_Prod, R.Semana from(Select distinct Cod_Prod, max(Fecha) as Fecha from UV_ProdRecepcion where CodEstatus = 'V' and Temporada = (select Temporada from CatSemanas where getdate() between Inicio and Fin) group by Cod_Prod)S " +
+                        "left join UV_ProdRecepcion R on S.Fecha = R.Fecha)SE on S.Cod_Prod = SE.Cod_Prod").ToList();
                 }
             }
             return Json(list, JsonRequestBehavior.AllowGet);
@@ -2650,18 +2667,18 @@ namespace Sistema_Indicadores.Controllers
                             var p = bd.ProdProductoresCat.Where(x => x.Cod_Prod == s.Cod_Prod).First();
                             var c = bd.ProdCamposCat.Where(x => x.Cod_Prod == s.Cod_Prod && x.Cod_Campo == s.Cod_Campo).First();
                             var i = bd.ProdAgenteCat.Where(x => x.IdAgen == c.IdAgen).First();
-                            s.IdAgen = i.IdAgen;
+                            s.Enviado = "S";
                             s.Fecha = DateTime.Now;
 
                             var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == i.IdAgen);
                             string correo = email_p.correo;
                             int region = (int)email_p.IdRegion;
-                            email.sendmail(correo, region, null, s.Cod_Prod, p.Nombre, s.Cod_Campo + " - " + c.Descripcion, estatus);
+                            email.sendmail(correo, region, null, s.Cod_Prod, p.Nombre, estatus);
                         }
                         else
                         {
                             var s = bd.Seguimiento_financ.Where(x => x.Id == a.Id).First();
-                            s.IdAgen = a.IdAgen;
+                            s.Enviado = "S";
                             s.Fecha = DateTime.Now;
                             if (estatus == "A")
                             {
@@ -2674,7 +2691,7 @@ namespace Sistema_Indicadores.Controllers
 
                 if (estatus == "A")
                 {
-                    email.sendmail("ademir.reyes@giddingsfruit.mx", 0, null, "", "", "", estatus);
+                    email.sendmail("ademir.reyes@giddingsfruit.mx", 0, null, "","", estatus);
                 }
 
                 else
@@ -2699,7 +2716,7 @@ namespace Sistema_Indicadores.Controllers
                                        {
                                            Cod_Prod = g.Key.Cod_Prod,
                                            Productor = g.Key.Productor,
-                                           Campo = g.Key.Campo,
+                                           //Campo = g.Key.Campo,
                                            caja1 = g.Key.caja1,
                                            caja2 = g.Key.caja2,
                                            dias = g.Key.dias,
@@ -2710,7 +2727,7 @@ namespace Sistema_Indicadores.Controllers
                             var email_p = bd.SIPGUsuarios.FirstOrDefault(m => m.IdAgen == item.IdAgen);
                             string correo = email_p.correo;
                             int region = (int)email_p.IdRegion;
-                            email.sendmail(correo, region, tbl, "", "", "", estatus);
+                            email.sendmail(correo, region, tbl, "", "", estatus);
                         }
                     }
                 }
@@ -2724,14 +2741,14 @@ namespace Sistema_Indicadores.Controllers
             }
             return Json(new { ViewBag.sms, JsonRequestBehavior.AllowGet });
         }
-        public JsonResult Add_Seguimiento(string Cod_Prod = "", short Cod_Campo = 0)
+        public JsonResult Add_Seguimiento(string Cod_Prod = "", short IdAgen = 0)
         {
             try
             {
                 Seguimiento_financ s = new Seguimiento_financ();
                 s.Cod_Empresa = 2;
                 s.Cod_Prod = Cod_Prod;
-                s.Cod_Campo = Cod_Campo;
+                s.IdAgen = IdAgen;
                 s.Fecha = DateTime.Now;
                 bd.Seguimiento_financ.Add(s);
                 bd.SaveChanges();

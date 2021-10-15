@@ -16,7 +16,7 @@ namespace Sistema_Indicadores.Models
     {
         public int Id { get; set; }
         public string Cod_Prod { get; set; }
-        public short Cod_Campo { get; set; }
+        public Nullable<short> Cod_Campo { get; set; }
         public string Comentarios { get; set; }
         public Nullable<System.DateTime> Fecha { get; set; }
         public short Cod_Empresa { get; set; }
@@ -24,5 +24,6 @@ namespace Sistema_Indicadores.Models
         public Nullable<short> IdAgen { get; set; }
         public string AP { get; set; }
         public Nullable<System.DateTime> Fecha_Up { get; set; }
+        public string Enviado { get; set; }
     }
 }
